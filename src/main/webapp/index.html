@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Drink Finder</title>
+</head>
+<body class="lift:content_id=main">
+	<div id="main" class="lift:surround?with=default&at=content">
+		Some content goes here
+		<!-- Add the drink finder form -->
+		<form class="lift:form.ajax">
+			<div class="lift:DrinkSearch">
+				<span class="formTitle">Enter Drink Search Details</span><br /><hr/> <span
+					class="formLabel">Drink Name: </span> <input name="DrinkName" /><br />
+				<span class="formLabel">Description Contains:</span> <input
+					name="DescriptionContains" /><br /> 
+				<span class="formLabel">Brewer:</span><select name="Brewer"></select><br />			
+				<span class="formLabel">ABV:</span> <select name="AbvComparisonType"></select> <input name="ABV" /> %
+				<span class="lift:Msg?id=ABVError; errorClass=error">error</span> 
+				<br/>
+				<span class="formLabel">Price Less Than:</span> &pound;<input name="PriceLessThan" /> %
+				<span class="lift:Msg?id=PriceError; errorClass=error">error</span><br/>
+				<input value="Submit" type="submit" />
+			</div>
+		</form>
+	</div>
+</body>
+</html>
