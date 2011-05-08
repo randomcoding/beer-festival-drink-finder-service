@@ -10,7 +10,6 @@ import util.Helpers._
 import js._
 import JsCmds._
 import JE._
-import scala.xml.NodeSeq
 /**
  * @author RandomCoder
  *
@@ -29,40 +28,43 @@ object DrinkSearch {
     var descriptionContains = ""
     var brewerName = ""
     var abv = "0.0"
+    	var abvValue = 0.0
     var abvComparisonType = ""
     var priceLessThan = "0.0"
-
+    	var priceValue = 0.0
+    
     def process(): JsCmd = {
       Thread.sleep(500) // show ajax spinner
       var valid = true
 
       // perform validation
-      asDouble(abv) match {
-        case Full(a) => // parsed ok
+      abvValue = asDouble(abv) match {
+        case Full(a) => a // parsed ok
         case _ => {
           displayError("ABVError", "ABV Value is not a number")
           valid = false
+          -1.0
         }
       }
 
-      asDouble(priceLessThan) match {
-        case Full(a) => // parsed ok
+      priceValue = asDouble(priceLessThan) match {
+        case Full(a) => a
         case _ => {
           displayError("PriceError", "Price Value is not a number")
           valid = false
+          -1.0
         }
       }
 
       if (valid) {
-        Alert(getParameterValues())
         val resultString = getParameterValues()
         SetHtml("results", <span class='alt'>{resultString}</span>)
       }
     }
 
     def getParameterValues(): String = {
-      val formatString = "Drink Name: %s<br>Description Contains: %s<br>Brewer Name: %s<br>ABV: %s%%<br>ABV Comparison: %s<br>Price Less Than: £%s"
-      formatString.format(drinkName, descriptionContains, brewerName, abv, abvComparisonType, priceLessThan)
+      val formatString = "Drink Name: %s<br>Description Contains: %s<br>Brewer Name: %s<br>ABV: %s %.1f%%<br>Price Less Than: £%.2f"
+      formatString.format(drinkName, descriptionContains, brewerName, abvComparisonType, abvValue, priceValue)
     }
 
     def displayError(formId: String, errorMessage: String) = {
