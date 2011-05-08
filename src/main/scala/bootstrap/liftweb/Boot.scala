@@ -45,9 +45,11 @@ class Boot {
 
     LiftRules.htmlProperties.default.set((r: Req) => new Html5Properties(r.userAgent))
     
+    // Use jQuery 1.4
+    LiftRules.jsArtifacts = net.liftweb.http.js.jquery.JQuery14Artifacts
     ResourceServer.allow { 
-      case "jqueryui" :: "css" :: _ => true 
-      case "jqueryui" :: "js" :: _ => true 
+      case "css" :: _ => true 
+      case "js" :: _ => true 
     } 
   }
 }
