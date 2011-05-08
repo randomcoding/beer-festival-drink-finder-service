@@ -4,7 +4,7 @@
 <meta http-equiv="content-type" content="text/html; charset=UTF-8"></meta>
 <meta name="description" content=""></meta>
 <meta name="keywords" content=""></meta>
-<title class="lift:Menu.title">App:</title>
+<title class="lift:Menu.title">Worcester Beer Festival Drink Finder</title>
 <style class="lift:CSS.blueprint"></style>
 <style class="lift:CSS.fancyType"></style>
 <script id="jquery" src="/classpath/js/jquery-1.5.1.min.js"
@@ -35,21 +35,15 @@
 .formEntry {
 	font-size: x-large;
 }
-
 /* ]]> */
 </style>
 </head>
-<body>
-	<script>
-		$(function() {
-			$("#accordion").accordion();
-		});
-	</script>
-	
+<body>	
 	<div class="column span-20 last">
 		<div class="column span-2">
 			<hr class="space" />
 		</div>
+
 		<div class="column span-18 last" style="text-align: left">
 			<h1 class="alt">
 				Worcester Beer Festival Drink Search<img alt="" id="ajax-loader"
@@ -57,30 +51,22 @@
 					src="/images/ajax-loader.gif" />
 			</h1>
 		</div>
-		<!-- hr class="span-20" / -->
+		
 		<div class="column span-2">
 			<hr class="space" />
 		</div>
+
 		<div class="container">
 			<div class="column span-18 last">
-				<div class="column span-18 last" id="accordion">
-					<h3>
-						<a href="#">Search</a>
-					</h3>
+				<div class="column span-18 last">
 					<div id="content">The main content will get bound here</div>
-					<h3>
-						<a href="#">Results</a>
-					</h3>
+				</div>
+				<div class="column span-18 last">
 					<div id="results">The search results will get displayed here</div>
 				</div>
-				<!--
-				<hr />
-				<div class="column span-18 last">
-					
-				</div>-->
 			</div>
 		</div>
-		<!--hr class="span-18" /-->
+		
 		<div class="column span-20 last" style="text-align: left;">
 			<h4 class="alt" style="text-align: right">
 				Powered by <a href="http://www.liftweb.net"><i>Lift</i></a>

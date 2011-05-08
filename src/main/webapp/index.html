@@ -11,23 +11,45 @@
 			<div class="lift:DrinkSearch column span-17">
 				<span class="formTitle alt">Enter Drink Search Details</span><br />
 				<hr class="column span-16 last" />
-				<div id="formLabels" class="column span-7">
-					<span class="formLabel">Drink Name: </span><br /><br /> 
-					<span class="formLabel">Description Contains:</span><br /><br /> 
-					<span class="formLabel">Brewer:</span><br /><br />
-					<span class="formLabel">ABV:</span><br /><br />
-					<span class="formLabel">Price Less Than:</span><br /><br />
-					<input class="formLabel" style="text-align: center;" value="Submit" type="submit" />
-				</div>
-				<div id="formInputs" class="column span-10 last">
-					<input class="formEntry" name="DrinkName" /><br /> 
-					<input class="formEntry" name="DescriptionContains" /><br /> 
-					<select class="formEntry" name="Brewer"></select><br />
-					<select class="formEntry" name="AbvComparisonType"></select> <input name="ABV" style="width: 4em;"/> %
-					<span class="lift:Msg?id=ABVError; errorClass=error edit_error_class formEntry">error</span> <br />
-					&pound;<input class="formEntry" name="PriceLessThan" style="width: 4em;"/> <span
-						class="lift:Msg?id=PriceError; errorClass=error edit_error_class formEntry">error</span><br />
-				</div>
+				<table style="width: 100%">
+					<tr>
+						<td><span class="formLabel">Drink Name: </span><br />
+						<br /></td>
+						<td><input class="formEntry" name="DrinkName" id="DrinkName" /><br />
+						</td>
+					</tr>
+					<tr>
+						<td><span class="formLabel">Description Contains:</span><br />
+						<br /></td>
+						<td><input class="formEntry" name="DescriptionContains" /><br />
+						</td>
+					</tr>
+					<tr>
+						<td><span class="formLabel">Brewer:</span><br />
+						<br /></td>
+						<td><select class="formEntry" name="Brewer"></select><br />
+						</td>
+					</tr>
+					<tr>
+						<td><span class="formLabel">ABV:</span><br />
+						<br /></td>
+						<td><select class="formEntry" name="AbvComparisonType"></select>
+							<span class="formEntry"><input name="ABV" style="width: 4em;" class="formEntry"/> % </span><span
+							class="lift:Msg?id=ABVError; errorClass=error edit_error_class formEntry">error</span>
+							<br /></td>
+					</tr>
+					<tr>
+						<td><span class="formLabel">Price Less Than:</span><br />
+						<br /></td>
+						<td><span class="formEntry">&pound;<input name="PriceLessThan" style="width: 4em;" class="formEntry"/></span><span
+							class="lift:Msg?id=PriceError; errorClass=error edit_error_class formEntry">error</span><br />
+						</td>
+					</tr>
+					<tr>
+						<td colspan=2><input class="formLabel"
+							style="text-align: center;" value="Submit" type="submit" /></td>
+					</tr>
+				</table>
 			</div>
 		</form>
 	</div>

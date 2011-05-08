@@ -9,6 +9,7 @@ import net.liftweb.common._
 import net.liftweb.http._
 import net.liftweb.http.js._
 import net.liftweb.http.js.jquery.JqJsCmds._
+import net.liftweb.http.js.jquery.JqJsCmds
 import net.liftweb._
 import net.liftweb.util.Helpers._
 /**
@@ -24,20 +25,20 @@ object DrinkSearch {
     // where did we come here from
     val whence = S.referer openOr "/"
 
-    //JqOnLoad // process the accordion command
-    
     // capture state from fields
     var drinkName = ""
     var descriptionContains = ""
     var brewerName = ""
     var abv = "0.0"
-    	var abvValue = 0.0
+    var abvValue = 0.0
     var abvComparisonType = ""
     var priceLessThan = "0.0"
-    	var priceValue = 0.0
+    var priceValue = 0.0
+
+    Focus("DrinkName")
     
     def process(): JsCmd = {
-      Thread.sleep(500) // show ajax spinner
+      Thread.sleep(500) // allow time to show ajax spinner
       var valid = true
 
       // perform validation
@@ -59,19 +60,19 @@ object DrinkSearch {
         }
       }
 
-      if (valid) {
-        val resultString = getParameterValues()
-        SetHtml("results", <span class='alt'>{resultString}</span>)
+      valid match {
+        case true => {
+          val resultString = getParameterValues()
+          Show("results")
+          SetHtml("results", <span class='alt'>{ resultString }</span>)
+        }
+        case false => // do nothing for nowHide("results")
       }
     }
 
     def getParameterValues(): String = {
       val formatString = "Drink Name: %s<br>Description Contains: %s<br>Brewer Name: %s<br>ABV: %s %.1f%%<br>Price Less Than: £%.2f"
       formatString.format(drinkName, descriptionContains, brewerName, abvComparisonType, abvValue, priceValue)
-    }
-
-    def displayError(formId: String, errorMessage: String) = {
-      S.error(formId, errorMessage)
     }
 
     // bind form to vars and create display
@@ -83,4 +84,7 @@ object DrinkSearch {
       "name=PriceLessThan" #> (SHtml.text(priceLessThan, priceLessThan = _) ++ SHtml.hidden(process))
   }
 
+  private def displayError(formId: String, errorMessage: String) = {
+    S.error(formId, errorMessage)
+  }
 }
