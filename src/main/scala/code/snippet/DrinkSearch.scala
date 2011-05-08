@@ -3,26 +3,29 @@
  */
 package code.snippet
 
+import net.liftweb.http.js.JE._
+import net.liftweb.http.js.JsCmds._
+import net.liftweb.common._
+import net.liftweb.http._
+import net.liftweb.http.js._
+import net.liftweb.http.js.jquery.JqJsCmds._
 import net.liftweb._
-import http._
-import common._
-import util.Helpers._
-import js._
-import JsCmds._
-import JE._
+import net.liftweb.util.Helpers._
 /**
  * @author RandomCoder
  *
  */
 object DrinkSearch {
   // global state/form values
-  val brewers = List(("None" -> ""), ("A Brewer" -> "A Brewer"), ("AN Brewer" -> "AN Brewer"))
-  val comparisonTypes = List(("Equal" -> "Equal To"), ("Greater Than" -> "Greater Than"), ("Less Than" -> "Less Than"))
+  private val brewers = List(("None" -> ""), ("A Brewer" -> "A Brewer"), ("AN Brewer" -> "AN Brewer"))
+  private val comparisonTypes = List(("Equal" -> "Equal To"), ("Greater Than" -> "Greater Than"), ("Less Than" -> "Less Than"))
 
   def render = {
     // where did we come here from
     val whence = S.referer openOr "/"
 
+    //JqOnLoad // process the accordion command
+    
     // capture state from fields
     var drinkName = ""
     var descriptionContains = ""

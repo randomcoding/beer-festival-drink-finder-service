@@ -27,45 +27,63 @@
 }
 
 .formLabel {
-    font-size: x-large;
+	font-size: x-large;
 	font-weight: bold;
 	text-indent: 2em;
 }
 
 .formEntry {
-    font-size: x-large;
+	font-size: x-large;
 }
 
 /* ]]> */
 </style>
 </head>
 <body>
+	<script>
+		$(function() {
+			$("#accordion").accordion();
+		});
+	</script>
+	
 	<div class="column span-20 last">
-		<div class="column span-20 last" style="text-align: left">
+		<div class="column span-2">
+			<hr class="space" />
+		</div>
+		<div class="column span-18 last" style="text-align: left">
 			<h1 class="alt">
 				Worcester Beer Festival Drink Search<img alt="" id="ajax-loader"
 					style="display: none; margin-bottom: 0px; margin-left: 5px"
 					src="/images/ajax-loader.gif" />
 			</h1>
 		</div>
-		<hr class="span-20" />
-		<div class="column span-2"><hr class="space" /></div>
+		<!-- hr class="span-20" / -->
+		<div class="column span-2">
+			<hr class="space" />
+		</div>
 		<div class="container">
 			<div class="column span-18 last">
-				<div class="column span-18 last">
+				<div class="column span-18 last" id="accordion">
+					<h3>
+						<a href="#">Search</a>
+					</h3>
 					<div id="content">The main content will get bound here</div>
-				</div>
-
-				<hr />
-				<div class="column span-18 last">
+					<h3>
+						<a href="#">Results</a>
+					</h3>
 					<div id="results">The search results will get displayed here</div>
 				</div>
+				<!--
+				<hr />
+				<div class="column span-18 last">
+					
+				</div>-->
 			</div>
 		</div>
-		<hr class="span-18"/>
+		<!--hr class="span-18" /-->
 		<div class="column span-20 last" style="text-align: left;">
-			<h4 class="alt">
-				Powered by <a href="http://www.liftweb.net"><i>Lift</i> </a>.
+			<h4 class="alt" style="text-align: right">
+				Powered by <a href="http://www.liftweb.net"><i>Lift</i></a>
 			</h4>
 		</div>
 	</div>
