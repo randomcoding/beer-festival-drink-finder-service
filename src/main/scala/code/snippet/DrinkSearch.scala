@@ -17,8 +17,8 @@ import scala.xml.NodeSeq
  */
 object DrinkSearch {
   // global state/form values
-  val brewers = List(("A Brewer" -> "A Brewer"), ("AN Brewer" -> "AN Brewer"))
-  val comparisonTypes = List(("Eq" -> "Equal To"), ("Gt" -> "Greater Than"), ("Lt" -> "Less Than"))
+  val brewers = List(("None" -> ""), ("A Brewer" -> "A Brewer"), ("AN Brewer" -> "AN Brewer"))
+  val comparisonTypes = List(("Equal" -> "Equal To"), ("Greater Than" -> "Greater Than"), ("Less Than" -> "Less Than"))
 
   def render = {
     // where did we come here from
@@ -55,16 +55,14 @@ object DrinkSearch {
 
       if (valid) {
         Alert(getParameterValues())
+        val resultString = getParameterValues()
+        SetHtml("results", <span class='alt'>{resultString}</span>)
       }
     }
 
     def getParameterValues(): String = {
-      "Drink Name: %s\n" +
-        "Description Contains: %s\n" +
-        "Brewer Name: %s\n" +
-        "ABV: %s%%\n" +
-        "ABV Comparison: %s\n" +
-        "Price Less Than: £%s".format(drinkName, descriptionContains.mkString, brewerName, abv, abvComparisonType, priceLessThan)
+      val formatString = "Drink Name: %s<br>Description Contains: %s<br>Brewer Name: %s<br>ABV: %s%%<br>ABV Comparison: %s<br>Price Less Than: £%s"
+      formatString.format(drinkName, descriptionContains, brewerName, abv, abvComparisonType, priceLessThan)
     }
 
     def displayError(formId: String, errorMessage: String) = {

@@ -5,22 +5,29 @@
 <title>Drink Finder</title>
 </head>
 <body class="lift:content_id=main">
-	<div id="main" class="lift:surround?with=default&at=content">
-		Some content goes here
+	<div id="main" class="lift:surround?with=defaultjquery&at=content">
 		<!-- Add the drink finder form -->
 		<form class="lift:form.ajax">
-			<div class="lift:DrinkSearch">
-				<span class="formTitle">Enter Drink Search Details</span><br /><hr/> <span
-					class="formLabel">Drink Name: </span> <input name="DrinkName" /><br />
-				<span class="formLabel">Description Contains:</span> <input
-					name="DescriptionContains" /><br /> 
-				<span class="formLabel">Brewer:</span><select name="Brewer"></select><br />			
-				<span class="formLabel">ABV:</span> <select name="AbvComparisonType"></select> <input name="ABV" /> %
-				<span class="lift:Msg?id=ABVError; errorClass=error">error</span> 
-				<br/>
-				<span class="formLabel">Price Less Than:</span> &pound;<input name="PriceLessThan" /> %
-				<span class="lift:Msg?id=PriceError; errorClass=error">error</span><br/>
-				<input value="Submit" type="submit" />
+			<div class="lift:DrinkSearch column span-18">
+				<span class="formTitle alt">Enter Drink Search Details</span><br />
+				<hr />
+				<div id="formLabels" class="column span-8">
+					<span class="formLabel">Drink Name: </span><br /><br /> 
+					<span class="formLabel">Description Contains:</span><br /><br /> 
+					<span class="formLabel">Brewer:</span><br /><br />
+					<span class="formLabel">ABV:</span><br /><br />
+					<span class="formLabel">Price Less Than:</span><br /><br />
+					<input class="formLabel" style="text-align: center;" value="Submit" type="submit" />
+				</div>
+				<div id="formInputs" class="column span-10 last">
+					<input class="formEntry" name="DrinkName" /><br /> 
+					<input class="formEntry" name="DescriptionContains" /><br /> 
+					<select class="formEntry" name="Brewer"></select><br />
+					<select class="formEntry" name="AbvComparisonType"></select> <input name="ABV" style="width: 4em;"/> %
+					<span class="lift:Msg?id=ABVError; errorClass=error edit_error_class formEntry">error</span> <br />
+					&pound;<input class="formEntry" name="PriceLessThan" style="width: 4em;"/> <span
+						class="lift:Msg?id=PriceError; errorClass=error edit_error_class formEntry">error</span><br />
+				</div>
 			</div>
 		</form>
 	</div>
