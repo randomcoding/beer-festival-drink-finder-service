@@ -24,7 +24,6 @@
 	<classpathentry kind="lib" path="lib_managed/scala_2.8.1/compile/joda-time-1.6.2.jar"/>
 	<classpathentry kind="lib" path="lib_managed/scala_2.8.1/test/specs_2.8.1-1.6.6.jar"/>
 	<classpathentry kind="lib" path="lib_managed/scala_2.8.1/test/servlet-api-2.5-20081211.jar"/>
-	<classpathentry kind="con" path="de.element34.sbt_eclipse.classpath.ManagedClasspathContainer"/>
 	<classpathentry kind="con" path="de.element34.sbt_eclipse.classpath.UnmanagedClasspathContainer"/>
 	<classpathentry kind="con" path="org.scala-ide.sdt.launching.SCALA_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>

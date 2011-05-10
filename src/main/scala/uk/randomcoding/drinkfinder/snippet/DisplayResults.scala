@@ -15,6 +15,7 @@ import net.liftweb.util.Helpers._
 class DisplayResults {
 	def render = {
 		val params = S.queryString openOr "No Query String"
+		println("Received params: " + params)
 		"* *" #> params
 	}
 

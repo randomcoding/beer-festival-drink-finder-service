@@ -14,42 +14,37 @@
 					src="/images/ajax-loader.gif" />
 			</h1>
 		</div>
-		<form class="lift:DrinkSearch?form=post">
+		<form class="lift:DrinkSearch?form=get">
 			<div class="column span-18 last">
 				<span class="formTitle alt">Enter Drink Search Details</span><br />
 				<hr class="column span-16 last" />
 				<table style="width: 100%">
 					<tr>
-						<td><span class="formLabel">Drink Name: </span><br />
-						<br /></td>
-						<td><input class="formEntry" name="DrinkName" id="DrinkName" /><br />
+						<td><span class="formLabel">Drink Name: </span></td>
+						<td><input class="formEntry" name="DrinkName" id="DrinkName" />
 						</td>
 					</tr>
 					<tr>
-						<td><span class="formLabel">Description Contains:</span><br />
-						<br /></td>
-						<td><input class="formEntry" name="DescriptionContains" /><br />
+						<td><span class="formLabel">Description Contains:</span></td>
+						<td><input class="formEntry" name="DescriptionContains" />
 						</td>
 					</tr>
 					<tr>
-						<td><span class="formLabel">Brewer:</span><br />
-						<br /></td>
-						<td><select class="formEntry" name="Brewer"></select><br />
+						<td><span class="formLabel">Brewer:</span></td>
+						<td><select class="formEntry" name="Brewer"></select>
 						</td>
 					</tr>
 					<tr>
-						<td><span class="formLabel">ABV:</span><br />
-						<br /></td>
+						<td><span class="formLabel">ABV:</span></td>
 						<td><select class="formEntry" name="AbvComparisonType"></select>
 							<span class="formEntry"><input name="ABV" style="width: 4em;" class="formEntry"/> % </span><span
 							class="lift:Msg?id=ABVError; errorClass=error edit_error_class formEntry">error</span>
-							<br /></td>
+						</td>
 					</tr>
 					<tr>
-						<td><span class="formLabel">Price Less Than:</span><br />
-						<br /></td>
+						<td><span class="formLabel">Price Less Than:</span></td>
 						<td><span class="formEntry">&pound;<input name="PriceLessThan" style="width: 4em;" class="formEntry"/></span><span
-							class="lift:Msg?id=PriceError; errorClass=error edit_error_class formEntry">error</span><br />
+							class="lift:Msg?id=PriceError; errorClass=error edit_error_class formEntry">error</span>
 						</td>
 					</tr>
 					<tr>

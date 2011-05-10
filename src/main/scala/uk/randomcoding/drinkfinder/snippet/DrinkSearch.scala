@@ -63,15 +63,43 @@ object DrinkSearch {
 			valid match {
 				case true => {
 					val resultString = getParameterValues()
-					S.redirectTo("/results")
+					val redirectTo = "/results?" + resultString
+					println("Redirecting to: " + redirectTo)
+					S.notice("Name: " + drinkName)
+					S.redirectTo(redirectTo)
 				}
-				case false => // do nothing for nowHide("results")
+				case false => // do nothing
 			}
 		}
 
 		def getParameterValues() : String = {
-			val formatString = "Drink Name: %s<br>Description Contains: %s<br>Brewer Name: %s<br>ABV: %s %.1f%%<br>Price Less Than: £%.2f"
-			formatString.format(drinkName, descriptionContains, brewerName, abvComparisonType, abvValue, priceValue)
+			var paramsList  = List.empty[String]
+			if (drinkName.nonEmpty)
+			{
+				paramsList = ("drinkName=" + drinkName) :: paramsList
+			}
+			
+			if (descriptionContains.nonEmpty)
+			{
+				paramsList = ("descriptionContains=" + descriptionContains) :: paramsList
+			}
+			
+			if (brewerName != "None")
+			{
+				paramsList = ("brewerName=" + brewerName) :: paramsList
+			}
+			
+			if (abvValue > 0.0)
+			{
+				paramsList = ("abv=%.1f&comparison=%s".format(abvValue, abvComparisonType)) :: paramsList
+			}
+			
+			if (priceValue > 0.0)
+			{
+				paramsList = ("priceLessThan=%.2f".format(priceValue)) :: paramsList
+			}
+
+			paramsList.mkString("", "&", "")
 		}
 
 		// bind form to vars and create display
