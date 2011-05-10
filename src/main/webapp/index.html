@@ -7,8 +7,15 @@
 <body class="lift:content_id=main">
 	<div id="main" class="lift:surround?with=defaultjquery&at=content">
 		<!-- Add the drink finder form -->
-		<form class="lift:form.ajax">
-			<div class="lift:DrinkSearch column span-17">
+		<div class="column span-18 last" style="text-align: left">
+			<h1 class="alt">
+				Worcester Beer Festival Drink Search<img alt="" id="ajax-loader"
+					style="display: none; margin-bottom: 0px; margin-left: 5px"
+					src="/images/ajax-loader.gif" />
+			</h1>
+		</div>
+		<form class="lift:DrinkSearch?form=post">
+			<div class="column span-18 last">
 				<span class="formTitle alt">Enter Drink Search Details</span><br />
 				<hr class="column span-16 last" />
 				<table style="width: 100%">

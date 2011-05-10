@@ -10,6 +10,8 @@ class LiftDrinkServiceProject(info: ProjectInfo) extends DefaultWebProject(info)
   // If you're using JRebel for Lift development, uncomment
   // this line
   // override def scanDirectories = Nil
+	  
+  val scalaTest = "org.scalatest" % "scalatest" % "1.3"
 
   override def libraryDependencies = Set(
     "net.liftweb" %% "lift-webkit" % liftVersion % "compile",
