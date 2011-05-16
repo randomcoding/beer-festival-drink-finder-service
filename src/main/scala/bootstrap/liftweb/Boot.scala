@@ -17,7 +17,7 @@ import Loc._
 class Boot {
   def boot {
     // where to search snippet
-    LiftRules.addToPackages("uk.randomcoding.drinkfinder")
+    LiftRules.addToPackages("uk.co.randomcoding.drinkfinder")
 
     // Build SiteMap
     val entries = List(

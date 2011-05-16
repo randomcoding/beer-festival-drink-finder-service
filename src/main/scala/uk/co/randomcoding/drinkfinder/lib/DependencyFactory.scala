@@ -1,5 +1,4 @@
-package code
-package lib
+package uk.co.randomcoding.drinkfinder.lib
 
 import net.liftweb._
 import http._

@@ -1,4 +1,4 @@
-package uk.randomcoding.drinkfinder.model.drink
+package uk.co.randomcoding.drinkfinder.model.drink
 
 sealed class Drink(name : String, description : String, abv : Double, price : Double) {
 

@@ -1,7 +1,7 @@
 /**
  *
  */
-package uk.randomcoding.drinkfinder.snippet
+package uk.co.randomcoding.drinkfinder.snippet
 
 import net.liftweb.http.js.JsCmds._
 import net.liftweb.common._
