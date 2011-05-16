@@ -1,4 +1,4 @@
-package uk.co.randomcoding.drinkfinder.model
+package uk.co.randomcoding.drinkfinder.model.data
 
 /**
  * Defines the means of accessing drink information data 

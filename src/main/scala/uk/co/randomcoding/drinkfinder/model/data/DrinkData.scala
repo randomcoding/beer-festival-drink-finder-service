@@ -1,9 +1,9 @@
 /**
  * 
  */
-package uk.co.randomcoding.drinkfinder.model
+package uk.co.randomcoding.drinkfinder.model.data
 
-import drink._
+import uk.co.randomcoding.drinkfinder.model.drink._
 
 /**
  * Store of information about drinks and associated data.
