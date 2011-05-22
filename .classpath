@@ -4,7 +4,6 @@
 	<classpathentry kind="src" output="target/eclipse/resources" path="src/main/resources"/>
 	<classpathentry kind="src" output="target/eclipse/test-classes" path="src/test/scala"/>
 	<classpathentry kind="src" output="target/eclipse/test-resources" path="src/test/resources"/>
-	<classpathentry kind="src" path="webapp"/>
 	<classpathentry kind="lib" path="lib_managed/scala_2.8.1/compile/paranamer-2.3.jar"/>
 	<classpathentry kind="lib" path="lib_managed/scala_2.8.1/test/jetty-util-6.1.22.jar"/>
 	<classpathentry kind="lib" path="lib_managed/scala_2.8.1/compile/commons-codec-1.4.jar"/>
@@ -27,6 +26,7 @@
 	<classpathentry kind="lib" path="lib_managed/scala_2.8.1/test/servlet-api-2.5-20081211.jar"/>
 	<classpathentry kind="lib" path="lib_managed/scala_2.8.1/test/scalatest-1.3.jar"/>
 	<classpathentry kind="con" path="de.element34.sbt_eclipse.classpath.UnmanagedClasspathContainer"/>
+	<classpathentry kind="con" path="de.element34.sbt_eclipse.classpath.ManagedClasspathContainer"/>
 	<classpathentry kind="con" path="org.scala-ide.sdt.launching.SCALA_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="target/eclipse/classes"/>
