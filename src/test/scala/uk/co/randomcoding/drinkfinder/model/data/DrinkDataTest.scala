@@ -13,7 +13,9 @@ import uk.co.randomcoding.drinkfinder.model.drink.{Perry, Cider, Beer, Drink}
  * @author RandomCoder
  */
 class DrinkDataTest extends FunSuite with ShouldMatchers {
-  // TODO: Create test drinks object to contain drinks to test matching
+
+  import uk.co.randomcoding.drinkfinder.model.data.DummyDrinks._
+
   val drinkData = new DummyDrinkData
 
   test("Query For Only Beers") {
@@ -38,6 +40,14 @@ class DrinkDataTest extends FunSuite with ShouldMatchers {
 	val matchingDrinks = drinkData.getMatching(List(matcher))
 
 	checkMatchedDrinks(matchingDrinks.toList, drinkData.perries.toList)
+  }
+
+  test("Query by Drink Name") {
+	val matcher = (drink: Drink) => drink.name.toLowerCase.contains("first")
+
+	val matchingDrinks = drinkData.getMatching(List(matcher))
+
+	checkMatchedDrinks(matchingDrinks.toList, List(FirstBeer, FirstCider, FirstPerry))
   }
 
   private def checkMatchedDrinks(matched: List[Drink], expected: List[Drink]) = {
