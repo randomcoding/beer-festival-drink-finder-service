@@ -114,8 +114,12 @@ class DrinkDataTest extends FunSuite with ShouldMatchers {
 	checkMatchedDrinks(drinkData.getMatching(List(dryMatcher, ciderMatcher)).toList, List(FirstCider))
   }
 
-  test("Query for Dry Ciders with ABV Less Than 6.0") {
-	pending
+  test("Query for Medium Ciders with ABV Greater Than 7.0") {
+	val ciderMatcher = (drink: Drink) => drink.isInstanceOf[Cider]
+	val mediumMatcher = (drink: Drink) => drink.features.contains(Medium)
+	val abvMatcher = (drink: Drink) => drink.abv > 7.0
+
+	checkMatchedDrinks(drinkData.getMatching(List(ciderMatcher, mediumMatcher, abvMatcher)).toList, List(SecondCider))
   }
 
   private def checkMatchedDrinks(matched: List[Drink], expected: List[Drink]) {
