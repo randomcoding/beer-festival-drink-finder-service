@@ -38,7 +38,5 @@ object MatcherFactory {
 	}
   }
 
-  //private implicit def stringToDouble(s: String): Double = s.toDouble
-
   private implicit def arrayTo2Tuple[T](array: Array[T]): (T, T) = (array(0), array(1))
 }

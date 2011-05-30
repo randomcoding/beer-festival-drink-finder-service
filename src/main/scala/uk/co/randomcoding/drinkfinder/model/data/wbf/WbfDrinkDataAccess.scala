@@ -1,10 +1,10 @@
+/**
+ * TODO: Add License details
+ */
 package uk.co.randomcoding.drinkfinder.model.data.wbf
 
 import uk.co.randomcoding.drinkfinder.model.data.DrinkInformationDataAccess
 
-/**
- * TODO: Add License details
- */
 /**
  * Contains the drink data for the Worcester Beer Festival
  *
@@ -13,16 +13,23 @@ import uk.co.randomcoding.drinkfinder.model.data.DrinkInformationDataAccess
  */
 
 class WbfDrinkDataAccess extends DrinkInformationDataAccess {
-  lazy val drinkData = initialiseDrinkData()
 
-  def initialiseDrinkData(): WbfDrinkData = {
-	// TODO: load property to specify which data lo load
-	val loadProperty = "test"
+  /**
+   * We use a [[WbfDrinkData]] as the type of drink data
+   */
+  type DrinkDataType = WbfDrinkData
 
-	loadProperty.toLowerCase match {
+  /**
+   * Returns a fully initialised ]]WbfDrinkData]] based on the the value of the [[TBD]] property.
+   */
+  protected def initialiseDrinkData(): WbfDrinkData = {
+	initialisationType match {
 	  case "file" => WbfDrinkData.loadFromFile()
 	  case "test" => WbfDrinkData.initialiseTest()
 	  case _ => WbfDrinkData.initialiseEmpty()
 	}
   }
+
+  // TODO: load property to specify which data lo load
+  private def initialisationType = "test"
 }
