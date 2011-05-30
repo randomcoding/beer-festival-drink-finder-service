@@ -6,6 +6,7 @@ package uk.co.randomcoding.drinkfinder.snippet
 import net.liftweb.http._
 import net.liftweb.util.Helpers._
 import uk.co.randomcoding.drinkfinder.model.data.wbf.WbfDrinkDataAccess
+import uk.co.randomcoding.drinkfinder.model.matcher.MatcherFactory
 
 /**
  * @author RandomCoder
@@ -19,7 +20,7 @@ class DisplayResults {
 	println("Received params: " + params)
 	val matchers = params match {
 	  case "No Query String" => Nil
-	  case paramString: String => MatcherFactory.generateMatchers(paramString)
+	  case paramString: String => MatcherFactory.generate(paramString)
 	}
 	"* *" #> params
   }

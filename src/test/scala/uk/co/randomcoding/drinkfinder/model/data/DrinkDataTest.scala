@@ -14,7 +14,7 @@ import uk.co.randomcoding.drinkfinder.model.drink._
  */
 class DrinkDataTest extends FunSuite with ShouldMatchers {
 
-  import uk.co.randomcoding.drinkfinder.model.data.DummyDrinks._
+  import DummyDrinks._
 
   val drinkData = new DummyDrinkData
 
@@ -76,19 +76,19 @@ class DrinkDataTest extends FunSuite with ShouldMatchers {
 	checkMatchedDrinks(drinkData.getMatching(List(abvGreater65Matcher)).toList, List(SecondCider, FirstPerry))
   }
 
-  test("Query Price Less Than £1.30") {
-	val matcher = (drink: Drink) => drink.price < 1.30
+  test("Query Price Less Than £1.50") {
+	val matcher = (drink: Drink) => drink.price < 1.50
 	checkMatchedDrinks(drinkData.getMatching(List(matcher)).toList, List(FirstPerry))
   }
 
   test("Query Price Equal To £1.40") {
 	val matcher = (drink: Drink) => drink.price == 1.40
-	checkMatchedDrinks(drinkData.getMatching(List(matcher)).toList, List(FirstBeer))
+	checkMatchedDrinks(drinkData.getMatching(List(matcher)).toList, List(FirstPerry))
   }
 
   test("Query Price Greater Than, £1.50") {
 	val matcher = (drink: Drink) => drink.price > 1.50
-	checkMatchedDrinks(drinkData.getMatching(List(matcher)).toList, List(SecondBeer))
+	checkMatchedDrinks(drinkData.getMatching(List(matcher)).toList, List(FirstBeer, SecondBeer, SecondCider))
   }
 
   test("Query for Real Ales") {

@@ -11,7 +11,7 @@ import uk.co.randomcoding.drinkfinder.model.data.DrinkData
  * User: RandomCoder
  * Date: 24/05/11
  */
-private class WbfDrinkData extends DrinkData {
+class WbfDrinkData extends DrinkData {
 
 }
 
