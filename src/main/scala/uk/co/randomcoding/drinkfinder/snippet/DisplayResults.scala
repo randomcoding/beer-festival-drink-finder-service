@@ -3,14 +3,14 @@
  */
 package uk.co.randomcoding.drinkfinder.snippet
 
-import net.liftweb.http._
-import net.liftweb.util._
-import Helpers._
-import uk.co.randomcoding.drinkfinder.model.data.wbf.WbfDrinkDataAccess
-import uk.co.randomcoding.drinkfinder.model.matcher.MatcherFactory
-import uk.co.randomcoding.drinkfinder.model.drink.{Cider, Perry, Beer, Drink}
 import net.liftweb.common.Box
-import xml.NodeSeq
+import net.liftweb.http._
+import net.liftweb.util.Helpers._
+import net.liftweb.util._
+import scala.xml.{ NodeSeq, Text }
+import uk.co.randomcoding.drinkfinder.model.data.wbf.WbfDrinkDataAccess
+import uk.co.randomcoding.drinkfinder.model.drink.{ Beer, Cider, Drink, Perry }
+import uk.co.randomcoding.drinkfinder.model.matcher.MatcherFactory
 
 /**
  * @author RandomCoder
@@ -21,25 +21,27 @@ class DisplayResults {
 
   private val drinkData = new WbfDrinkDataAccess()
 
-  def render(in : NodeSeq) : NodeSeq = {
-	val params = S.queryString openOr "No Query String"
+  def calculateResults(in : NodeSeq) : NodeSeq = {
+    val params = S.queryString openOr "No Query String"
 
-	val matchers: List[Matcher] = params match {
-	  case "No Query String" => Nil
-	  case paramString: String => MatcherFactory.generate(paramString)
-	}
+    val matchers : List[Matcher] = params match {
+      case "No Query String" => Nil
+      case paramString : String => MatcherFactory.generate(paramString)
+    }
 
-	val matchingDrinks:Set[Drink] = drinkData.getMatching(matchers)
+    val matchingDrinks : Set[Drink] = drinkData.getMatching(matchers)
 
-	val beers = matchingDrinks.filter(_.isInstanceOf[Beer]).toList
-	val ciders = matchingDrinks.filter(_.isInstanceOf[Cider]).toList
-	val perries = matchingDrinks.filter(_.isInstanceOf[Perry]).toList
+    val beers = matchingDrinks.filter(_.isInstanceOf[Beer]).toList
+    val ciders = matchingDrinks.filter(_.isInstanceOf[Cider]).toList
+    val perries = matchingDrinks.filter(_.isInstanceOf[Perry]).toList
 
-	// TODO: Use the bind mechanism to put content into each results div
-	
-	/*val results = "#beer-tab" #> "%d Beers".format(beers.size) & "#cider-tab" #> "%d Ciders".format(ciders.size) &
-	  "#perry-tab" #> "%d Perries".format(perries.size)
+    bind("results", in,
+      "beers" -> convertResultsToDisplayForm("Beers", beers),
+      "ciders" -> convertResultsToDisplayForm("Ciders", ciders),
+      "perries" -> convertResultsToDisplayForm("Perries", perries))
+  }
 
-	results*/
+  private def convertResultsToDisplayForm(titleText : String = "", results : List[Drink]) : NodeSeq = {
+    Text("%d %s".format(results.size, titleText))
   }
 }
