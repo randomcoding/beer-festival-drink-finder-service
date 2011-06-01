@@ -4,7 +4,8 @@
 package uk.co.randomcoding.drinkfinder.snippet
 
 import net.liftweb.http._
-import net.liftweb.util.Helpers._
+import net.liftweb.util._
+import Helpers._
 import uk.co.randomcoding.drinkfinder.model.data.wbf.WbfDrinkDataAccess
 import uk.co.randomcoding.drinkfinder.model.matcher.MatcherFactory
 import uk.co.randomcoding.drinkfinder.model.drink.{Cider, Perry, Beer, Drink}
@@ -20,9 +21,8 @@ class DisplayResults {
 
   private val drinkData = new WbfDrinkDataAccess()
 
-  def render/*(in : NodeSeq) : NodeSeq*/ = {
+  def render(in : NodeSeq) : NodeSeq = {
 	val params = S.queryString openOr "No Query String"
-	println("Received params: " + params)
 
 	val matchers: List[Matcher] = params match {
 	  case "No Query String" => Nil
@@ -35,7 +35,7 @@ class DisplayResults {
 	val ciders = matchingDrinks.filter(_.isInstanceOf[Cider]).toList
 	val perries = matchingDrinks.filter(_.isInstanceOf[Perry]).toList
 
-	SHtml.radio(List("Beers", "Ciders", "Perries"), Box("Beers"), displayDrinks)
+	/*SHtml.radio(List("Beers", "Ciders", "Perries"), Box("Beers"), displayDrinks)
 
 	def displayDrinks: (String) => Any = (drinkType: String) => {
 	  val drinks = drinkType match {
@@ -46,6 +46,11 @@ class DisplayResults {
 	  }
 
 		"* *" #> drinkType + "(" + drinks.size + ")"
-	}
+	}*/
+
+	val results = "#beer-tab" #> "%d Beers".format(beers.size) & "#cider-tab" #> "%d Ciders".format(ciders.size) &
+	  "#perry-tab" #> "%d Perries".format(perries.size)
+
+	results
   }
 }

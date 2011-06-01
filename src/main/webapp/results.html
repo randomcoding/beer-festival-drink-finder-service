@@ -10,7 +10,23 @@
 		<div class="column span-18 last" style="text-align: left">
 		<h1 class="alt">Search Results</h1>
 		</div>
+        <script>
+            $(function() {
+                $("#tabs").tabs();
+            });
+        </script>
 		<div class="lift:DisplayResults column span-18 last">
+            <div class="column span-18 last" id="tabs">
+                <ul>
+                    <li><a href="#beer-tab">Beer Results</a></li>
+                    <li><a href="#cider-tab">Cider Results</a></li>
+                    <li><a href="#perry-tab">Perry Results</a></li>
+                </ul>
+                <div id="beer-tab">Beers</div>
+                <div id="cider-tab">Ciders</div>
+                <div id="perry-tab">Perries</div>
+
+            </div>
 			<!--<span class="lift:DisplayResults column span-18 last">Results Selectors will get displayed here</span>-->
 		</div>
         <!--<div class="column span-18 last">
