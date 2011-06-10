@@ -4,6 +4,7 @@
 package uk.co.randomcoding.drinkfinder.model.data.wbf
 
 import uk.co.randomcoding.drinkfinder.model.data.DrinkInformationDataAccess
+import net.liftweb.common.Logger
 
 /**
  * Contains the drink data for the Worcester Beer Festival
@@ -12,7 +13,7 @@ import uk.co.randomcoding.drinkfinder.model.data.DrinkInformationDataAccess
  * Date: 24/05/11
  */
 
-class WbfDrinkDataAccess extends DrinkInformationDataAccess {
+class WbfDrinkDataAccess extends DrinkInformationDataAccess with Logger {
 
   /**
    * We use a [[WbfDrinkData]] as the type of drink data
@@ -23,6 +24,7 @@ class WbfDrinkDataAccess extends DrinkInformationDataAccess {
    * Returns a fully initialised ]]WbfDrinkData]] based on the the value of the [[TBD]] property.
    */
   protected def initialiseDrinkData(): WbfDrinkData = {
+	  debug("Initialisation of WbfData with type: %s".format(initialisationType))
 	initialisationType match {
 	  case "file" => WbfDrinkData.loadFromFile()
 	  case "test" => WbfDrinkData.initialiseTest()

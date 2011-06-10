@@ -3,45 +3,50 @@
  */
 package uk.co.randomcoding.drinkfinder.snippet
 
-import net.liftweb.common.Box
 import net.liftweb.http._
 import net.liftweb.util.Helpers._
-import net.liftweb.util._
-import scala.xml.{ NodeSeq, Text }
+import scala.xml.{NodeSeq, Text}
 import uk.co.randomcoding.drinkfinder.model.data.wbf.WbfDrinkDataAccess
-import uk.co.randomcoding.drinkfinder.model.drink.{ Beer, Cider, Drink, Perry }
+import uk.co.randomcoding.drinkfinder.model.drink.{Beer, Cider, Drink, Perry}
 import uk.co.randomcoding.drinkfinder.model.matcher.MatcherFactory
+import net.liftweb.common.Logger
 
 /**
  * @author RandomCoder
  *
  */
-class DisplayResults {
-  type Matcher = (Drink) => Boolean
+class DisplayResults extends Logger {
 
-  private val drinkData = new WbfDrinkDataAccess()
+	private val drinkData = new WbfDrinkDataAccess()
 
-  def calculateResults(in : NodeSeq) : NodeSeq = {
-    val params = S.queryString openOr "No Query String"
+	def calculateResults(in: NodeSeq): NodeSeq = {
+		import uk.co.randomcoding.drinkfinder.model.matcher.Matcher
+		val params = S.queryString openOr "No Query String"
+		debug("Received Query String: %s".format(params))
 
-    val matchers : List[Matcher] = params match {
-      case "No Query String" => Nil
-      case paramString : String => MatcherFactory.generate(paramString)
-    }
+		val matchers: List[Matcher] = params match {
+			case "No Query String" => Nil
+			case paramString: String => MatcherFactory.generate(paramString)
+		}
+		debug("Generated %d matchers:\n%s".format(matchers.size, matchers.mkString("\n\t")))
 
-    val matchingDrinks : Set[Drink] = drinkData.getMatching(matchers)
+		val matchingDrinks: Set[Drink] = drinkData.getMatching(matchers)
 
-    val beers = matchingDrinks.filter(_.isInstanceOf[Beer]).toList
-    val ciders = matchingDrinks.filter(_.isInstanceOf[Cider]).toList
-    val perries = matchingDrinks.filter(_.isInstanceOf[Perry]).toList
+		debug("There are %d matching drinks:\n%s".format(matchingDrinks.size, matchingDrinks.mkString("\n\t")))
+		val beers = matchingDrinks.filter(_.isInstanceOf[Beer]).toList
+		debug("There are %d matching beers".format(beers.size))
+		val ciders = matchingDrinks.filter(_.isInstanceOf[Cider]).toList
+		debug("There are %d matching ciders".format(ciders.size))
+		val perries = matchingDrinks.filter(_.isInstanceOf[Perry]).toList
+		debug("There are %d matching perries".format(perries.size))
 
-    bind("results", in,
-      "beers" -> convertResultsToDisplayForm("Beers", beers),
-      "ciders" -> convertResultsToDisplayForm("Ciders", ciders),
-      "perries" -> convertResultsToDisplayForm("Perries", perries))
-  }
+		bind("results", in,
+			"beers" -> convertResultsToDisplayForm("Beers", beers),
+			"ciders" -> convertResultsToDisplayForm("Ciders", ciders),
+			"perries" -> convertResultsToDisplayForm("Perries", perries))
+	}
 
-  private def convertResultsToDisplayForm(titleText : String = "", results : List[Drink]) : NodeSeq = {
-    Text("%d %s".format(results.size, titleText))
-  }
+	private def convertResultsToDisplayForm(titleText: String = "", results: List[Drink]): NodeSeq = {
+		Text("%d %s".format(results.size, titleText))
+	}
 }

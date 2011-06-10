@@ -4,6 +4,7 @@
 package uk.co.randomcoding.drinkfinder.model.data
 
 import uk.co.randomcoding.drinkfinder.model.drink._
+import net.liftweb.common.Logger
 
 /**
  * Store of information about drinks and associated data.
@@ -11,21 +12,26 @@ import uk.co.randomcoding.drinkfinder.model.drink._
  * @author RandomCoder
  *
  */
-trait DrinkData {
-  private var drinks = Set.empty[Drink]
+trait DrinkData extends Logger {
+
+	import uk.co.randomcoding.drinkfinder.model.matcher.Matcher
+
+	private var drinks = Set.empty[Drink]
 
   def addDrink(drink: Drink) {
 	drinks = drinks + drink
+	  debug("Added %s".format(drink))
   }
 
-  def removeDrink(drink: Drink) {
-	drinks = drinks - drink
+	def removeDrink(drink: Drink) {
+		debug("Removed %s".format(drink))
+		drinks = drinks - drink
   }
 
   /**
    * Get all the drinks that match all the matchers provided
    */
-  def getMatching(matchers: List[((Drink) => Boolean)]): Set[Drink] = {
+  def getMatching(matchers: List[Matcher]): Set[Drink] = {
 	// TODO: This could be done more concisely and more elegantly, possibly with recursion or filtering and joining
 	// results.
 

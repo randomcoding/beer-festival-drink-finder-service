@@ -3,6 +3,8 @@
  */
 package uk.co.randomcoding.drinkfinder.model.data
 
+import uk.co.randomcoding.drinkfinder.model.matcher.DrinkTypeMatcher
+import uk.co.randomcoding.drinkfinder.model.matcher.DrinkTypeMatcher
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
 import uk.co.randomcoding.drinkfinder.model.drink._
@@ -19,7 +21,7 @@ class DrinkDataTest extends FunSuite with ShouldMatchers {
   val drinkData = new DummyDrinkData
 
   test("Query For Only Beers") {
-	val matcher = (drink: Drink) => drink.isInstanceOf[Beer]
+	val matcher = DrinkTypeMatcher(Beer..getClass)
 
 	val matchingDrinks = drinkData.getMatching(List(matcher))
 

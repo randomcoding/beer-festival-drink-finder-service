@@ -6,6 +6,7 @@ package uk.co.randomcoding.drinkfinder.model.data
 import org.scalatest.FunSuite
 import uk.co.randomcoding.drinkfinder.model.matcher.MatcherId._
 import uk.co.randomcoding.drinkfinder.model.matcher.MatcherFactory._
+import uk.co.randomcoding.drinkfinder.model.matcher.Matcher
 import uk.co.randomcoding.drinkfinder.model.data.DummyDrinks._
 import org.scalatest.matchers.ShouldMatchers
 

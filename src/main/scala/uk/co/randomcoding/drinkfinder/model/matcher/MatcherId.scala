@@ -1,13 +1,56 @@
-package uk.co.randomcoding.drinkfinder.model.matcher
+package uk.co.randomcoding.drinkfinder.model.matcher.id
 
-object MatcherId extends Enumeration {
-  val DRINK_NAME = Value("drink.name")
-  val DRINK_DESCRIPTION = Value("drink.description")
-  val DRINK_PRICE = Value("drink.price")
-  val DRINK_ABV_LESS_THAN = Value("drink.abv.lessthan")
-  val DRINK_ABV_GREATER_THAN = Value("drink.abv.greaterthan")
-  val DRINK_ABV_EQUAL_TO = Value("drink.abv.equalto")
-  val DRINK_HAS_FEATURES = Value("drink.has.features")
+sealed abstract class MatcherId(idValue: String) {
+  protected val id = idValue
+  
+  override def equals(other: Any) : Boolean = {
+    Some(other).isDefined && other.isInstanceOf[MatcherId] && id == other.asInstanceOf[MatcherId].id
+  }
+  
+  override def hashCode() : Int = {
+    id.hashCode
+  }
+}
+case object DRINK_NAME extends MatcherId("drink.name") {
+  def unapply(matcherId: String) : Option[MatcherId] = if (matcherId == id) Some(DRINK_NAME) else None
+}
+  
+case object DRINK_DESCRIPTION extends MatcherId("drink.description") {
+	def unapply(matcherId: String) : Option[MatcherId] = if (matcherId == id) Some(DRINK_DESCRIPTION) else None  
+}  
 
-  implicit def enumToString(matcherId: Value): String = matcherId.toString
+case object DRINK_PRICE extends MatcherId("drink.price") {
+	def unapply(matcherId: String) : Option[MatcherId] = if (matcherId == id) Some(DRINK_PRICE) else None  
+}
+
+case object DRINK_ABV_LESS_THAN extends MatcherId("drink.abv.lessthan"){
+	def unapply(matcherId: String) : Option[MatcherId] = if (matcherId == id) Some(DRINK_ABV_LESS_THAN) else None  
+}
+
+case object DRINK_ABV_GREATER_THAN extends MatcherId("drink.abv.greaterthan") {
+	def unapply(matcherId: String) : Option[MatcherId] = if (matcherId == id) Some(DRINK_ABV_GREATER_THAN) else None  
+}
+
+case object DRINK_ABV_EQUAL_TO extends MatcherId("drink.abv.equalto") {
+	def unapply(matcherId: String) : Option[MatcherId] = if (matcherId == id) Some(DRINK_ABV_EQUAL_TO) else None  
+}  
+
+case object DRINK_HAS_FEATURES extends MatcherId("drink.has.features") {
+	def unapply(matcherId: String) : Option[MatcherId] = if (matcherId == id) Some(DRINK_HAS_FEATURES) else None  
+}
+
+case object DRINK_TYPE_BEER extends MatcherId("drink.type.beer") {
+	def unapply(matcherId: String) : Option[MatcherId] = if (matcherId == id) Some(DRINK_TYPE_BEER) else None  
+}
+
+case object DRINK_TYPE_CIDER extends MatcherId("drink.type.cider") {
+	def unapply(matcherId: String) : Option[MatcherId] = if (matcherId == id) Some(DRINK_TYPE_CIDER) else None  
+}
+ 
+case object DRINK_TYPE_PERRY extends MatcherId("drink.type.perry") {
+	def unapply(matcherId: String) : Option[MatcherId] = if (matcherId == id) Some(DRINK_TYPE_PERRY) else None  
+}
+
+case object BREWER_NAME extends MatcherId("brewer.name") {
+	def unapply(matcherId: String) : Option[MatcherId] = if (matcherId == id) Some(BREWER_NAME) else None  
 }

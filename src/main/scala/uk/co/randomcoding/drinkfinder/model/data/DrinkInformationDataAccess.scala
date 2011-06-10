@@ -6,7 +6,10 @@ import uk.co.randomcoding.drinkfinder.model.drink.Drink
  * Defines the means of accessing drink information data 
  */
 trait DrinkInformationDataAccess {
-  /**
+
+	import uk.co.randomcoding.drinkfinder.model.matcher.Matcher
+
+	/**
    * The type of [[DrinkData]] used
    */
   type DrinkDataType <: DrinkData
@@ -30,5 +33,5 @@ trait DrinkInformationDataAccess {
    * **drinkData***
    * @return The [[drink.Drink]]s that match **all** the matchers
    */
-  def getMatching(matchers: List[((Drink) => Boolean)]) = drinkData.getMatching(matchers)
+  def getMatching(matchers: List[Matcher]) = drinkData.getMatching(matchers)
 }
