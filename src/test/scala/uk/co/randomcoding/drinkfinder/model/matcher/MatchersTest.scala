@@ -4,7 +4,7 @@
 package uk.co.randomcoding.drinkfinder.model.data
 
 import org.scalatest.FunSuite
-import uk.co.randomcoding.drinkfinder.model.matcher.MatcherId._
+import uk.co.randomcoding.drinkfinder.model.matcher.id._
 import uk.co.randomcoding.drinkfinder.model.matcher.MatcherFactory._
 import uk.co.randomcoding.drinkfinder.model.matcher.Matcher
 import uk.co.randomcoding.drinkfinder.model.data.DummyDrinks._
@@ -15,6 +15,8 @@ import org.scalatest.matchers.ShouldMatchers
  *
  */
 class MatchersTest extends FunSuite with ShouldMatchers {
+  implicit def MatcherIdToString(id: MatcherId) : String = { id.id }
+  
   test("Match to drink name pattern") {
 	val queryString = DRINK_NAME + "=First"
 	val matchers = generate(queryString)

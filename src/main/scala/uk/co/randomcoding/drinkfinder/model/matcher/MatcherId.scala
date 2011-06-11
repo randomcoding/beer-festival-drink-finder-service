@@ -11,6 +11,7 @@ sealed abstract class MatcherId(idValue: String) {
     id.hashCode
   }
 }
+
 case object DRINK_NAME extends MatcherId("drink.name") {
   def unapply(matcherId: String) : Option[MatcherId] = if (matcherId == id) Some(DRINK_NAME) else None
 }
@@ -62,5 +63,4 @@ case object BREWER_NAME extends MatcherId("brewer.name") {
 case object ALWAYS_TRUE extends MatcherId("always.true") {
 	def unapply(matcherId: String) : Option[MatcherId] = if (matcherId == id) Some(BREWER_NAME) else None  
 }
-
 
