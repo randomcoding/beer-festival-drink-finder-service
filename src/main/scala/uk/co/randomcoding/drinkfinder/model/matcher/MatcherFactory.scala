@@ -5,7 +5,7 @@ package uk.co.randomcoding.drinkfinder.model.matcher
 
 import scala.Enumeration
 import net.liftweb.common.Logger
-import MatcherId._
+import id._
 
 /**
  * Factory object to generate matchers from a supplied query string
@@ -16,7 +16,7 @@ import MatcherId._
 
 object MatcherFactory extends Logger {
 
-  def generate(queryString : String) : List[Matcher] = {
+  def generate(queryString : String) : List[DrinkMatcher[_]] = {
     val queryParts = queryString.split("&")
     (for {
       queryPart <- queryParts
@@ -25,24 +25,24 @@ object MatcherFactory extends Logger {
     }).toList
   }
 
-  private def createMatcher(query : (String, String)) : Matcher = {
+  private def createMatcher(query : (String, String)) : DrinkMatcher[_] = {
     val (queryId, queryValue) = query
 
     debug("Query Id: %s, Query Value: %s".format(queryId, queryValue))
 
     queryId match {
-      case DRINK_ABV_EQUAL_TO .toString=> DrinkAbvEqualToMatcher
-      case DRINK_ABV_GREATER_THAN => DrinkAbvGreaterThanMatcher
-      case DRINK_ABV_LESS_THAN => DrinkAbvLessThanMatcher
-      case DRINK_DESCRIPTION => DrinkDescriptionMatcher
-      case DRINK_HAS_FEATURES => DrinkFeatureMatcher
-      case DRINK_NAME => DrinkNameMatcher
-      case DRINK_PRICE => DrinkPriceMatcher
-      case DRINK_TYPE => DrinkTypeMatcher
-      case DRINK_TYPE_BEER => BeerTypeMatcher
-      case DRINK_TYPE_CIDER => CiderTypeMatcher
-      case DRINK_TYPE_PERRY => PerryTypeMatcher
-      case _ => AlwaysTrueMatcher
+      case DRINK_ABV_EQUAL_TO(queryId) => DrinkAbvEqualToMatcher(queryValue.toDouble)
+      case DRINK_ABV_GREATER_THAN(queryId) => DrinkAbvGreaterThanMatcher(queryValue.toDouble)
+      case DRINK_ABV_LESS_THAN(queryId) => DrinkAbvLessThanMatcher(queryValue.toDouble)
+      case DRINK_DESCRIPTION(queryId) => DrinkDescriptionMatcher(queryValue)
+      //case DRINK_HAS_FEATURES(queryId) => DrinkFeatureMatcher(queryValue)
+      case DRINK_NAME(queryId) => DrinkNameMatcher(queryValue)
+      case DRINK_PRICE(queryId) => DrinkPriceMatcher(queryValue.toDouble)
+      case DRINK_TYPE(queryId) => DrinkTypeMatcher(queryValue)
+      case DRINK_TYPE_BEER(queryId) => BeerTypeMatcher
+      case DRINK_TYPE_CIDER(queryId) => CiderTypeMatcher
+      case DRINK_TYPE_PERRY(queryId) => PerryTypeMatcher
+      case _ => AlwaysTrueDrinkMatcher
     }
   }
 

@@ -5,7 +5,6 @@ import id._
 import uk.co.randomcoding.drinkfinder.model.drink._
 import net.liftweb.common.Logger
 
-
 /**
  * Enumeration of the types of matchers as case classes with extractors
  *
@@ -13,140 +12,162 @@ import net.liftweb.common.Logger
  * Date: 26/05/11
  */
 
-sealed abstract class Matcher(matcherType: MatcherId) extends Logger {
-	type T
-	def matcherId: MatcherId = matcherType
+sealed abstract class Matcher[M](matcherType : MatcherId, matchValue : M) extends Logger {
+  type T
 
-	def apply(matchTo : T) : Boolean
+  def matcherId : MatcherId = matcherType
+
+  def apply(matchWith : T) : Boolean
+
+  //def unapply(matchId: String, matchTo: M) : Option[Matcher[_]]
+
+  protected val matchTo = matchValue
 }
 
-abstract class DrinkMatcher(matcherType : MatcherId) extends Matcher(matcherType) {
-	type T = Drink
+abstract class DrinkMatcher[M](matcherType : MatcherId, matchValue : M) extends Matcher(matcherType, matchValue) {
+  override type T = Drink
 }
 
-case object BeerTypeMatcher extends DrinkMatcher(DRINK_TYPE_BEER) {
-  def apply(drink: T) = {
+case object BeerTypeMatcher extends DrinkMatcher[Any](DRINK_TYPE_BEER, "") {
+
+  def apply(drink : T) = {
     drink.isInstanceOf[Beer]
   }
-  
-  def unapply(matcherType: String) : Option[Matcher] = {
+
+  /*def unapply(matcherType : String) : Option[Matcher[_]] = {
     if (matcherType == matcherId) Some(BeerTypeMatcher) else None
+  }*/
+}
+
+case object CiderTypeMatcher extends DrinkMatcher[Any](DRINK_TYPE_CIDER, "") {
+
+  def apply(drink : T) = {
+    drink.isInstanceOf[Cider]
   }
+
+  /*def unapply(matcherType : String) : Option[Matcher[_]] = {
+    if (matcherType == matcherId) Some(CiderTypeMatcher) else None
+  }*/
 }
 
-case object CiderTypeMatcher extends DrinkMatcher(DRINK_TYPE_CIDER) {
-	def apply(drink: T) = {
-		drink.isInstanceOf[Cider]
-	}
-	
-	def unapply(matcherType: String) : Option[Matcher] = {
-		if (matcherType == matcherId) Some(CiderTypeMatcher) else None
-	}
+case object PerryTypeMatcher extends DrinkMatcher[Any](DRINK_TYPE_PERRY, "") {
+
+  def apply(drink : T) = {
+    drink.isInstanceOf[Perry]
+  }
+
+  /*def unapply(matcherType : String) : Option[Matcher[_]] = {
+    if (matcherType == matcherId) Some(PerryTypeMatcher) else None
+  }*/
 }
 
-case object PerryTypeMatcher extends DrinkMatcher(DRINK_TYPE_PERRY) {
-	def apply(drink: T) = {
-		drink.isInstanceOf[Perry]
-	}
-	
-	def unapply(matcherType: String) : Option[Matcher] = {
-		if (matcherType == matcherId) Some(PerryTypeMatcher) else None
-	}
+case class DrinkNameMatcher(drinkName : String) extends DrinkMatcher[String](DRINK_NAME, drinkName) {
+
+  def apply(drink : T) = {
+    debug("Matching drink %s to name containing %s".format(drink, matchTo))
+    drink.name.toLowerCase contains matchTo.toLowerCase
+  }
+
+  /*def unapply(matcherType : String, matchTo : String) : Option[Matcher[_]] = {
+    if (matcherType == matcherId) Some(DrinkNameMatcher(matchTo)) else None
+  }*/
 }
 
-case object DrinkNameMatcher extends DrinkMatcher(DRINK_NAME) {
-	def apply(drink: T, matchTo: String) = {
-			debug("Matching drink %s to name containing %s".format(drink, matchTo))
-			drink.name.toLowerCase contains matchTo.toLowerCase
-		}
+case class DrinkDescriptionMatcher(descriptionWords : String) extends DrinkMatcher[String](DRINK_DESCRIPTION, descriptionWords) {
 
-	def unapply(matcherType: String): Option[Matcher] = {
-		if (matcherType == matcherId) Some(DrinkNameMatcher) else None
-	}
+  def apply(drink : T) = {
+    val desc = drink.description.toLowerCase
+    val words = matchTo.split(", ")
+    val wordMatcher = (matchWord : String) => desc contains matchWord.toLowerCase
+    words.map(wordMatcher).find(_ == false).isEmpty
+  }
+
+  /*def unapply(matcherType : String, matchTo : String) : Option[Matcher[_]] = {
+    if (matcherType == matcherId) Some(DrinkDescriptionMatcher(matchTo)) else None
+  }*/
 }
 
-case object DrinkDescriptionMatcher extends DrinkMatcher(DRINK_DESCRIPTION) {
-	def apply(drink: T, matchTo: String) = {
-		val desc = drink.description.toLowerCase
-		val words = matchTo.split(", ")
-		val wordMatcher = (matchWord: String) => desc contains matchWord.toLowerCase
-		words.map(wordMatcher).find(_ == false).isEmpty
-	}
+case class DrinkPriceMatcher(price : Double) extends DrinkMatcher[Double](DRINK_PRICE, price) {
 
-	def unapply(matcherType: String): Option[Matcher] = {
-		if (matcherType == matcherId) Some(DrinkDescriptionMatcher) else None
-	}
+  def apply(drink : T) = {
+    drink.price <= matchTo
+  }
+
+  /*def unapply(matcherType : String, matchTo : Double) : Option[Matcher[_]] = {
+    if (matcherType == matcherId) Some(DrinkPriceMatcher(matchTo)) else None
+  }*/
 }
 
-case object DrinkPriceMatcher extends DrinkMatcher(DRINK_PRICE) {
-	def apply(drink: T, matchTo : Double) = drink.price <= matchTo
+case class DrinkAbvLessThanMatcher(abv : Double) extends DrinkMatcher[Double](DRINK_ABV_LESS_THAN, abv) {
 
-	def unapply(matcherType: String): Option[Matcher] = {
-		if (matcherType == matcherId) Some(DrinkPriceMatcher) else None
-	}
+  def apply(drink : T) = drink.abv < matchTo
+
+  /* def unapply(matcherType : String, matchTo : String) : Option[Matcher] = {
+    if (matcherType == matcherId) Some(DrinkAbvLessThanMatcher(matchTo)) else None
+  }*/
 }
 
-case object DrinkAbvLessThanMatcher extends DrinkMatcher(DRINK_ABV_LESS_THAN) {
+case class DrinkAbvGreaterThanMatcher(abv : Double) extends DrinkMatcher[Double](DRINK_ABV_GREATER_THAN, abv) {
 
-	def apply(drink: T, matchTo : Double) = drink.abv < matchTo
+  def apply(drink : T) = drink.abv > matchTo
 
-	def unapply(matcherType: String, matchTo : Double): Option[Matcher] = {
-		if (matcherType == matcherId) Some(DrinkAbvLessThanMatcher) else None
-	}
+  /*def unapply(matcherType : String, matchTo : String) : Option[Matcher] = {
+    if (matcherType == matcherId) Some(DrinkAbvGreaterThanMatcher(matchTo)) else None
+  }*/
 }
 
-case object DrinkAbvGreaterThanMatcher extends DrinkMatcher(DRINK_ABV_GREATER_THAN) {
+case class DrinkAbvEqualToMatcher(abv : Double) extends DrinkMatcher[Double](DRINK_ABV_EQUAL_TO, abv) {
 
-	def apply(drink: T, matchTo : Double) = drink.abv > matchTo
+  def apply(drink : T) = drink.abv == matchTo
 
-	def unapply(matcherType: String): Option[Matcher] = {
-		if (matcherType == matcherId) Some(DrinkAbvGreaterThanMatcher) else None
-	}
+  /*  def unapply(matcherType : String, matchTo: String) : Option[Matcher] = {
+    if (matcherType == matcherId) Some(DrinkAbvEqualToMatcher(matchTo)) else None
+  }*/
 }
 
-case object DrinkAbvEqualToMatcher extends DrinkMatcher(DRINK_ABV_EQUAL_TO) {
+case class DrinkFeatureMatcher(features : List[DrinkFeature]) extends DrinkMatcher[List[DrinkFeature]](DRINK_HAS_FEATURES, features) {
 
-	def apply(drink: T, matchTo : Double) = drink.abv == matchTo
+  def apply(drink : T) = matchTo.map(drink.features.contains(_)).find(_ == false).isEmpty
 
-	def unapply(matcherType: String): Option[Matcher] = {
-		if (matcherType == matcherId) Some(DrinkAbvEqualToMatcher) else None
-	}
+  /*def unapply(matcherType : String) : Option[Matcher] = {
+    if (matcherType == matcherId) Some(DrinkFeatureMatcher) else None
+  }*/
 }
 
-case object DrinkFeatureMatcher extends DrinkMatcher(DRINK_HAS_FEATURES) {
+case class DrinkTypeMatcher(drinkType : String) extends DrinkMatcher[String](DRINK_TYPE, drinkType) {
 
-	def apply(drink: T, matchTo : List[DrinkFeature]) = matchTo.map(drink.features.contains(_)).find(_ == false).isEmpty
-
-	def unapply(matcherType: String): Option[Matcher] = {
-		if (matcherType == matcherId) Some(DrinkFeatureMatcher) else None
-	}
-}
-
-case object DrinkTypeMatcher extends DrinkMatcher(DRINK_TYPE) {
-  def apply[C](drink : T) = drink.isInstanceOf[C]
-  
-  def unapply(matcherType: String, matchTo: Class[Drink]) : Option[Matcher] = {
+  def apply(drink : T) = {
+    matchTo.toLowerCase match {
+      case "beer" => drink.isInstanceOf[Beer]
+      case "cider" => drink.isInstanceOf[Cider]
+      case "perry" => drink.isInstanceOf[Perry]
+      case _ => {
+        error("Undefined drink type %s".format(matchTo));
+        false
+      }
+    }
+  }
+  /*  def unapply(matcherType : String, matchTo : Class[Drink]) : Option[Matcher] = {
     if (matcherType == matcherId) Some(DrinkTypeMatcher) else None
-  }
+  }*/
 }
 
-case object BrewerNameMatcher extends Matcher("brewer.name") {
+case class BrewerNameMatcher(brewerName : String) extends Matcher[String](BREWER_NAME, brewerName) {
 
-	import uk.co.randomcoding.drinkfinder.model.brewer.Brewer
+  import uk.co.randomcoding.drinkfinder.model.brewer.Brewer
 
-	type T = Brewer
+  override type T = Brewer
 
-	def apply(brewer : Brewer, matchTo: String) = brewer.name.toLowerCase.contains(matchTo.toLowerCase)
+  def apply(brewer : Brewer) = brewer.name.toLowerCase.contains(matchTo.toLowerCase)
 
-	def unapply(matcherType: String, matchTo: String): Option[Matcher] = {
-		if (matcherType == matcherId) Some(BrewerNameMatcher) else None
-	}
+  /*def unapply(matcherType : String, matchTo : String) : Option[Matcher] = {
+    if (matcherType == matcherId) Some(BrewerNameMatcher(matchTo)) else None
+  }*/
 }
 
-case object AlwaysTrueMatcher extends Matcher("empty.matcher") {
-	type T = Any
+case object AlwaysTrueDrinkMatcher extends DrinkMatcher[Any](ALWAYS_TRUE, "") {
 
-	def apply(matchTo: T) = true
+  def apply(matchTo : T) = true
 
-	def unapply(matchTo: Any): Option[Matcher] = Some(AlwaysTrueMatcher)
+  /*def unapply(matchTo : Any) : Option[Matcher] = Some(AlwaysTrueDrinkMatcher)*/
 }

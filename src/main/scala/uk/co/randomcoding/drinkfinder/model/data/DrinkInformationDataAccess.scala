@@ -1,14 +1,12 @@
 package uk.co.randomcoding.drinkfinder.model.data
 
+import uk.co.randomcoding.drinkfinder.model.matcher.DrinkMatcher
 import uk.co.randomcoding.drinkfinder.model.drink.Drink
 
 /**
  * Defines the means of accessing drink information data 
  */
 trait DrinkInformationDataAccess {
-
-	import uk.co.randomcoding.drinkfinder.model.matcher.Matcher
-
 	/**
    * The type of [[DrinkData]] used
    */
@@ -33,5 +31,5 @@ trait DrinkInformationDataAccess {
    * **drinkData***
    * @return The [[drink.Drink]]s that match **all** the matchers
    */
-  def getMatching(matchers: List[Matcher]) = drinkData.getMatching(matchers)
+  def getMatching(matchers: List[DrinkMatcher[_]]) = drinkData.getMatching(matchers)
 }

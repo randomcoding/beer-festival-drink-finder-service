@@ -3,6 +3,8 @@
  */
 package uk.co.randomcoding.drinkfinder.snippet
 
+import uk.co.randomcoding.drinkfinder.model.matcher.BrewerNameMatcher
+import uk.co.randomcoding.drinkfinder.model.matcher.id.BREWER_NAME
 import net.liftweb.http._
 import net.liftweb.util.Helpers._
 import scala.xml.{NodeSeq, Text}
@@ -18,13 +20,14 @@ import net.liftweb.common.Logger
 class DisplayResults extends Logger {
 
 	private val drinkData = new WbfDrinkDataAccess()
+	private val BrewerNameQueryRegex = "$%s=(\\.*)".format(BREWER_NAME.id)
 
 	def calculateResults(in: NodeSeq): NodeSeq = {
 		import uk.co.randomcoding.drinkfinder.model.matcher.Matcher
 		val params = S.queryString openOr "No Query String"
 		debug("Received Query String: %s".format(params))
-
-		val matchers: List[Matcher] = params match {
+		
+		val matchers/*: List[Matcher]*/ = params match {
 			case "No Query String" => Nil
 			case paramString: String => MatcherFactory.generate(paramString)
 		}

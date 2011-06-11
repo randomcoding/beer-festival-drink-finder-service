@@ -1,7 +1,7 @@
 package uk.co.randomcoding.drinkfinder.model.matcher.id
 
 sealed abstract class MatcherId(idValue: String) {
-  protected val id = idValue
+  val id = idValue
   
   override def equals(other: Any) : Boolean = {
     Some(other).isDefined && other.isInstanceOf[MatcherId] && id == other.asInstanceOf[MatcherId].id
@@ -51,6 +51,16 @@ case object DRINK_TYPE_PERRY extends MatcherId("drink.type.perry") {
 	def unapply(matcherId: String) : Option[MatcherId] = if (matcherId == id) Some(DRINK_TYPE_PERRY) else None  
 }
 
+case object DRINK_TYPE extends MatcherId("drink.type") {
+  def unapply (matcherId: String) : Option[MatcherId] = if (matcherId == id) Some(DRINK_TYPE) else None
+}
+
 case object BREWER_NAME extends MatcherId("brewer.name") {
 	def unapply(matcherId: String) : Option[MatcherId] = if (matcherId == id) Some(BREWER_NAME) else None  
 }
+
+case object ALWAYS_TRUE extends MatcherId("always.true") {
+	def unapply(matcherId: String) : Option[MatcherId] = if (matcherId == id) Some(BREWER_NAME) else None  
+}
+
+
