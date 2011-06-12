@@ -3,7 +3,6 @@
  */
 package uk.co.randomcoding.drinkfinder.model.matcher
 
-import scala.Enumeration
 import net.liftweb.common.Logger
 import id._
 

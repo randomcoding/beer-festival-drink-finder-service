@@ -30,9 +30,7 @@ abstract class DrinkMatcher[M](matcherType : MatcherId, matchValue : M) extends 
 
 case object BeerTypeMatcher extends DrinkMatcher[Any](DRINK_TYPE_BEER, "") {
 
-  def apply(drink : T) = {
-    drink.isInstanceOf[Beer]
-  }
+  def apply(drink : Drink) = drink.isInstanceOf[Beer]
 
   /*def unapply(matcherType : String) : Option[Matcher[_]] = {
     if (matcherType == matcherId) Some(BeerTypeMatcher) else None
@@ -41,9 +39,7 @@ case object BeerTypeMatcher extends DrinkMatcher[Any](DRINK_TYPE_BEER, "") {
 
 case object CiderTypeMatcher extends DrinkMatcher[Any](DRINK_TYPE_CIDER, "") {
 
-  def apply(drink : T) = {
-    drink.isInstanceOf[Cider]
-  }
+  def apply(drink : Drink) = drink.isInstanceOf[Cider]
 
   /*def unapply(matcherType : String) : Option[Matcher[_]] = {
     if (matcherType == matcherId) Some(CiderTypeMatcher) else None
@@ -52,9 +48,7 @@ case object CiderTypeMatcher extends DrinkMatcher[Any](DRINK_TYPE_CIDER, "") {
 
 case object PerryTypeMatcher extends DrinkMatcher[Any](DRINK_TYPE_PERRY, "") {
 
-  def apply(drink : T) = {
-    drink.isInstanceOf[Perry]
-  }
+  def apply(drink : Drink) = drink.isInstanceOf[Perry]
 
   /*def unapply(matcherType : String) : Option[Matcher[_]] = {
     if (matcherType == matcherId) Some(PerryTypeMatcher) else None
@@ -63,7 +57,7 @@ case object PerryTypeMatcher extends DrinkMatcher[Any](DRINK_TYPE_PERRY, "") {
 
 case class DrinkNameMatcher(drinkName : String) extends DrinkMatcher[String](DRINK_NAME, drinkName) {
 
-  def apply(drink : T) = {
+  def apply(drink : Drink) = {
     debug("Matching drink %s to name containing %s".format(drink, matchTo))
     drink.name.toLowerCase contains matchTo.toLowerCase
   }
@@ -75,7 +69,7 @@ case class DrinkNameMatcher(drinkName : String) extends DrinkMatcher[String](DRI
 
 case class DrinkDescriptionMatcher(descriptionWords : String) extends DrinkMatcher[String](DRINK_DESCRIPTION, descriptionWords) {
 
-  def apply(drink : T) = {
+  def apply(drink : Drink) = {
     val desc = drink.description.toLowerCase
     val words = matchTo.split(", ")
     val wordMatcher = (matchWord : String) => desc contains matchWord.toLowerCase
@@ -89,9 +83,7 @@ case class DrinkDescriptionMatcher(descriptionWords : String) extends DrinkMatch
 
 case class DrinkPriceMatcher(price : Double) extends DrinkMatcher[Double](DRINK_PRICE, price) {
 
-  def apply(drink : T) = {
-    drink.price <= matchTo
-  }
+  def apply(drink : Drink) = drink.price <= matchTo
 
   /*def unapply(matcherType : String, matchTo : Double) : Option[Matcher[_]] = {
     if (matcherType == matcherId) Some(DrinkPriceMatcher(matchTo)) else None
@@ -100,7 +92,7 @@ case class DrinkPriceMatcher(price : Double) extends DrinkMatcher[Double](DRINK_
 
 case class DrinkAbvLessThanMatcher(abv : Double) extends DrinkMatcher[Double](DRINK_ABV_LESS_THAN, abv) {
 
-  def apply(drink : T) = drink.abv < matchTo
+  def apply(drink : Drink) = drink.abv < matchTo
 
   /* def unapply(matcherType : String, matchTo : String) : Option[Matcher] = {
     if (matcherType == matcherId) Some(DrinkAbvLessThanMatcher(matchTo)) else None
@@ -109,7 +101,7 @@ case class DrinkAbvLessThanMatcher(abv : Double) extends DrinkMatcher[Double](DR
 
 case class DrinkAbvGreaterThanMatcher(abv : Double) extends DrinkMatcher[Double](DRINK_ABV_GREATER_THAN, abv) {
 
-  def apply(drink : T) = drink.abv > matchTo
+  def apply(drink : Drink) = drink.abv > matchTo
 
   /*def unapply(matcherType : String, matchTo : String) : Option[Matcher] = {
     if (matcherType == matcherId) Some(DrinkAbvGreaterThanMatcher(matchTo)) else None
@@ -118,7 +110,7 @@ case class DrinkAbvGreaterThanMatcher(abv : Double) extends DrinkMatcher[Double]
 
 case class DrinkAbvEqualToMatcher(abv : Double) extends DrinkMatcher[Double](DRINK_ABV_EQUAL_TO, abv) {
 
-  def apply(drink : T) = drink.abv == matchTo
+  def apply(drink : Drink) = drink.abv == matchTo
 
   /*  def unapply(matcherType : String, matchTo: String) : Option[Matcher] = {
     if (matcherType == matcherId) Some(DrinkAbvEqualToMatcher(matchTo)) else None
@@ -136,7 +128,7 @@ case class DrinkFeatureMatcher(features : List[DrinkFeature]) extends DrinkMatch
 
 case class DrinkTypeMatcher(drinkType : String) extends DrinkMatcher[String](DRINK_TYPE, drinkType) {
 
-  def apply(drink : T) = {
+  def apply(drink : Drink) = {
     matchTo.toLowerCase match {
       case "beer" => drink.isInstanceOf[Beer]
       case "cider" => drink.isInstanceOf[Cider]
