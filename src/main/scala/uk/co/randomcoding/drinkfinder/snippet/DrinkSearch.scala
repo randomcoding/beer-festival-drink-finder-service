@@ -9,6 +9,7 @@ import net.liftweb.http._
 import net.liftweb.http.js._
 import net.liftweb._
 import net.liftweb.util.Helpers._
+import uk.co.randomcoding.drinkfinder.model.matcher.id._
 
 /**
  * Snippet code to handle the display of the search form.
@@ -76,27 +77,32 @@ object DrinkSearch {
 			var paramsList  = List.empty[String]
 			if (drinkName.nonEmpty)
 			{
-				paramsList = ("drinkName=" + drinkName) :: paramsList
+				paramsList = (getParam(DRINK_NAME) + "=" + drinkName) :: paramsList
 			}
 			
 			if (descriptionContains.nonEmpty)
 			{
-				paramsList = ("descriptionContains=" + descriptionContains) :: paramsList
+				paramsList = (getParam(DRINK_DESCRIPTION) +"=" + descriptionContains) :: paramsList
 			}
 			
-			if (brewerName != "None")
+			/*if (brewerName != "None")
 			{
 				paramsList = ("brewerName=" + brewerName) :: paramsList
-			}
+			}*/
 			
 			if (abvValue > 0.0)
 			{
-				paramsList = ("abv=%.1f&comparison=%s".format(abvValue, abvComparisonType)) :: paramsList
+			  val abvParam = abvComparisonType match {
+			    case "Equal" => getParam(DRINK_ABV_EQUAL_TO)
+			    case "Less Than" => getParam(DRINK_ABV_LESS_THAN)
+			    case "Greater Than" =>getParam(DRINK_ABV_GREATER_THAN)
+			  }
+				paramsList = ( abvParam + "=%.1f".format(abvValue)) :: paramsList
 			}
 			
 			if (priceValue > 0.0)
 			{
-				paramsList = ("priceLessThan=%.2f".format(priceValue)) :: paramsList
+				paramsList = ("%S=%.2f".format(getParam(DRINK_PRICE) ,priceValue)) :: paramsList
 			}
 
 			paramsList.mkString("", "&", "")
@@ -114,4 +120,6 @@ object DrinkSearch {
 	private def displayError(formId : String, errorMessage : String) = {
 		S.error(formId, errorMessage)
 	}
+	
+	private def getParam(queryId: MatcherId) : String = queryId.id
 }
