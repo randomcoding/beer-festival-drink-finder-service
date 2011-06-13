@@ -3,6 +3,7 @@
  */
 package uk.co.randomcoding.drinkfinder.snippet
 
+import uk.co.randomcoding.drinkfinder.model.matcher.id._
 import net.liftweb.http.js.JsCmds._
 import net.liftweb.common._
 import net.liftweb.http._
@@ -77,32 +78,27 @@ object DrinkSearch {
 			var paramsList  = List.empty[String]
 			if (drinkName.nonEmpty)
 			{
-				paramsList = (getParam(DRINK_NAME) + "=" + drinkName) :: paramsList
+				paramsList = (DRINK_NAME + "=" + drinkName) :: paramsList
 			}
 			
 			if (descriptionContains.nonEmpty)
 			{
-				paramsList = (getParam(DRINK_DESCRIPTION) +"=" + descriptionContains) :: paramsList
+				paramsList = (DRINK_DESCRIPTION +"=" + descriptionContains) :: paramsList
 			}
-			
-			/*if (brewerName != "None")
-			{
-				paramsList = ("brewerName=" + brewerName) :: paramsList
-			}*/
 			
 			if (abvValue > 0.0)
 			{
 			  val abvParam = abvComparisonType match {
-			    case "Equal" => getParam(DRINK_ABV_EQUAL_TO)
-			    case "Less Than" => getParam(DRINK_ABV_LESS_THAN)
-			    case "Greater Than" =>getParam(DRINK_ABV_GREATER_THAN)
+			    case "Equal" => DRINK_ABV_EQUAL_TO
+			    case "Less Than" => DRINK_ABV_LESS_THAN
+			    case "Greater Than" =>DRINK_ABV_GREATER_THAN
 			  }
 				paramsList = ( abvParam + "=%.1f".format(abvValue)) :: paramsList
 			}
 			
 			if (priceValue > 0.0)
 			{
-				paramsList = ("%S=%.2f".format(getParam(DRINK_PRICE) ,priceValue)) :: paramsList
+				paramsList = ("%S=%.2f".format(DRINK_PRICE ,priceValue)) :: paramsList
 			}
 
 			paramsList.mkString("", "&", "")
@@ -111,7 +107,6 @@ object DrinkSearch {
 		// bind form to vars and create display
 		"name=DrinkName" #> SHtml.text(drinkName, drinkName = _, "id" -> "the_name") &
 			"name=DescriptionContains" #> SHtml.text(descriptionContains, descriptionContains = _) &
-			"name=Brewer" #> SHtml.select(brewers, Box(""), brewerName = _) &
 			"name=ABV" #> SHtml.text(abv, abv = _) &
 			"name=AbvComparisonType" #> SHtml.select(comparisonTypes, Box(""), abvComparisonType = _) &
 			"name=PriceLessThan" #> (SHtml.text(priceLessThan, priceLessThan = _) ++ SHtml.hidden(process))
@@ -120,6 +115,4 @@ object DrinkSearch {
 	private def displayError(formId : String, errorMessage : String) = {
 		S.error(formId, errorMessage)
 	}
-	
-	private def getParam(queryId: MatcherId) : String = queryId.id
 }
