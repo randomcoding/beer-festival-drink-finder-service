@@ -20,8 +20,7 @@ import uk.co.randomcoding.drinkfinder.model.matcher.id._
  *
  */
 object DrinkSearch {
-	// global state/form values
-	private val brewers = List(("None" -> ""), ("A Brewer" -> "A Brewer"), ("AN Brewer" -> "AN Brewer"))
+	// global form values
 	private val comparisonTypes = List(("Equal" -> "Equal To"), ("Greater Than" -> "Greater Than"), ("Less Than" -> "Less Than"))
 
 	def render = {
@@ -31,7 +30,6 @@ object DrinkSearch {
 		// store state from fields
 		var drinkName = ""
 		var descriptionContains = ""
-		var brewerName = ""
 		var abv = "0.0"
 		var abvValue = 0.0
 		var abvComparisonType = ""
