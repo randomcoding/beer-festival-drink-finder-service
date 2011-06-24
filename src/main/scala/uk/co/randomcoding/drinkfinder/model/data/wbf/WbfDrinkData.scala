@@ -36,9 +36,12 @@ object WbfDrinkData extends WbfDrinkData {
 	  import uk.co.randomcoding.drinkfinder.model.drink.DrinkFactory._
 	  import uk.co.randomcoding.drinkfinder.model.drink._
 	  val data = new WbfDrinkData()
-	  data.addDrink(beer("First Beer", "The First Beer", 4.5, 1.40, List(RealAle)))
+	  data.addDrink(beer("First Beer", "The First Beer", 4.5, 1.80, List(RealAle)))
 	  data.addDrink(cider("First Cider", "The First Cider", 6.5, 1.30, List(Dry)))
-	  data.addDrink(perry("First Perry", "The First Perry", 7.3, 1.40, List(Medium)))
+	  data.addDrink(perry("First Perry", "The First Perry", 7.3, 1.60, List(Medium)))
+	  data.addDrink(beer("Second Beer", "The Second Beer", 4.5, 1.70, List(RealAle)))
+	  data.addDrink(cider("Second Cider", "The Second Cider", 6.5, 1.35, List(Medium)))
+	  data.addDrink(perry("Second Perry", "The Second Perry", 7.3, 1.50, List(Sweet)))
 	  data
 	})
 

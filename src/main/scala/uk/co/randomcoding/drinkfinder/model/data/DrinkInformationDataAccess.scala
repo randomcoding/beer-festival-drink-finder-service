@@ -27,9 +27,16 @@ trait DrinkInformationDataAccess {
   /**
    * Get the [[drink.Drink]]s that match all the matchers provided
    *
-   * @param matchers A List of functions **(Drink) => Boolean** that are used to match [[drink.Drink]]s from the
-   * **drinkData***
+   * @param matchers A List of [[uk.co.randomcoding.drinkfinder.model.matcher.DrinkMatcher]]s used to search the drink data
    * @return The [[drink.Drink]]s that match **all** the matchers
    */
   def getMatching(matchers: List[DrinkMatcher[_]]) = drinkData.getMatching(matchers)
+  
+  /**
+   * Get the [[drink.Drink]]s that match the matchers provided
+   *
+   * @param matcher A [[uk.co.randomcoding.drinkfinder.model.matcher.DrinkMatcher]] that is used to search the drink data
+   * @return The [[drink.Drink]]s that match **all** the matchers
+   */
+  def getMatching(matcher: DrinkMatcher[_]) = drinkData.getMatching(List(matcher))
 }
