@@ -18,3 +18,5 @@ case class Brewer(name : String, region : String) {
 
 	def removeDrink(drink : Drink) = brewedDrinks = brewedDrinks.filterNot(_ == drink)
 }
+
+object NoBrewer extends Brewer("No Brewer", "From Nowhere")
