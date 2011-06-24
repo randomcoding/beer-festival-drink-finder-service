@@ -53,7 +53,7 @@
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="jdk" jdkName="1.6" jdkType="JavaSDK" />
+    <orderEntry type="inheritedJdk" />
     <orderEntry type="library" name="scala-library-2.8.1" level="application" />
     <orderEntry type="library" name="ManagedLibraries" level="project" />
     <orderEntry type="library" scope="TEST" name="TestLibraries" level="project" />
