@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Drink Finder</title>
+</head>
+<body class="lift:content_id=main">
+	<div id="main" class="lift:surround?with=defaultjquery&at=content">
+		<!-- Display drink data -->
+		<div class="lift:DisplayDrink.showDrink column span-18 last">
+		<div class="column span-18 last" style="text-align: left">
+		<h1 class="alt"><span id="drinkName">Drink Name is Displayed Here</span></h1>
+		</div>
+            <div class="column span-18 last" id="details">
+                <div>
+                <div class="column span-6 detailHeading">ABV</div>
+                <div class="column span-12 detailText last"><span id="abvDetail">abv</span>%</div> 
+                <div class="column span-6 detailHeading">Price per 1/2 pint</div>
+                <div class="column span-12 detailText last">&pound;<span id="priceDetail">price</span></div> 
+                <div class="column span-6 detailHeading">Brewer</div>
+                <div class="column span-12 detailText last"><span id="brewerDetail">brewer</span></div> 
+                <div class="column span-6 detailHeading">Description</div>
+                <div class="column span-12 detailText last"><span id="descriptionDetail">description</span></div> 
+                </div>
+            </div>
+            <hr>
+            <div id="sharebar"></div>
+		</div>
+	</div>
+</body>
+</html>
