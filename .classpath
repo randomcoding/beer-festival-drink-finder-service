@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" output="target/eclipse/classes" path="src/main/scala"/>
-	<classpathentry kind="src" output="target/eclipse/resources" path="src/main/resources"/>
-	<classpathentry kind="src" output="target/eclipse/test-classes" path="src/test/scala"/>
-	<classpathentry kind="src" output="target/eclipse/test-resources" path="src/test/resources"/>
+	<classpathentry kind="src" output="target/scala_2.8.1/classes" path="src/main/scala"/>
+	<classpathentry kind="src" output="target/scala_2.8.1/resources" path="src/main/resources"/>
+	<classpathentry kind="src" output="target/scala_2.8.1/test-classes" path="src/test/scala"/>
+	<classpathentry kind="src" output="target/scala_2.8.1/test-resources" path="src/test/resources"/>
 	<classpathentry kind="lib" path="lib_managed/scala_2.8.1/compile/paranamer-2.3.jar"/>
 	<classpathentry kind="lib" path="lib_managed/scala_2.8.1/test/jetty-util-6.1.22.jar"/>
 	<classpathentry kind="lib" path="lib_managed/scala_2.8.1/compile/commons-codec-1.4.jar"/>
