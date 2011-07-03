@@ -20,97 +20,99 @@ import uk.co.randomcoding.drinkfinder.model.matcher.id._
  *
  */
 object DrinkSearch {
-	// global form values
-	private val comparisonTypes = List(("Equal" -> "Equal To"), ("Greater Than" -> "Greater Than"), ("Less Than" -> "Less Than"))
+  // global form values
+  private val comparisonTypes = List(("Any" -> "Any"), ("Equal" -> "Equal To"), ("Greater Than" -> "Greater Than"), ("Less Than" -> "Less Than"))
+  private val drinkTypes = List(("Any" -> "Any"), ("Beer" -> "Beer"), ("Cider" -> "Cider"), ("Perry" -> "Perry"))
 
-	def render = {
-		// where did we come here from
-		val whence = S.referer openOr "/"
+  def render = {
+    // where did we come here from
+    val whence = S.referer openOr "/"
 
-		// store state from fields
-		var drinkName = ""
-		var descriptionContains = ""
-		var abv = "0.0"
-		var abvValue = 0.0
-		var abvComparisonType = ""
-		var priceLessThan = "0.0"
-		var priceValue = 0.0
+    // store state from fields
+    var drinkName = ""
+    var descriptionContains = ""
+    var abv = "0.0"
+    var abvValue = 0.0
+    var abvComparisonType = ""
+    var priceLessThan = "0.0"
+    var priceValue = 0.0
+    var drinkType = ""
 
-		Focus("DrinkName")
+    Focus("DrinkName")
 
-		def process() : JsCmd = {
-			Thread.sleep(500) // allow time to show ajax spinner
-			var valid = true
+    def process() : JsCmd = {
+      Thread.sleep(500) // allow time to show ajax spinner
+      var valid = true
 
-			abvValue = asDouble(abv) match {
-				case Full(a) => a
-				case _ => {
-					displayError("ABVError", "ABV Value is not a number")
-					valid = false
-					-1.0
-				}
-			}
+      abvValue = asDouble(abv) match {
+        case Full(a) => a
+        case _ => {
+          displayError("ABVError", "ABV Value is not a number")
+          valid = false
+          -1.0
+        }
+      }
 
-			priceValue = asDouble(priceLessThan) match {
-				case Full(a) => a
-				case _ => {
-					displayError("PriceError", "Price Value is not a number")
-					valid = false
-					-1.0
-				}
-			}
+      priceValue = asDouble(priceLessThan) match {
+        case Full(a) => a
+        case _ => {
+          displayError("PriceError", "Price Value is not a number")
+          valid = false
+          -1.0
+        }
+      }
 
-			valid match {
-				case true => {
-					val resultString = getParameterValues()
-					val redirectTo = "/results?" + resultString
-					println("Redirecting to: " + redirectTo)
-					S.notice("Name: " + drinkName)
-					S.redirectTo(redirectTo)
-				}
-				case false => // do nothing
-			}
-		}
+      valid match {
+        case true => {
+          val resultString = getParameterValues()
+          val redirectTo = "/results?" + resultString
+          S.notice("Name: " + drinkName)
+          S.redirectTo(redirectTo)
+        }
+        case false => // do nothing - should probably display an error here
+      }
+    }
 
-		def getParameterValues() : String = {
-			var paramsList  = List.empty[String]
-			if (drinkName.nonEmpty)
-			{
-				paramsList = (DRINK_NAME + "=" + drinkName) :: paramsList
-			}
-			
-			if (descriptionContains.nonEmpty)
-			{
-				paramsList = (DRINK_DESCRIPTION +"=" + descriptionContains) :: paramsList
-			}
-			
-			if (abvValue > 0.0)
-			{
-			  val abvParam = abvComparisonType match {
-			    case "Equal" => DRINK_ABV_EQUAL_TO
-			    case "Less Than" => DRINK_ABV_LESS_THAN
-			    case "Greater Than" =>DRINK_ABV_GREATER_THAN
-			  }
-				paramsList = ( abvParam + "=%.1f".format(abvValue)) :: paramsList
-			}
-			
-			if (priceValue > 0.0)
-			{
-				paramsList = ("%S=%.2f".format(DRINK_PRICE ,priceValue)) :: paramsList
-			}
+    def getParameterValues() : String = {
+      var paramsList = List.empty[String]
+      if (drinkName.nonEmpty) {
+        paramsList = (DRINK_NAME + "=" + drinkName) :: paramsList
+      }
 
-			paramsList.mkString("", "&", "")
-		}
+      if (descriptionContains.nonEmpty) {
+        paramsList = (DRINK_DESCRIPTION + "=" + descriptionContains) :: paramsList
+      }
 
-		// bind form to vars and create display
-		"name=DrinkName" #> SHtml.text(drinkName, drinkName = _, "id" -> "the_name") &
-			"name=DescriptionContains" #> SHtml.text(descriptionContains, descriptionContains = _) &
-			"name=ABV" #> SHtml.text(abv, abv = _) &
-			"name=AbvComparisonType" #> SHtml.select(comparisonTypes, Box(""), abvComparisonType = _) &
-			"name=PriceLessThan" #> (SHtml.text(priceLessThan, priceLessThan = _) ++ SHtml.hidden(process))
-	}
+      if (abvValue > 0.0) {
+        val abvParam = abvComparisonType match {
+          case "Equal" => DRINK_ABV_EQUAL_TO
+          case "Less Than" => DRINK_ABV_LESS_THAN
+          case "Greater Than" => DRINK_ABV_GREATER_THAN
+        }
+        paramsList = (abvParam + "=%.1f".format(abvValue)) :: paramsList
+      }
 
-	private def displayError(formId : String, errorMessage : String) = {
-		S.error(formId, errorMessage)
-	}
+      if (priceValue > 0.0) {
+        paramsList = ("%s=%.2f".format(DRINK_PRICE, priceValue)) :: paramsList
+      }
+      
+      if (drinkType.nonEmpty && drinkType.ne("Any")) {
+        paramsList = ("%s=%s".format(DRINK_TYPE, drinkType)) :: paramsList
+      }
+
+      paramsList.mkString("", "&", "")
+    }
+
+    // bind form to vars and create display
+    "name=DrinkName" #> SHtml.text(drinkName, drinkName = _, "id" -> "the_name") &
+      "name=DescriptionContains" #> SHtml.text(descriptionContains, descriptionContains = _) &
+      "name=ABV" #> SHtml.text(abv, abv = _) &
+      "name=AbvComparisonType" #> SHtml.select(comparisonTypes, Box("Any"), abvComparisonType = _) &
+      "name=DrinkType" #> (SHtml.select(drinkTypes, Box("Any"), drinkType = _)) &
+      "name=PriceLessThan" #> (SHtml.text(priceLessThan, priceLessThan = _) ++ SHtml.hidden(process))
+  }
+
+  private def displayError(formId : String, errorMessage : String) = {
+    S.error(formId, errorMessage)
+  }
 }

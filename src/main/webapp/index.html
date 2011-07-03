@@ -29,11 +29,11 @@
 						<td><input class="formEntry" name="DescriptionContains" />
 						</td>
 					</tr>
-					<!-- <tr>
-						<td><span class="formLabel">Brewer:</span></td>
-						<td><select class="formEntry" name="Brewer"></select>
+					<tr>
+						<td><span class="formLabel">Drink Type:</span></td>
+						<td><select class="formEntry" name="DrinkType"></select>
 						</td>
-					</tr> -->
+					</tr>
 					<tr>
 						<td><span class="formLabel">ABV:</span></td>
 						<td><select class="formEntry" name="AbvComparisonType"></select>
@@ -42,11 +42,18 @@
 						</td>
 					</tr>
 					<tr>
-						<td><span class="formLabel">Price Less Than:</span></td>
-						<td><span class="formEntry">&pound;<input name="PriceLessThan" style="width: 4em;" class="formEntry"/></span><span
-							class="lift:Msg?id=PriceError; errorClass=error edit_error_class formEntry">error</span>
+						<td><span class="formLabel">Price:</span></td>
+						<td><span class="formEntry">
+							<input name="PriceLessThan" style="width: 4em;" class="formEntry"/><span
+							class="lift:Msg?id=ABVError; errorClass=error edit_error_class formEntry">error</span></span>
 						</td>
 					</tr>
+					<!-- <tr>
+						<td><span class="formLabel">Price Less Than:</span></td>
+						<td><span class="formEntry"><input name="PriceLessThan" style="width: 4em;" class="formEntry"/></span><span
+							class="lift:Msg?id=PriceError; errorClass=error edit_error_class formEntry">error</span>
+						</td>
+					</tr> -->
 					<tr>
 						<td colspan=2><input class="formLabel"
 							style="text-align: center;" value="Submit" type="submit" /></td>
