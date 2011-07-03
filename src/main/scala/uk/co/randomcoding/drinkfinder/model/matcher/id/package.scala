@@ -47,18 +47,6 @@ package object id {
     def unapply(matcherId : String) : Option[MatcherId] = if (matcherId == id) Some(DRINK_HAS_FEATURES) else None
   }
 
-  case object DRINK_TYPE_BEER extends MatcherId("drink.type.beer") {
-    def unapply(matcherId : String) : Option[MatcherId] = if (matcherId == id) Some(DRINK_TYPE_BEER) else None
-  }
-
-  case object DRINK_TYPE_CIDER extends MatcherId("drink.type.cider") {
-    def unapply(matcherId : String) : Option[MatcherId] = if (matcherId == id) Some(DRINK_TYPE_CIDER) else None
-  }
-
-  case object DRINK_TYPE_PERRY extends MatcherId("drink.type.perry") {
-    def unapply(matcherId : String) : Option[MatcherId] = if (matcherId == id) Some(DRINK_TYPE_PERRY) else None
-  }
-
   case object DRINK_TYPE extends MatcherId("drink.type") {
     def unapply(matcherId : String) : Option[MatcherId] = if (matcherId == id) Some(DRINK_TYPE) else None
   }

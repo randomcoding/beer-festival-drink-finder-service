@@ -38,9 +38,6 @@ object MatcherFactory extends Logger {
       case DRINK_NAME(queryId) => DrinkNameMatcher(queryValue)
       case DRINK_PRICE(queryId) => DrinkPriceMatcher(queryValue.toDouble)
       case DRINK_TYPE(queryId) => DrinkTypeMatcher(queryValue)
-      case DRINK_TYPE_BEER(queryId) => BeerTypeMatcher
-      case DRINK_TYPE_CIDER(queryId) => CiderTypeMatcher
-      case DRINK_TYPE_PERRY(queryId) => PerryTypeMatcher
       case _ => AlwaysTrueDrinkMatcher
     }
   }

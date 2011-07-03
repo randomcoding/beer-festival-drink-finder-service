@@ -26,21 +26,6 @@ abstract class DrinkMatcher[M](matcherType : MatcherId, matchValue : M) extends 
   override type T = Drink
 }
 
-case object BeerTypeMatcher extends DrinkMatcher[Any](DRINK_TYPE_BEER, "") {
-
-  def apply(drink : Drink) = drink.isInstanceOf[Beer]
-}
-
-case object CiderTypeMatcher extends DrinkMatcher[Any](DRINK_TYPE_CIDER, "") {
-
-  def apply(drink : Drink) = drink.isInstanceOf[Cider]
-}
-
-case object PerryTypeMatcher extends DrinkMatcher[Any](DRINK_TYPE_PERRY, "") {
-
-  def apply(drink : Drink) = drink.isInstanceOf[Perry]
-}
-
 case class DrinkNameMatcher(drinkName : String) extends DrinkMatcher[String](DRINK_NAME, drinkName) {
 
   def apply(drink : Drink) = {
