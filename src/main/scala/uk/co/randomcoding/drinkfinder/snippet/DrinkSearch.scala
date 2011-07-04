@@ -19,7 +19,7 @@ import uk.co.randomcoding.drinkfinder.model.matcher.id._
  * @author RandomCoder
  *
  */
-object DrinkSearch {
+object DrinkSearch extends Logger {
   // global form values
   private val comparisonTypes = List(("Any" -> "Any"), ("Equal" -> "Equal To"), ("Greater Than" -> "Greater Than"), ("Less Than" -> "Less Than"))
   private val drinkTypes = List(("Any" -> "Any"), ("Beer" -> "Beer"), ("Cider" -> "Cider"), ("Perry" -> "Perry"))
@@ -44,12 +44,24 @@ object DrinkSearch {
       Thread.sleep(500) // allow time to show ajax spinner
       var valid = true
 
+      val setInvalid : ((String, String) => Double) = ((errorId : String, errorMessage : String) => {
+        displayError(errorId, errorMessage)
+        valid = false
+        -1.0
+      })
+
       abvValue = asDouble(abv) match {
-        case Full(a) => a
+        case Full(a) => {
+          if (a == 0 && !abvComparisonType.equals("Any")) setInvalid("ABVError", "Please Enter an ABV for Comparison") else {
+            abvComparisonType match {
+              case "Any" => setInvalid("ABVError", "Please Select a Comparison Type")
+              case "" => setInvalid("ABVError", "Please Select a ComparisonType")
+              case _ => a
+            }
+          }
+        }
         case _ => {
-          displayError("ABVError", "ABV Value is not a number")
-          valid = false
-          -1.0
+          setInvalid("ABVError", "ABV Value is not a number")
         }
       }
 
@@ -89,14 +101,15 @@ object DrinkSearch {
           case "Less Than" => DRINK_ABV_LESS_THAN
           case "Greater Than" => DRINK_ABV_GREATER_THAN
         }
+
         paramsList = (abvParam + "=%.1f".format(abvValue)) :: paramsList
       }
 
       if (priceValue > 0.0) {
         paramsList = ("%s=%.2f".format(DRINK_PRICE, priceValue)) :: paramsList
       }
-      
-      if (drinkType.nonEmpty && drinkType.ne("Any")) {
+
+      if (drinkType.nonEmpty && !drinkType.equals("Any")) {
         paramsList = ("%s=%s".format(DRINK_TYPE, drinkType)) :: paramsList
       }
 
