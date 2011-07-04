@@ -76,14 +76,13 @@ class DisplayResults extends Logger {
     
     println("Sorted %s into %s".format(results.mkString(","), sortedDrinks.mkString(",")))
 
-    for {
+    val drinkEntries = for {
       drink <- sortedDrinks
     } yield {
       val drinkHref = "drink?" + DRINK_NAME + "=" + drink.name
       val abvString = "%.1f".format(drink.abv)
       val priceString = "%.2f".format(drink.price)
 
-      <div id={divId}>
         <span class="drinkText">
           <table class="drinkList" style="border: thin;">
             <tr>
@@ -98,7 +97,7 @@ class DisplayResults extends Logger {
             </tr>
           </table>
         </span>
-      </div>
     }
+    <div id={divId}> {drinkEntries} </div>
   }
 }
