@@ -52,12 +52,12 @@ object DrinkSearch extends Logger {
 
       abvValue = asDouble(abv) match {
         case Full(a) => {
-          if (a == 0 && !abvComparisonType.equals("Any")) setInvalid("ABVError", "Please Enter an ABV for Comparison") else {
-            abvComparisonType match {
-              case "Any" => setInvalid("ABVError", "Please Select a Comparison Type")
-              case "" => setInvalid("ABVError", "Please Select a ComparisonType")
-              case _ => a
-            }
+          debug("ABV=%f and comparison=%s".format(a, abvComparisonType))
+          if (abvComparisonType equals "Any") {
+            if (a > 0) setInvalid("ABVError", "Please Enter an ABV for Comparison") else a
+          }
+          else {
+            if (a equals 0) setInvalid("ABVError", "Please Select a Comparison Type") else a
           }
         }
         case _ => {
