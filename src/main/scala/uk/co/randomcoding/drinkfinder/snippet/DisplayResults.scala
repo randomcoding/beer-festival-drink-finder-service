@@ -20,8 +20,12 @@ class DisplayResults extends Logger {
 
   private val drinkData = new WbfDrinkDataAccess()
   private val BrewerNameQueryRegex = "$%s=(\\.*)".format(BREWER_NAME.id)
+  
+  private val beerResultsId = "beerResults"
+  private val ciderResultsId = "ciderResults"
+  private val perryResultsId = "perryResults"
 
-  def calculateResults(in : NodeSeq) : NodeSeq = {
+  def calculateResults/*(in : NodeSeq) : NodeSeq*/ = {
     import uk.co.randomcoding.drinkfinder.model.matcher.Matcher
     val params = S.queryString openOr "No Query String"
     debug("Received Query String: %s".format(params))
@@ -41,15 +45,36 @@ class DisplayResults extends Logger {
     debug("There are %d matching ciders".format(ciders.size))
     val perries = matchingDrinks.filter(_.isInstanceOf[Perry])
     debug("There are %d matching perries".format(perries.size))
-
-    bind("results", in,
-      "beers" -> convertResultsToDisplayForm("Beers", beers),
-      "ciders" -> convertResultsToDisplayForm("Ciders", ciders),
-      "perries" -> convertResultsToDisplayForm("Perries", perries))
+    
+    "#resultTabs" #> generateResultTabs(beers, ciders, perries) &
+    "#%s".format(beerResultsId) #> convertResultsToDisplayForm(beerResultsId, beers) &
+    "#%s".format(ciderResultsId) #> convertResultsToDisplayForm(ciderResultsId, ciders) &
+    "#%s".format(perryResultsId) #> convertResultsToDisplayForm(perryResultsId, perries)
+  }
+  
+  val anchorRef = ((anchor: String) => "#" + anchor)
+  
+  private [this] def generateResultTabs(beers: Iterable[Drink], ciders: Iterable[Drink], perries: Iterable[Drink]) : NodeSeq = {
+    val beersLink = beers.toList match {
+      case Nil => Text("")
+      case _ => <li><a href={anchorRef(beerResultsId)}>Beers</a></li>
+    }
+    val cidersLink = ciders.toList match {
+    case Nil => Text("")
+    case _ => <li><a href={anchorRef(ciderResultsId)}>Ciders</a></li>
+    }
+    val perryLink = perries.toList match {
+    case Nil => Text("")
+    case _ => <li><a href={anchorRef(perryResultsId)}>Perries</a></li>
+    }
+    
+    <ul>  {beersLink} {cidersLink} {perryLink }</ul>
   }
 
-  private def convertResultsToDisplayForm(titleText : String = "", results : Iterable[Drink]) : NodeSeq = {
+  private def convertResultsToDisplayForm(divId: String, results : Iterable[Drink]) : NodeSeq = {
     val sortedDrinks = results.toList.sortBy(_.name)
+    
+    println("Sorted %s into %s".format(results.mkString(","), sortedDrinks.mkString(",")))
 
     for {
       drink <- sortedDrinks
@@ -58,7 +83,7 @@ class DisplayResults extends Logger {
       val abvString = "%.1f".format(drink.abv)
       val priceString = "%.2f".format(drink.price)
 
-      <div>
+      <div id={divId}>
         <span class="drinkText">
           <table class="drinkList" style="border: thin;">
             <tr>

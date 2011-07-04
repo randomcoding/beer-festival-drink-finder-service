@@ -6,26 +6,22 @@
 </head>
 <body class="lift:content_id=main">
 	<div id="main" class="lift:surround?with=defaultjquery&at=content">
+		<script>
+			$(function() {
+				$("#tabs").tabs();
+			});
+		</script>
 		<!-- Display results -->
 		<div class="column span-18 last" style="text-align: left">
-		<h1 class="alt">Search Results</h1>
+			<h1 class="alt">Search Results</h1>
 		</div>
-        <script>
-            $(function() {
-                $("#tabs").tabs();
-            });
-        </script>
 		<div class="lift:DisplayResults.calculateResults column span-18 last">
-            <div class="column span-18 last" id="tabs">
-                <ul>
-                    <li><a href="#beer-tab">Beer Results</a></li>
-                    <li><a href="#cider-tab">Cider Results</a></li>
-                    <li><a href="#perry-tab">Perry Results</a></li>
-                </ul>
-                <div id="beer-tab"><results:beers /></div>
-                <div id="cider-tab"><results:ciders /></div>
-                <div id="perry-tab"><results:perries /></div>
-            </div>
+			<div class="column span-18 last" id="tabs">
+				<span id="resultTabs">Result Tab Titles</span>
+				<span id="beerResults">Beer Results</span>
+				<span id="ciderResults">Cider Results</span>
+				<span id="perryResults">Perry Results</span>
+			</div>
 		</div>
 	</div>
 </body>
