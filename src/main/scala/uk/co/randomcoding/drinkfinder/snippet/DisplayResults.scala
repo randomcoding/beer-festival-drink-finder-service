@@ -11,6 +11,7 @@ import uk.co.randomcoding.drinkfinder.model.data.wbf.WbfDrinkDataAccess
 import uk.co.randomcoding.drinkfinder.model.drink.{ Beer, Cider, Drink, Perry }
 import uk.co.randomcoding.drinkfinder.model.matcher.{MatcherFactory, BrewerNameMatcher}
 import net.liftweb.common.Logger
+import uk.co.randomcoding.drinkfinder.model.matcher.AlwaysTrueDrinkMatcher
 
 /**
  * @author RandomCoder
@@ -25,13 +26,15 @@ class DisplayResults extends Logger {
   private val ciderResultsId = "ciderResults"
   private val perryResultsId = "perryResults"
 
-  def calculateResults/*(in : NodeSeq) : NodeSeq*/ = {
+  def calculateResults = {
     import uk.co.randomcoding.drinkfinder.model.matcher.Matcher
+    
     val params = S.queryString openOr "No Query String"
     debug("Received Query String: %s".format(params))
 
     val matchers = params match {
-      case "No Query String" => Nil
+      case "No Query String" => List(AlwaysTrueDrinkMatcher)
+      case paramString : String if paramString.trim.isEmpty => List(AlwaysTrueDrinkMatcher) 
       case paramString : String => MatcherFactory.generate(paramString)
     }
     debug("Generated %d matchers:\n%s".format(matchers.size, matchers.mkString("\n\t")))
@@ -57,15 +60,15 @@ class DisplayResults extends Logger {
   private [this] def generateResultTabs(beers: Iterable[Drink], ciders: Iterable[Drink], perries: Iterable[Drink]) : NodeSeq = {
     val beersLink = beers.toList match {
       case Nil => Text("")
-      case _ => <li><a href={anchorRef(beerResultsId)}>Beers</a></li>
+      case _ => <li><a href={anchorRef(beerResultsId)}>Beers ({beers.size})</a></li>
     }
     val cidersLink = ciders.toList match {
     case Nil => Text("")
-    case _ => <li><a href={anchorRef(ciderResultsId)}>Ciders</a></li>
+    case _ => <li><a href={anchorRef(ciderResultsId)}>Ciders ({ciders.size})</a></li>
     }
     val perryLink = perries.toList match {
     case Nil => Text("")
-    case _ => <li><a href={anchorRef(perryResultsId)}>Perries</a></li>
+    case _ => <li><a href={anchorRef(perryResultsId)}>Perries ({perries.size})</a></li>
     }
     
     <ul>  {beersLink} {cidersLink} {perryLink }</ul>
