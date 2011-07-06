@@ -7,7 +7,7 @@ import scala.xml.NodeSeq
 import net.liftweb.http._
 import net.liftweb.util.Helpers._
 import uk.co.randomcoding.drinkfinder.model.data.wbf.WbfDrinkDataAccess
-import uk.co.randomcoding.drinkfinder.model.matcher.id.{BREWER_NAME, DRINK_NAME}
+import uk.co.randomcoding.drinkfinder.model.matcher.id._
 import uk.co.randomcoding.drinkfinder.model.matcher.DrinkNameMatcher
 
 class DisplayDrink extends Logger {
@@ -15,22 +15,35 @@ class DisplayDrink extends Logger {
 	
 	def showDrink = {
 	  val drinkName = S.param(DRINK_NAME.toString).openOr("Unknown Drink")
-	   debug("Got Drink Name: %s".format(drinkName))
-	       
-	  val drink = S.param(DRINK_NAME.toString) match {
-	    case Full(drinkName) => drinkData.getMatching(DrinkNameMatcher(drinkName)).head
-	    case _ => NoDrink
-	  }
-	   
-	   debug("Returned Drink is %s".format(drink))
+	  val drinkDescription = S.param(DRINK_DESCRIPTION.toString).openOr("Unknown Description")
+	  val drinkAbv = S.param(DRINK_ABV_EQUAL_TO.toString).openOr("Unknown ABV")
+	  val drinkPrice = S.param(DRINK_PRICE.toString).openOr("Unknown Price")
+	  val drinkBrewer = S.param(BREWER_NAME.toString).openOr("Unknown Brewer")
+	  val features = S.param(DRINK_HAS_FEATURES.toString).openOr("Unknown Features")
+	   debug("Got Drink Name: %s, Description: %s, ABV: %s, Price: %s, Brewer: %s, Features: %s".format(drinkName, drinkDescription, drinkAbv, drinkPrice, drinkBrewer, features))
 	  
-	   "#drinkName" #> drink.name &
-	   "#abvDetail" #> Text("%.1f".format(drink.abv)) &
-	   "#priceDetail" #> Text("%.2f".format(drink.price)) &
-	   "#brewerDetail" #> <a href={brewerHRef(drink)}>{drink.brewer.name}</a> &
-		"#descriptionDetail" #> Text(drink.description)
+	   "#drinkFeatures" #> drinkFeatures(features) &
+	   "#drinkName" #> drinkName &
+	   "#abvDetail" #> Text("%.1f".format(drinkAbv.toDouble)) &
+	   "#priceDetail" #> Text("%.2f".format(drinkPrice.toDouble)) &
+	   "#brewerDetail" #> <a href={brewerHref(drinkBrewer)}>{drinkBrewer}</a> &
+		"#descriptionDetail" #> Text(drinkDescription)
 	}
 	
-	private def brewerHRef(drink: Drink) : String =  "brewer?%s=%s".format(BREWER_NAME, drink.brewer.name)
+	private def brewerHref(brewerName: String) : String =  "brewer?%s=%s".format(BREWER_NAME, brewerName)
 
+	private def drinkFeatures(featuresString: String) : NodeSeq = {
+	  val features = for {
+	    feature <- featuresString.split(",")
+	  } yield {
+	    // TODO add feature
+	    Text(feature)
+	  }
+	
+	
+	var nodes : NodeSeq = Text("")
+	features.foreach((node : NodeSeq) => nodes = nodes ++ node)
+	
+	nodes
+	}
 }

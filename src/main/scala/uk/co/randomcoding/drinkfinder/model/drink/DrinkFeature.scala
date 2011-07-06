@@ -1,6 +1,6 @@
 package uk.co.randomcoding.drinkfinder.model.drink
 
-sealed class DrinkFeature(feature : String)
+sealed class DrinkFeature(val feature : String)
 
 sealed class DrinkSweetness(sweetness : String) extends DrinkFeature(sweetness)
 
