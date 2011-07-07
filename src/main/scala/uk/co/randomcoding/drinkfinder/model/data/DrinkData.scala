@@ -6,6 +6,8 @@ package uk.co.randomcoding.drinkfinder.model.data
 import uk.co.randomcoding.drinkfinder.model.matcher.DrinkMatcher
 import uk.co.randomcoding.drinkfinder.model.drink._
 import net.liftweb.common.Logger
+import uk.co.randomcoding.drinkfinder.model.brewer.Brewer
+import uk.co.randomcoding.drinkfinder.model.brewer.NoBrewer
 
 /**
  * Store of information about drinks and associated data.
@@ -16,6 +18,7 @@ import net.liftweb.common.Logger
 trait DrinkData extends Logger {
 
   private var drinks = Set.empty[Drink]
+  private var brewers = Set.empty[Brewer]
 
   def addDrink(drink : Drink) {
     drinks = drinks + drink
@@ -48,4 +51,9 @@ trait DrinkData extends Logger {
 
     matches.toSet
   }
+  
+  /**
+   * Get the brewer with the name or return [[brewer.NoBrewer]] if there is no Brewer with that name.
+   */
+  def getBrewer(brewerName: String) : Brewer = brewers.find(_.name equals brewerName).getOrElse(NoBrewer)
 }

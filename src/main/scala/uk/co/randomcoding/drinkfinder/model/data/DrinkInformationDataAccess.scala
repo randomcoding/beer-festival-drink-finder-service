@@ -39,4 +39,9 @@ trait DrinkInformationDataAccess {
    * @return The [[drink.Drink]]s that match **all** the matchers
    */
   def getMatching(matcher: DrinkMatcher[_]) = drinkData.getMatching(List(matcher))
+  
+  /**
+   * Get the [[brewer.Brewer]] that has the given name or [[brewer.NoBrewer]] if one does not exist
+   */
+  def getBrewer(brewerName: String)  = drinkData.getBrewer(brewerName)
 }

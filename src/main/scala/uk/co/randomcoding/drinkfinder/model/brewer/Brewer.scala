@@ -10,7 +10,7 @@ import uk.co.randomcoding.drinkfinder.model.drink.Drink
  * 
  * @author RandomCoder
  */
-case class Brewer(name : String, region : String) {
+case class Brewer(val name : String) {
 	
 	private var brewedDrinks : List[Drink] = Nil
 
@@ -19,4 +19,4 @@ case class Brewer(name : String, region : String) {
 	def removeDrink(drink : Drink) = brewedDrinks = brewedDrinks.filterNot(_ == drink)
 }
 
-object NoBrewer extends Brewer("No Brewer", "From Nowhere")
+object NoBrewer extends Brewer("No Brewer")
