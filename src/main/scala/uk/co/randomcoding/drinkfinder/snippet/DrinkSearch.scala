@@ -37,6 +37,7 @@ object DrinkSearch extends Logger {
     var priceLessThan = "0.0"
     var priceValue = 0.0
     var drinkType = ""
+    var brewerName = ""
 
     Focus("DrinkName")
 
@@ -55,8 +56,7 @@ object DrinkSearch extends Logger {
           debug("ABV=%f and comparison=%s".format(a, abvComparisonType))
           if (abvComparisonType equals "Any") {
             if (a > 0) setInvalid("ABVError", "Please Enter an ABV for Comparison") else a
-          }
-          else {
+          } else {
             if (a equals 0) setInvalid("ABVError", "Please Select a Comparison Type") else a
           }
         }
@@ -113,6 +113,11 @@ object DrinkSearch extends Logger {
         paramsList = ("%s=%s".format(DRINK_TYPE, drinkType)) :: paramsList
       }
 
+      debug("BrewerName is" + brewerName)
+      if (brewerName.nonEmpty) {
+        paramsList = (BREWER_NAME + "=" + brewerName) :: paramsList
+      }
+
       paramsList.mkString("", "&", "")
     }
 
@@ -122,7 +127,9 @@ object DrinkSearch extends Logger {
       "name=ABV" #> SHtml.text(abv, abv = _) &
       "name=AbvComparisonType" #> SHtml.select(comparisonTypes, Box("Any"), abvComparisonType = _) &
       "name=DrinkType" #> (SHtml.select(drinkTypes, Box("Any"), drinkType = _)) &
-      "name=PriceLessThan" #> (SHtml.text(priceLessThan, priceLessThan = _) ++ SHtml.hidden(process))
+      "name=BrewerName" #> (SHtml.text(brewerName, brewerName = _)) &
+      "name=PriceLessThan" #> (SHtml.text(priceLessThan, priceLessThan = _)) &
+      "type=submit" #> (SHtml.onSubmitUnit(process))
   }
 
   private def displayError(formId : String, errorMessage : String) = {
