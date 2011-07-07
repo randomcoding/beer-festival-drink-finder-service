@@ -8,6 +8,7 @@ import uk.co.randomcoding.drinkfinder.model.drink._
 import net.liftweb.common.Logger
 import uk.co.randomcoding.drinkfinder.model.brewer.Brewer
 import uk.co.randomcoding.drinkfinder.model.brewer.NoBrewer
+import uk.co.randomcoding.drinkfinder.model.matcher.BrewerNameMatcher
 
 /**
  * Store of information about drinks and associated data.
@@ -29,6 +30,10 @@ trait DrinkData extends Logger {
     debug("Removed %s".format(drink))
     drinks = drinks - drink
   }
+  
+  def addBrewer(brewer: Brewer) = brewers = brewers + brewer
+  
+  def removeBrewer(brewer: Brewer) = brewers = brewers - brewer
 
   /**
    * Get all the drinks that match all the matchers provided
