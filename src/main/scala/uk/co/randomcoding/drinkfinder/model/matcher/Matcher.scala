@@ -84,13 +84,9 @@ case class DrinkTypeMatcher(drinkType : String) extends DrinkMatcher[String](DRI
   }
 }
 
-case class BrewerNameMatcher(brewerName : String) extends Matcher[String](BREWER_NAME, brewerName) {
+case class BrewerNameMatcher(brewerName : String) extends DrinkMatcher[String](BREWER_NAME, brewerName) {
 
-  import uk.co.randomcoding.drinkfinder.model.brewer.Brewer
-
-  override type T = Brewer
-
-  def apply(brewer : Brewer) = brewer.name.toLowerCase.contains(matchTo.toLowerCase)
+  def apply(drink: Drink) = drink.brewer.name.toLowerCase.contains(matchTo.toLowerCase)
 
 }
 
