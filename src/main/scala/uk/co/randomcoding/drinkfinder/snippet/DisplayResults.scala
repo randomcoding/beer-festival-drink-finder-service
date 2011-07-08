@@ -34,7 +34,7 @@ class DisplayResults extends Logger {
     val matchers = params match {
       case "No Query String" => List(AlwaysTrueDrinkMatcher)
       case paramString : String if paramString.trim.isEmpty => List(AlwaysTrueDrinkMatcher)
-      case paramString : String => MatcherFactory.generate(paramString)
+      case paramString : String => MatcherFactory.generate(urlDecode(paramString))
     }
     debug("Generated %d matchers:\n%s".format(matchers.size, matchers.mkString("\n\t")))
 

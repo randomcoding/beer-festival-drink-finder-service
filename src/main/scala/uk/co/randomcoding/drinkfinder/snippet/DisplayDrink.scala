@@ -14,7 +14,7 @@ class DisplayDrink extends Logger {
 	private val drinkData = new WbfDrinkDataAccess()
 	
 	def showDrink = {
-	  val drinkName = S.param(DRINK_NAME.toString).openOr("Unknown Drink")
+	  val drinkName = urlDecode( S.param(DRINK_NAME.toString).openOr("Unknown Drink"))
 	  val drinkDescription = S.param(DRINK_DESCRIPTION.toString).openOr("Unknown Description")
 	  val drinkAbv = S.param(DRINK_ABV_EQUAL_TO.toString).openOr("Unknown ABV")
 	  val drinkPrice = S.param(DRINK_PRICE.toString).openOr("Unknown Price")
