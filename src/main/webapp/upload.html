@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Drink Finder Admin Section</title>
+</head>
+<body class="lift:content_id=main">
+	<div id="main" class="lift:surround?with=admintemplate&at=content">
+		<!-- Add the drink finder form -->
+		<div class="column span-18 last" style="text-align: left">
+			<h1 class="alt">
+				Worcester Beer Festival Drink Search - Admin<img alt="" id="ajax-loader" style="display: none; margin-bottom: 0px; margin-left: 5px"
+					src="/images/ajax-loader.gif" />
+			</h1>
+		</div>
+		<div class="lift:UploadData.showForm?form=post">
+			<div class="column span-8">
+				<span class="formTitle alt">Choose Template:</span>
+			</div>
+			<div class="column span-10 last">
+				<input id="availableTemplates" class="formEntry">
+			</div>
+			<div class="column span-8">
+				<span class="formTitle alt">Upload Spreadsheet:</span>
+			</div>
+			<div class="column span-10 last">
+				<input id="uploadButton" class="formEntry">
+			</div>
+			<div class="column span-18"><hr/></div>
+			<div class="column span-18 last" style="text-align: right;">
+				<input type="submit" value="Upload Data" class="formEntry" />
+			</div>
+			<!-- TODO: Add a validate button here to check the spreadsheet against the template -->
+		</div>
+	</div>
+</body>
+</html>
