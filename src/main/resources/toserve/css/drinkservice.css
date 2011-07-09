@@ -25,6 +25,7 @@
 }
 
 .drinkTitle {
+	font-size: x-large;
 	font-weight: bold
 }
 
@@ -33,7 +34,7 @@
 }
 
 .drinkText {
-	font-size: x-large
+	font-size: large
 }
 
 .drinkHeading {

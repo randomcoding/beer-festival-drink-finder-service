@@ -4,6 +4,7 @@
 package uk.co.randomcoding.drinkfinder.snippet
 
 import uk.co.randomcoding.drinkfinder.model.matcher.id._
+import uk.co.randomcoding.drinkfinder.lib.TransformUtils._
 import net.liftweb.http._
 import net.liftweb.util.Helpers._
 import scala.xml.{ NodeSeq, Text }
@@ -20,7 +21,7 @@ import uk.co.randomcoding.drinkfinder.model.matcher.AlwaysTrueDrinkMatcher
 class DisplayResults extends Logger {
 
   private val drinkData = new WbfDrinkDataAccess()
-  
+
   private val beerResultsId = "beerResults"
   private val ciderResultsId = "ciderResults"
   private val perryResultsId = "perryResults"
@@ -41,17 +42,17 @@ class DisplayResults extends Logger {
     val matchingDrinks = drinkData.getMatching(matchers)
 
     debug("There are %d matching drinks:\n%s".format(matchingDrinks.size, matchingDrinks.mkString("\n\t")))
-    val beers = matchingDrinks.filter(_.isInstanceOf[Beer])
+    val beers = matchingDrinks.filter(_.isInstanceOf[Beer]).toList.sortBy(_.name)
     debug("There are %d matching beers".format(beers.size))
-    val ciders = matchingDrinks.filter(_.isInstanceOf[Cider])
+    val ciders = matchingDrinks.filter(_.isInstanceOf[Cider]).toList.sortBy(_.name)
     debug("There are %d matching ciders".format(ciders.size))
-    val perries = matchingDrinks.filter(_.isInstanceOf[Perry])
+    val perries = matchingDrinks.filter(_.isInstanceOf[Perry]).toList.sortBy(_.name)
     debug("There are %d matching perries".format(perries.size))
 
     "#resultTabs" #> generateResultTabs(beers, ciders, perries) &
-      "#%s".format(beerResultsId) #> convertResultsToDisplayForm(beerResultsId, beers) &
-      "#%s".format(ciderResultsId) #> convertResultsToDisplayForm(ciderResultsId, ciders) &
-      "#%s".format(perryResultsId) #> convertResultsToDisplayForm(perryResultsId, perries)
+      "#beers *" #> toSummaryDisplay(beers) &
+      "#ciders *" #> toSummaryDisplay(ciders) &
+      "#perries *" #> toSummaryDisplay(perries)
   }
 
   val anchorRef = ((anchor : String) => "#" + anchor)
@@ -73,38 +74,24 @@ class DisplayResults extends Logger {
     <ul>{ beersLink }{ cidersLink }{ perryLink }</ul>
   }
 
-  private def convertResultsToDisplayForm(divId : String, results : Iterable[Drink]) : NodeSeq = {
+  /*private def convertResultsToDisplayForm(divId : String, results : Iterable[Drink]) : NodeSeq = {
     val sortedDrinks = results.toList.sortBy(_.name)
 
     println("Sorted %s into %s".format(results.mkString(","), sortedDrinks.mkString(",")))
 
-    val drinkEntries = for {
-      drink <- sortedDrinks
-    } yield {
-      <span class="drinkText">
-        <table class="drinkList" style="border: thin;">
-          <tr>
-            <td colspan="2" class="drinkTitle"><a href={ drinkHref (drink)}>{ drink.name }</a></td>
-          </tr>
-          <tr class="drinkData">
-            <td>ABV:{ "%.1f".format(drink.abv)}%</td>
-            <td>£{ "%.2f".format(drink.price) }</td>
-          </tr>
-          <tr class="drinkDescription">
-            <td colspan="2">{ drink.description }</td>
-          </tr>
-        </table>
-      </span>
-    }
-    <div id={ divId }>{ drinkEntries }</div>
-  }
-  
-  private [this] def drinkHref(drink: Drink) : String = {
-    "drink?%s=%s&%s=%s&%s=%s&%s=%s&%s=%s".format(DRINK_NAME, drink.name, 
-          DRINK_DESCRIPTION, drink.description, 
-          DRINK_ABV_EQUAL_TO, drink.abv, 
-          DRINK_PRICE, drink.price, 
-          BREWER_NAME, drink.brewer.name, 
-          DRINK_HAS_FEATURES, drink.features.map(_.feature).mkString("", ",", ""))
-  }
+    val drinkPageUrl = (drink : Drink) => "displaydrink?%s=%s&%s=%s&%s=%s&%s=%s&%s=%s".format(DRINK_NAME, drink.name, DRINK_ABV_EQUAL_TO, drink.abv.toString, DRINK_PRICE, drink.price, DRINK_DESCRIPTION, drink.description, DRINK_HAS_FEATURES, drink.features.map(_.feature).mkString("", ",", ""))
+
+    val drinkNodes = sortedDrinks.flatMap(drink => <iframe src={ drinkPageUrl(drink) } frameborder="0" class="column span-17 last"></iframe>)
+
+    <div id={ divId }>{ drinkNodes }</div>
+  }*/
+
+  /*private[this] def drinkHref(drink : Drink) : String = {
+    "drink?%s=%s&%s=%s&%s=%s&%s=%s&%s=%s".format(DRINK_NAME, drink.name,
+      DRINK_DESCRIPTION, drink.description,
+      DRINK_ABV_EQUAL_TO, drink.abv,
+      DRINK_PRICE, drink.price,
+      BREWER_NAME, drink.brewer.name,
+      DRINK_HAS_FEATURES, drink.features.map(_.feature).mkString("", ",", ""))
+  }*/
 }

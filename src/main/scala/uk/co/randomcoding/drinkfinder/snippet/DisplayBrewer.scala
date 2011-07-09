@@ -1,6 +1,7 @@
 package uk.co.randomcoding.drinkfinder.snippet
 
 import uk.co.randomcoding.drinkfinder.model.drink.{ Drink, NoDrink }
+import uk.co.randomcoding.drinkfinder.lib.TransformUtils._
 import net.liftweb.common.{ Full, Logger }
 import scala.xml.Text
 import scala.xml.NodeSeq
@@ -16,13 +17,14 @@ class DisplayBrewer extends Logger {
   def showBrewer = {
     val brewerName = urlDecode(S.param(BREWER_NAME.toString).openOr("No Brewer"))
 
-    val drinks = drinkData.getMatching(BrewerNameMatcher(brewerName)).toList
+    val drinks = drinkData.getMatching(BrewerNameMatcher(brewerName)).toList.sortBy(_.name)
 
     "#brewerName" #> Text(brewerName) &
-      "#drinks" #> generateDrinksList(drinks.sortBy(_.name))
+      "#drinks" #> toSummaryDisplay(drinks)
+    //generateDrinksList(drinks.sortBy(_.name))
   }
 
-  private def generateDrinksList(drinks : List[Drink]) : NodeSeq = {
+  /*private def generateDrinksList(drinks : List[Drink]) : NodeSeq = {
     // again, this could de done with an embeded template
     drinks.flatMap(drink => {
       <div>
@@ -31,6 +33,6 @@ class DisplayBrewer extends Logger {
     })
   }
 
-  private def drinkHref(drinkName : String) : String = "drink?%s=%s".format(DRINK_NAME, drinkName)
+  private def drinkHref(drinkName : String) : String = "drink?%s=%s".format(DRINK_NAME, drinkName)*/
 
 }
