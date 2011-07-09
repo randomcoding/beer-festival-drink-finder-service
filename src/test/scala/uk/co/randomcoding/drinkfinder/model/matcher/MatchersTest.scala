@@ -9,10 +9,14 @@ import MatcherFactory._
 import uk.co.randomcoding.drinkfinder.model.data.DummyDrinks._
 import org.scalatest.matchers.ShouldMatchers
 
+import org.scalatest.junit.JUnitRunner
+import org.junit.runner.RunWith
+
 /**
  * @author RandomCoder
  *
  */
+@RunWith(classOf[JUnitRunner])
 class MatchersTest extends FunSuite with ShouldMatchers {
   implicit def MatcherIdToString(id: MatcherId) : String = { id.id }
   

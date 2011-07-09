@@ -8,11 +8,15 @@ import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
 import uk.co.randomcoding.drinkfinder.model.drink._
 
+import org.scalatest.junit.JUnitRunner
+import org.junit.runner.RunWith
+
 /**
  * Tests for the filter matching capabilities of the Drink Data class/
  *
  * @author RandomCoder
  */
+@RunWith(classOf[JUnitRunner])
 class DrinkDataTest extends FunSuite with ShouldMatchers {
 
   import DummyDrinks._
