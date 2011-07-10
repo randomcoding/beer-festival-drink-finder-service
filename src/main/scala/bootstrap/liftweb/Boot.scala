@@ -25,8 +25,8 @@ class Boot {
       Menu.i("Results") / "results", 
       Menu.i("Drink Display") / "drink", 
       Menu.i("Brewer Display") / "brewer", 
-      Menu.i("Data Upload") / "upload", 
-      Menu.i("Upload Completed") / "uploadcompleted", 
+      Menu.i("Data Upload") / "admin" / "upload", 
+      Menu.i("Upload Completed") / "admin" / "uploadcompleted", 
 
       // more complex because this menu allows anything in the
       // /static path to be visible
