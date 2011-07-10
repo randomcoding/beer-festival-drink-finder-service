@@ -25,4 +25,4 @@ class Cider(name: String, description: String, abv: Double, price: Double) exten
 
 class Perry(name: String, description: String, abv: Double, price: Double) extends Drink(name, description, abv, price)
 
-case object NoDrink extends Drink("No Drink", "No drinks matched the search", 0, 0)
+object NoDrink extends Drink("No Drink", "No drinks matched the search", 0, 0)
