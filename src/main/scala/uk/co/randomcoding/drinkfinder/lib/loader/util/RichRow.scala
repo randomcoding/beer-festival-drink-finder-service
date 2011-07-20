@@ -12,7 +12,7 @@ import org.apache.poi.ss.usermodel.{ Row, Cell }
  */
 class RichRow(row : Row) {
 	import RichRow._
-	
+
 	/**
 	 * Get the cell at the given index
 	 */
@@ -20,17 +20,16 @@ class RichRow(row : Row) {
 
 	/**
 	 * Gets the numeric value of a cell.
-	 * 
+	 *
 	 * @return '''Some(value)''' if the cell contains a numeric value or '''None''' otherwise
 	 */
 	def getNumericCellValue(cellIndex : Int) : Option[Double] = {
 		if (correctCellType(row, cellIndex, Cell.CELL_TYPE_NUMERIC)) Some(row(cellIndex).getNumericCellValue) else None
 	}
 
-	
 	/**
 	 * Gets the string value of a cell.
-	 * 
+	 *
 	 * @return '''Some(value)''' if the cell contains a string value or '''None''' otherwise
 	 */
 	def getStringCellValue(cellIndex : Int) : Option[String] = {
@@ -43,11 +42,22 @@ class RichRow(row : Row) {
 	 * Currently checks the name is a string and the price cell is a numeric value
 	 */
 	def isDataRow(dataTemplate : DrinkDataTemplate) : Boolean = {
-		correctCellType(row, dataTemplate.drinkNameColumn, Cell.CELL_TYPE_STRING) &&
-			correctCellType(row, dataTemplate.drinkPriceColumn, Cell.CELL_TYPE_NUMERIC)
+		null == row match {
+			case true => println("Row is null"); false
+			case _ => {
+				val abvColumn = dataTemplate.drinkAbvColumn
+				correctCellType(row, dataTemplate.drinkNameColumn, Cell.CELL_TYPE_STRING) &&
+					correctCellType(row, dataTemplate.drinkAbvColumn, Cell.CELL_TYPE_NUMERIC)
+			}
+		}
 	}
 
-	private def correctCellType(row : Row, cellIndex : Int, expectedCellType : Int) : Boolean = row(cellIndex).getCellType equals expectedCellType
+	private def correctCellType(row : Row, cellIndex : Int, expectedCellType : Int) : Boolean = {
+		val correctType = row(cellIndex).getCellType equals expectedCellType
+		println("Checking cell at %d has type %d: %s".format(cellIndex, expectedCellType, correctType))
+
+		correctType
+	}
 }
 
 /**

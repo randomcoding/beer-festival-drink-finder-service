@@ -21,17 +21,18 @@ class WbfDataLoader {
 	/**
 	 * Read the data from an Excel spreadsheet input stream according to the provided data template
 	 */
-	def loadData(excelDataFile : InputStream, dataTemplate : DrinkDataTemplate) = {
+	def loadData(excelDataFile : InputStream, dataTemplate : DrinkDataTemplate) : WbfDrinkData = {
 
 		val wb = WorkbookFactory.create(excelDataFile)
-		wb.setMissingCellPolicy(Row.RETURN_BLANK_AS_NULL)
+		wb.setMissingCellPolicy(Row.CREATE_NULL_AS_BLANK)
 		val dataSheet = wb.getSheetAt(0);
-
-		val physicalRows = dataSheet.rowIterator.asScala
 
 		val drinkData = new WbfDrinkData()
 
+		val physicalRows = dataSheet.rowIterator.asScala
 		physicalRows.foreach(row => if (row.isDataRow(dataTemplate)) addRowToData(row, drinkData, dataTemplate))
+		
+		drinkData
 	}
 
 	// These can be implemented in a parent class if there are more than one festival datasource to load
@@ -48,6 +49,7 @@ class WbfDataLoader {
 		val drinkPrice = row.getNumericCellValue(dataTemplate.drinkPriceColumn)
 		val drinkAbv = row.getNumericCellValue(dataTemplate.drinkAbvColumn)
 		
+		println("Retrieved Name: %s, Desc: %s, Price: %f, ABV: %f".format(drinkName.get, drinkDescription.get, drinkPrice.get, drinkAbv.get))
 		// read drink features
 		
 		// read/determine drink type

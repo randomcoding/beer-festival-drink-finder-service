@@ -2,6 +2,7 @@
  * 
  */
 package uk.co.randomcoding.drinkfinder.lib.loader
+
 import scala.io.Source
 
 /**
@@ -14,7 +15,7 @@ class DrinkDataTemplate(templateSource: Source) {
 	
 	private def getValueFor(key: String) : String = {		
 		lines.find(_.startsWith(key)) match {
-			case Some(line) => line.split("=")(1)
+			case Some(line) => line.split("=")(1).trim
 			case _ => "NOT_FOUND"
 		}
 	}
@@ -30,6 +31,8 @@ class DrinkDataTemplate(templateSource: Source) {
 	lazy val drinkAbvColumn = getValueFor("drink.abv.column").toInt
 	
 	lazy val brewerNameColumn = getValueFor("brewer.name.column").toInt
+	
+	lazy val drinkFeatureColumn = getValueFor("drink.feature.column").toInt
 }
 
 //class DrinkTemplateData(dataStartRow: Int)
