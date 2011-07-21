@@ -54,10 +54,7 @@ class RichRow(row : Row) {
 	}
 
 	private def correctCellType(row : Row, cellIndex : Int, expectedCellType : Int) : Boolean = {
-		val correctType = row(cellIndex).getCellType equals expectedCellType
-		println("Checking cell at %d has type %d: %s".format(cellIndex, expectedCellType, correctType))
-
-		correctType
+		row(cellIndex).getCellType equals expectedCellType
 	}
 }
 
