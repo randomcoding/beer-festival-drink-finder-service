@@ -77,12 +77,16 @@ object DrinkSearch extends Logger {
       valid match {
         case true => {
           val resultString = getParameterValues()
-          val redirectTo = "/results?" + resultString
+          val redirectTo = if (isOnlyBrewerSearch()) "/brewer?%s" else "/results?%s"
           S.notice("Name: " + drinkName)
-          S.redirectTo(redirectTo)
+          S.redirectTo(redirectTo.format(resultString))
         }
         case false => // do nothing - should probably display an error here
       }
+    }
+    
+    def isOnlyBrewerSearch() : Boolean = {
+    	brewerName.nonEmpty && drinkName.isEmpty && descriptionContains.isEmpty && (abvValue equals 0.0) && (priceValue equals 0.0)
     }
 
     def getParameterValues() : String = {

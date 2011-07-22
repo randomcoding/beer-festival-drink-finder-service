@@ -1,48 +1,49 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <artifactId>drinkservice.lift</artifactId>
-  <name>Drink Service Lift Component</name>
-  <description>The lift frontend for the Drink Service app</description>
-  
-  <parent>
-  	<groupId>uk.co.randomcoding</groupId>
-  	<artifactId>drinkservice.dependencies</artifactId>
-  	<version>0.0.1-SNAPSHOT</version>
-  	<relativePath>../DrinkServiceDependencies</relativePath>
-  </parent>
-  
-  	<dependencies>
-			<dependency>
-				<groupId>org.scala-lang</groupId>
-				<artifactId>scala-library</artifactId>
-			</dependency>
-			<dependency>
-				<groupId>net.liftweb</groupId>
-				<artifactId>lift-common_2.8.1</artifactId>
-			</dependency>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>drinkservice.lift</artifactId>
+	<name>Drink Service Lift Component</name>
+	<description>The lift frontend for the Drink Service app</description>
 
-			<!-- Test -->
-			<dependency>
-				<groupId>junit</groupId>
-				<artifactId>junit</artifactId>
-			</dependency>
-			<dependency>
-				<groupId>org.scalatest</groupId>
-				<artifactId>scalatest_${scala.version}</artifactId>
-			</dependency>
-			<dependency>
-				<groupId>uk.co.randomcoding</groupId>
-				<artifactId>drinkservice.core</artifactId>
-			</dependency>
-			<dependency>
-				<groupId>net.liftweb</groupId>
-				<artifactId>lift-util_2.8.1</artifactId>
-			</dependency>
-			<dependency>
-				<groupId>net.liftweb</groupId>
-				<artifactId>lift-webkit_2.8.1</artifactId>
-			</dependency>
-  	</dependencies>
-  
-  	<packaging>war</packaging>
+	<parent>
+		<groupId>uk.co.randomcoding</groupId>
+		<artifactId>drinkservice.dependencies</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../DrinkServiceDependencies</relativePath>
+	</parent>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.scala-lang</groupId>
+			<artifactId>scala-library</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.liftweb</groupId>
+			<artifactId>lift-common_2.8.1</artifactId>
+		</dependency>
+
+		<!-- Test -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.scalatest</groupId>
+			<artifactId>scalatest_${scala.version}</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>uk.co.randomcoding</groupId>
+			<artifactId>drinkservice.core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.liftweb</groupId>
+			<artifactId>lift-util_2.8.1</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.liftweb</groupId>
+			<artifactId>lift-webkit_2.8.1</artifactId>
+		</dependency>
+	</dependencies>
+
+	<packaging>war</packaging>
 </project>

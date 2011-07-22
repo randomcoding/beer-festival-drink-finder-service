@@ -74,24 +74,4 @@ class DisplayResults extends Logger {
     <ul>{ beersLink }{ cidersLink }{ perryLink }</ul>
   }
 
-  /*private def convertResultsToDisplayForm(divId : String, results : Iterable[Drink]) : NodeSeq = {
-    val sortedDrinks = results.toList.sortBy(_.name)
-
-    println("Sorted %s into %s".format(results.mkString(","), sortedDrinks.mkString(",")))
-
-    val drinkPageUrl = (drink : Drink) => "displaydrink?%s=%s&%s=%s&%s=%s&%s=%s&%s=%s".format(DRINK_NAME, drink.name, DRINK_ABV_EQUAL_TO, drink.abv.toString, DRINK_PRICE, drink.price, DRINK_DESCRIPTION, drink.description, DRINK_HAS_FEATURES, drink.features.map(_.feature).mkString("", ",", ""))
-
-    val drinkNodes = sortedDrinks.flatMap(drink => <iframe src={ drinkPageUrl(drink) } frameborder="0" class="column span-17 last"></iframe>)
-
-    <div id={ divId }>{ drinkNodes }</div>
-  }*/
-
-  /*private[this] def drinkHref(drink : Drink) : String = {
-    "drink?%s=%s&%s=%s&%s=%s&%s=%s&%s=%s".format(DRINK_NAME, drink.name,
-      DRINK_DESCRIPTION, drink.description,
-      DRINK_ABV_EQUAL_TO, drink.abv,
-      DRINK_PRICE, drink.price,
-      BREWER_NAME, drink.brewer.name,
-      DRINK_HAS_FEATURES, drink.features.map(_.feature).mkString("", ",", ""))
-  }*/
 }
