@@ -1,0 +1,6 @@
+.scala_dependencies
+
+target/
+bin/
+*.class
+*.jar
