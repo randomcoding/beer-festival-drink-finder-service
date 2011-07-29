@@ -36,6 +36,12 @@ object WbfDrinkData extends WbfDrinkData {
 	initialiseData = (() => {
 	  import uk.co.randomcoding.drinkfinder.model.drink.DrinkFactory._
 	  import uk.co.randomcoding.drinkfinder.model.drink._
+	  
+	  val RealAle = DrinkFeature("Real Ale")
+	  val Dry = DrinkFeature("Dry")
+	  val Medium = DrinkFeature("Medium")
+	  val Sweet = DrinkFeature("Sweet")
+	  
 	  val data = new WbfDrinkData() 
 	  val firstBeer = beer("First Beer", "The First Beer", 4.5, 1.80, List(RealAle))
 	  val secondBeer = beer("Second Beer", "The Second Beer", 4.5, 1.70, List(RealAle))
