@@ -1,13 +1,19 @@
 package uk.co.randomcoding.drinkfinder.model.drink
 
-sealed class DrinkFeature(val feature : String)
+/**
+ * A feature of a drink.
+ *
+ * @constructor Takes a single string that is the identifier for this feature
+ * 
+ * The identifier is used, ignoring case, to determine equality and uniqueness. So Dry is the same as dry and DRY
+ */
+case class DrinkFeature(val feature : String) {
+	val displayName = feature.split("\\s").map(word => word.charAt(0).toUpper + word.substring(1)).mkString("", " ", "")
+	
+	override def canEqual(other : Any) : Boolean = other.isInstanceOf[DrinkFeature]
 
-sealed class DrinkSweetness(sweetness : String) extends DrinkFeature(sweetness)
+	override def equals(other : Any) : Boolean = feature.toLowerCase.equals(other.asInstanceOf[DrinkFeature].feature.toLowerCase)
 
-case object Dry extends DrinkSweetness("Dry")
-case object Medium extends DrinkSweetness("Medium")
-case object Sweet extends DrinkSweetness("Sweet")
+	override def hashCode() : Int = feature.toLowerCase.hashCode
+}
 
-sealed class BeerStyle(style : String) extends DrinkFeature(style)
-case object RealAle extends BeerStyle("Real Ale")
-// TODO: Add more styles
