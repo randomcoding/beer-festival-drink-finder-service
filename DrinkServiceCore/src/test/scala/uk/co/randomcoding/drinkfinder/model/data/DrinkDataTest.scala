@@ -87,23 +87,23 @@ class DrinkDataTest extends FunSuite with ShouldMatchers {
   }
 
   test("Query for Real Ales") {
-	val matcher = DrinkFeatureMatcher(List(RealAle))
+	val matcher = DrinkFeatureMatcher(RealAle)
 
 	checkMatchedDrinks(drinkData.getMatching(List(matcher)).toList, beers)
   }
 
   test("Query for Sweet Drinks") {
-	val matcher = DrinkFeatureMatcher(List(Sweet))
+	val matcher = DrinkFeatureMatcher(Sweet)
 	checkMatchedDrinks(drinkData.getMatching(List(matcher)).toList, List(FirstPerry))
   }
 
   test("Query for Dry Drinks") {
-	val matcher = DrinkFeatureMatcher(List(Dry))
+	val matcher = DrinkFeatureMatcher(Dry)
 	checkMatchedDrinks(drinkData.getMatching(List(matcher)).toList, List(FirstCider))
   }
 
   test("Query for Dry Ciders") {
-	val dryMatcher = DrinkFeatureMatcher(List(Dry))
+	val dryMatcher = DrinkFeatureMatcher(Dry)
 	val ciderMatcher = DrinkTypeMatcher("cider")
 
 	checkMatchedDrinks(drinkData.getMatching(List(dryMatcher, ciderMatcher)).toList, List(FirstCider))
@@ -111,7 +111,7 @@ class DrinkDataTest extends FunSuite with ShouldMatchers {
 
   test("Query for Medium Ciders with ABV Greater Than 7.0") {
 	val ciderMatcher = DrinkTypeMatcher("cider")
-	val mediumMatcher = DrinkFeatureMatcher(List(Medium))
+	val mediumMatcher = DrinkFeatureMatcher(Medium)
 	val abvMatcher = DrinkAbvGreaterThanMatcher(7.0)
 
 	checkMatchedDrinks(drinkData.getMatching(List(ciderMatcher, mediumMatcher, abvMatcher)).toList, List(SecondCider))

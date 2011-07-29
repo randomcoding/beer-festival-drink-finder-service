@@ -13,6 +13,11 @@ import uk.co.randomcoding.drinkfinder.model.drink._
  * Date: 22/05/11
  */
 object DummyDrinks {
+	val RealAle = DrinkFeature("Real Ale")
+	val Dry = DrinkFeature("Dry")
+	val Medium = DrinkFeature("Medium")
+	val Sweet = DrinkFeature("Sweet")
+
 	val FirstBeer = beer("First Beer", "The First Beer Brewed", 4.5, 1.70, RealAle)
 	val SecondBeer = beer("Second Beer", "The Second Beer Brewed", 3.7, 1.80, RealAle)
 
@@ -27,11 +32,6 @@ object DummyDrinks {
 	val perries = List(FirstPerry, SecondPerry)
 
 	val allDrinks = beers ++ ciders ++ perries
-
-	val RealAle = DrinkFeature("Real Ale")
-	val Dry = DrinkFeature("Dry")
-	val Medium = DrinkFeature("Medium")
-	val Sweet = DrinkFeature("Sweet")
 
 	/*
    * Used to handle the creation of a set from a single feature
