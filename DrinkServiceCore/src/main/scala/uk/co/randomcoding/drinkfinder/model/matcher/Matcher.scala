@@ -64,9 +64,9 @@ case class DrinkAbvEqualToMatcher(abv : Double) extends DrinkMatcher[Double](DRI
   def apply(drink : Drink) = drink.abv == matchTo
 }
 
-case class DrinkFeatureMatcher(features : List[DrinkFeature]) extends DrinkMatcher[List[DrinkFeature]](DRINK_HAS_FEATURES, features) {
+case class DrinkFeatureMatcher(feature : DrinkFeature) extends DrinkMatcher[DrinkFeature](DRINK_HAS_FEATURES, feature) {
 
-  def apply(drink : T) = matchTo.map(drink.features.contains(_)).find(_ == false).isEmpty
+  def apply(drink : T) = drink.features.contains(matchTo)
 }
 
 case class DrinkTypeMatcher(drinkType : String) extends DrinkMatcher[String](DRINK_TYPE, drinkType) {
