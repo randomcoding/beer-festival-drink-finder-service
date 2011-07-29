@@ -81,7 +81,7 @@ object DrinkSearch extends Logger {
           S.notice("Name: " + drinkName)
           S.redirectTo(redirectTo.format(resultString))
         }
-        case false => // do nothing - should probably display an error here
+        case false => // do nothing - the user is shown an error and can correct it
       }
     }
     
