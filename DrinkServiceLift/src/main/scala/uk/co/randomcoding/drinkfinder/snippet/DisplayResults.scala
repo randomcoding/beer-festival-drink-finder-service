@@ -8,7 +8,7 @@ import uk.co.randomcoding.drinkfinder.lib.TransformUtils._
 import net.liftweb.http._
 import net.liftweb.util.Helpers._
 import scala.xml.{ NodeSeq, Text }
-import uk.co.randomcoding.drinkfinder.model.data.wbf.WbfDrinkDataAccess
+import uk.co.randomcoding.drinkfinder.model.data.FestivalData
 import uk.co.randomcoding.drinkfinder.model.drink.{ Beer, Cider, Drink, Perry, DrinkFeature }
 import uk.co.randomcoding.drinkfinder.model.matcher.{ MatcherFactory, BrewerNameMatcher }
 import net.liftweb.common.Logger
@@ -20,8 +20,6 @@ import uk.co.randomcoding.drinkfinder.model.matcher.AlwaysTrueDrinkMatcher
  */
 class DisplayResults extends Logger {
 
-  private val drinkData = new WbfDrinkDataAccess()
-
   private val beerResultsId = "beerResults"
   private val ciderResultsId = "ciderResults"
   private val perryResultsId = "perryResults"
@@ -30,6 +28,12 @@ class DisplayResults extends Logger {
     import uk.co.randomcoding.drinkfinder.model.matcher.Matcher
 
     val params = S.queryString openOr "No Query String"
+    val festivalName = params.split("&").find(_.startsWith("festival.name")) match {
+    	case None => "Worcester Beer, Cider and Perry Festival"
+    	case Some(festivalNameParam) => festivalNameParam.split("=")(1) 
+    }
+
+    val festivalData = FestivalData(festivalName)
     debug("Received Query String: %s".format(params))
 
     val matchers = params match {
@@ -39,7 +43,7 @@ class DisplayResults extends Logger {
     }
     debug("Generated %d matchers:\n%s".format(matchers.size, matchers.mkString("\n\t")))
 
-    val matchingDrinks = drinkData.getMatching(matchers)
+    val matchingDrinks = festivalData.getMatching(matchers)
 
     debug("There are %d matching drinks:\n%s".format(matchingDrinks.size, matchingDrinks.mkString("\n\t")))
     val beers = matchingDrinks.filter(_.isInstanceOf[Beer]).toList.sortBy(_.name)

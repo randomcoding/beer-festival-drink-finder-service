@@ -39,6 +39,7 @@ object UploadData extends Logger {
 				case _ => S.redirectTo("uploadcompleted?status=error&description=Failed to retrieve uploaded file data")
 			}
 
+			// TODO: Perform actual data load.
 			S.redirectTo("uploadcompleted?status=success&filename=" + fileParam.fileName)
 		}
 

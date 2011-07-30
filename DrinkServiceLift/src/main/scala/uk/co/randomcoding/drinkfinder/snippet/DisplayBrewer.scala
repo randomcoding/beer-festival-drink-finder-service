@@ -1,38 +1,26 @@
 package uk.co.randomcoding.drinkfinder.snippet
 
-import uk.co.randomcoding.drinkfinder.model.drink.{ Drink, NoDrink }
+import uk.co.randomcoding.drinkfinder.model.data.FestivalData
 import uk.co.randomcoding.drinkfinder.lib.TransformUtils._
 import net.liftweb.common.{ Full, Logger }
 import scala.xml.Text
 import scala.xml.NodeSeq
 import net.liftweb.http._
 import net.liftweb.util.Helpers._
-import uk.co.randomcoding.drinkfinder.model.data.wbf.WbfDrinkDataAccess
 import uk.co.randomcoding.drinkfinder.model.matcher.id._
-import uk.co.randomcoding.drinkfinder.model.matcher.{ DrinkNameMatcher, BrewerNameMatcher }
+import uk.co.randomcoding.drinkfinder.model.matcher.{ DrinkNameMatcher, BrewerNameMatcher, MatcherFactory }
 
 class DisplayBrewer extends Logger {
-  private val drinkData = new WbfDrinkDataAccess()
 
-  def showBrewer = {
-    val brewerName = urlDecode(S.param(BREWER_NAME.toString).openOr("No Brewer"))
+	def showBrewer = {
 
-    val drinks = drinkData.getMatching(BrewerNameMatcher(brewerName)).toList.sortBy(_.name)
+		val festivalName = urlDecode(S.param(BREWER_NAME.toString).openOr("Worcester Beer, Cider and Perry Festival"))
+		val drinkData = FestivalData(festivalName)
+		val brewerName = urlDecode(S.param(BREWER_NAME.toString).openOr("No Brewer"))
 
-    "#brewerName" #> Text(brewerName) &
-      "#drinks" #> toSummaryDisplay(drinks)
-    //generateDrinksList(drinks.sortBy(_.name))
-  }
+		val drinks = drinkData.getMatching(MatcherFactory.generate("%s=%s".format(BREWER_NAME.toString, brewerName))).toList.sortBy(_.name)
 
-  /*private def generateDrinksList(drinks : List[Drink]) : NodeSeq = {
-    // again, this could de done with an embeded template
-    drinks.flatMap(drink => {
-      <div>
-        <a href={ drinkHref(drink.name) }>{ drink.name }</a>
-      </div>
-    })
-  }
-
-  private def drinkHref(drinkName : String) : String = "drink?%s=%s".format(DRINK_NAME, drinkName)*/
-
+		"#brewerName" #> Text(brewerName) &
+			"#drinks" #> toSummaryDisplay(drinks)
+	}
 }

@@ -6,12 +6,10 @@ import scala.xml.Text
 import scala.xml.NodeSeq
 import net.liftweb.http._
 import net.liftweb.util.Helpers._
-import uk.co.randomcoding.drinkfinder.model.data.wbf.WbfDrinkDataAccess
 import uk.co.randomcoding.drinkfinder.model.matcher.id._
 import uk.co.randomcoding.drinkfinder.model.matcher.DrinkNameMatcher
 
 class DisplayDrink extends Logger {
-	private val drinkData = new WbfDrinkDataAccess()
 	
 	def showDrink = {
 	  val drinkName = urlDecode( S.param(DRINK_NAME.toString).openOr("Unknown Drink"))
