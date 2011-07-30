@@ -8,7 +8,7 @@ import java.io.InputStream
 import org.apache.poi.ss.usermodel.{ WorkbookFactory, Row, Cell }
 import util.RichRow
 import util.RichRow._
-import uk.co.randomcoding.drinkfinder.model.data.wbf.WbfDrinkData
+import uk.co.randomcoding.drinkfinder.model.data.FestivalData
 import uk.co.randomcoding.drinkfinder.model.brewer.{ Brewer, NoBrewer }
 import uk.co.randomcoding.drinkfinder.model.drink.DrinkFactory._
 import uk.co.randomcoding.drinkfinder.model.drink.DrinkFeature
@@ -23,21 +23,21 @@ class SpreadsheetDataLoader {
 	/**
 	 * Read the data from an Excel spreadsheet input stream according to the provided data template
 	 */
-	def loadData(excelDataFile : InputStream, dataTemplate : DrinkDataTemplate) : WbfDrinkData = {
+	def loadData(excelDataFile : InputStream, dataTemplate : DrinkDataTemplate) : FestivalData = {
 
 		val wb = WorkbookFactory.create(excelDataFile)
 		wb.setMissingCellPolicy(Row.CREATE_NULL_AS_BLANK)
 		val dataSheet = wb.getSheetAt(0);
 
-		val drinkData = new WbfDrinkData()
+		val festivalData = FestivalData(dataTemplate.festivalName)
 
 		val physicalRows = dataSheet.rowIterator.asScala
-		physicalRows.foreach(row => if (row.isDataRow(dataTemplate)) addRowToData(row, drinkData, dataTemplate))
+		physicalRows.foreach(row => if (row.isDataRow(dataTemplate)) addRowToData(row, festivalData, dataTemplate))
 
-		drinkData
+		festivalData
 	}
 
-	private def addRowToData(row : Row, drinkData : WbfDrinkData, dataTemplate : DrinkDataTemplate) {
+	private def addRowToData(row : Row, festivalData : FestivalData, dataTemplate : DrinkDataTemplate) {
 		val drink = getDrinkType(row, dataTemplate) match {
 			case Some(t) => t.toLowerCase match {
 				case "beer" => beer(getDrinkName(row, dataTemplate), getDrinkDescription(row, dataTemplate), getDrinkAbv(row, dataTemplate), getDrinkPrice(row, dataTemplate), getDrinkFeatures(row, dataTemplate))
@@ -48,10 +48,10 @@ class SpreadsheetDataLoader {
 		}
 
 		val brewer = getBrewer(row, dataTemplate)
-		drinkData.addBrewer(brewer)
+		festivalData.addBrewer(brewer)
 		drink.brewer = brewer
 
-		drinkData.addDrink(drink)
+		festivalData.addDrink(drink)
 	}
 
 	private def getBrewer(row : Row, dataTemplate : DrinkDataTemplate) : Brewer = {

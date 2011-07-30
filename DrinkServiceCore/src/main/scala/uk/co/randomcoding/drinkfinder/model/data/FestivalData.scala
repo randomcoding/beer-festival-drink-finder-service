@@ -16,7 +16,7 @@ import uk.co.randomcoding.drinkfinder.model.matcher.BrewerNameMatcher
  *
  * @author RandomCoder
  */
-protected class FestivalData(val festivalName : String) extends Logger {
+class FestivalData(val festivalName : String) extends Logger {
 
 	private val BEER = "BEER"
 	private val CIDER = "CIDER"
@@ -26,25 +26,57 @@ protected class FestivalData(val festivalName : String) extends Logger {
 	private var brewers = Set.empty[Brewer]
 	private var drinkFeatures = Map.empty[String, MSet[DrinkFeature]]
 
-	def addDrink(drink : Drink) = drinks = drinks + drink
+	/**
+	 * Adds the given drink to the Festival's drinks list.
+	 *
+	 * This also updates the features for the drink type by adding the drink's features to the feature set for its type
+	 */
+	def addDrink(drink : Drink) = {
+		drinks = drinks + drink
 
+		addDrinkFeatures(drink)
+	}
+
+	/**
+	 * Remove a drink from the festival data.
+	 * 
+	 * This does not remove the drink's features
+	 */
 	def removeDrink(drink : Drink) = drinks = drinks - drink
 
+	/**
+	 * Add a brewer to the festival's data
+	 */
 	def addBrewer(brewer : Brewer) = brewers = brewers + brewer
 
+	/**
+	 * Remove a brewer from the festival's data
+	 */
 	def removeBrewer(brewer : Brewer) = brewers = brewers - brewer
-	
-	def addBeerFeature(feature: DrinkFeature) = addFeature(feature, BEER)
-	
-	def addCiderFeature(feature: DrinkFeature) = addFeature(feature, CIDER)
-	
-	def addPerryFeature(feature: DrinkFeature) = addFeature(feature, PERRY)
-	
-	def removeBeerFeature(feature: DrinkFeature) = removeFeature(feature, BEER)
-	
-	def removeCiderFeature(feature: DrinkFeature) = removeFeature(feature, CIDER)
-	
-	def removePerryFeature(feature: DrinkFeature) = removeFeature(feature, PERRY)
+
+	/**
+	 * Returns a sorted list of all the features for Beers.
+	 */
+	def beerFeatures() : List[DrinkFeature] = drinkFeatures.get(BEER) match {
+		case None => List.empty
+		case Some(features) => features.toList.sortBy(_.displayName)
+	}
+
+	/**
+	 * Returns a sorted list of all the features for Ciders.
+	 */
+	def ciderFeatures() : List[DrinkFeature] = drinkFeatures.get(CIDER) match {
+		case None => List.empty
+		case Some(features) => features.toList.sortBy(_.displayName)
+	}
+
+	/**
+	 * Returns a sorted list of all the features for Perries.
+	 */
+	def perryFeatures() : List[DrinkFeature] = drinkFeatures.get(PERRY) match {
+		case None => List.empty
+		case Some(features) => features.toList.sortBy(_.displayName)
+	}
 
 	/**
 	 * Get all the drinks that match all the matchers provided
@@ -72,18 +104,17 @@ protected class FestivalData(val festivalName : String) extends Logger {
 	 * Get the brewer with the name or return [[brewer.NoBrewer]] if there is no Brewer with that name.
 	 */
 	def getBrewer(brewerName : String) : Brewer = brewers.find(_.name equals brewerName).getOrElse(NoBrewer)
-	
-	private def addFeature(feature : DrinkFeature, drinkType: String) = {
-		drinkFeatures.get(drinkType) match {
-			case None => drinkFeatures = drinkFeatures + (drinkType-> MSet(feature))
-			case Some(_) => 	drinkFeatures(drinkType) += feature
-		}
-	}
 
-	private def removeFeature(feature : DrinkFeature, drinkType: String) = {
+	private def addDrinkFeatures(drink : Drink) = {
+		val drinkType = drink.getClass.getSimpleName match {
+			case "Beer" => BEER
+			case "Cider" => CIDER
+			case "Perry" => PERRY
+		}
+
 		drinkFeatures.get(drinkType) match {
-			case None => // nothing to do
-			case Some(_) => 	drinkFeatures(drinkType) -= feature
+			case None => drinkFeatures = drinkFeatures + (drinkType -> MSet(drink.features : _*))
+			case Some(currentFeats) => drinkFeatures = drinkFeatures + (drinkType -> (currentFeats ++ drink.features))
 		}
 	}
 }
