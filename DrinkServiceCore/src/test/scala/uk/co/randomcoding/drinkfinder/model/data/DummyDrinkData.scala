@@ -3,7 +3,7 @@
  */
 package uk.co.randomcoding.drinkfinder.model.data
 
-class DummyDrinkData extends DrinkData {
+class DummyDrinkData extends FestivalData("Test Festival") {
 
   import uk.co.randomcoding.drinkfinder.model.data.DummyDrinks._
 

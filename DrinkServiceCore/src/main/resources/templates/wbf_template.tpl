@@ -1,4 +1,5 @@
 # These are all indexed from 0
+festival.name=Worcester Beer, Cider and Perry Festival
 data.start.line=7
 drink.name.column=5
 drink.description.column=13
