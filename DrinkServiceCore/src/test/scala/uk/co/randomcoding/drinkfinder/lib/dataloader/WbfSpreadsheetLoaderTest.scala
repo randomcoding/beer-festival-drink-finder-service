@@ -33,7 +33,7 @@ class WbfSpreadsheetLoaderTest extends FunSuite with ShouldMatchers {
 		var drink = matched.head
 		drink.name should be("Deception")
 		drink.abv should be (4.1 plusOrMinus 0.1)
-		drink.price should be (1.2)
+		drink.price should be (2.4)
 		drink.brewer should be(Brewer("Abbeydale"))
 		drink.description should be("a very pale blonde beer with Nelson Sauvin hops")
 	}

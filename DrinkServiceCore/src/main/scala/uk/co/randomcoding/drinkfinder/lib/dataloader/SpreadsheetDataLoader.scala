@@ -98,10 +98,10 @@ class SpreadsheetDataLoader {
 	protected def convertDrinkAbvValue(drinkAbvValue : Double) : Double = drinkAbvValue * 100.0D
 
 	/**
-	 * Convert the raw value of the the drink price value to the value per 1/2 pint that is required by the system.
+	 * Convert the raw value of the the drink price value to the value per pint that is required by the system.
 	 *
 	 * Currently this is geared for the WBF format which is initially an int in pence, i.e. £2.60 per pint is stored as 260.
 	 */
-	protected def convertDrinkPriceValue(drinkPriceValue : Double) : Double = drinkPriceValue / 200.0D
+	protected def convertDrinkPriceValue(drinkPriceValue : Double) : Double = drinkPriceValue / 100.0D
 
 }
