@@ -6,6 +6,8 @@ package uk.co.randomcoding.drinkfinder.lib.dataloader
 import org.apache.poi.ss.usermodel.Row
 import uk.co.randomcoding.drinkfinder.lib.dataloader.template.DrinkDataTemplate
 import uk.co.randomcoding.drinkfinder.model.drink.DrinkFeature
+import util.RichRow
+import util.RichRow._
 
 /**
  * A Trait for all drink feature loaders to inherit from providing the basic glue to the resto of the system.
@@ -13,19 +15,17 @@ import uk.co.randomcoding.drinkfinder.model.drink.DrinkFeature
  * @author RandomCoder
  *
  */
-trait DrinkFeatureLoader {
+class DrinkFeatureLoader {
 
-	def loadFeatures(row: Row, dataTemplate: DrinkDataTemplate) : List[DrinkFeature] = {
-		val featureNames = featuresForDrink(row, dataTemplate)
-		
+	/**
+	 * Reads the [[DrinkFeature]]s from the given '''Row'''
+	 */
+	def drinkFeatures(row: Row, dataTemplate: DrinkDataTemplate) : List[DrinkFeature] = {
 		for {
-			featureName <- featureNames
+			featureName <- featuresForDrink(row, dataTemplate)
 		} yield {
 			DrinkFeature(featureName)
 		}
-		
-		
-		// convert to features by case classes
 	}
 	
 	/**
@@ -35,14 +35,17 @@ trait DrinkFeatureLoader {
 	 * 
 	 * This should read the drink features form the data source and return a list of strings where each element is the name of a single feature.
 	 */
-	def featuresForDrink(row: Row, dataTemplate: DrinkDataTemplate) : List[String]
-	
-	/**
-	 * Function to register a feature with the service's features manager. 
-	 * 
-	 * This makes the feature available to the rest of the service
-	 */
-	private def registerFeature(featureString: String) = {
-		// TODO
+	private def featuresForDrink(row: Row, dataTemplate: DrinkDataTemplate) : List[String] = {
+		dataTemplate.drinkFeatureFormat match {
+			case "SeparateColumns" => {
+				(for {
+					(name, column) <- dataTemplate.drinkFeatureColumns
+					if row.isNotBlank(column)
+				} yield {
+					name
+				}).toList
+			}
+			case "SingleColumn" => List.empty
+		}
 	}
 }

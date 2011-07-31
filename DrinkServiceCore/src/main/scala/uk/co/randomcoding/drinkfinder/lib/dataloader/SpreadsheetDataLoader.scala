@@ -19,7 +19,7 @@ import uk.co.randomcoding.drinkfinder.lib.dataloader.template.DrinkDataTemplate
  *
  */
 class SpreadsheetDataLoader {
-
+	private val featureLoader = new DrinkFeatureLoader()
 	/**
 	 * Read the data from an Excel spreadsheet input stream according to the provided data template
 	 */
@@ -84,14 +84,11 @@ class SpreadsheetDataLoader {
 		}
 	}
 
-	// TODO: If this is needed to be the base class of different loaders then  implement these methods.
-	/**
-	 * Load the features from a specific spreadsheet. This is intrinsically
-	 */
-	protected def getDrinkFeatures(row : Row, dataTemplate : DrinkDataTemplate) : List[DrinkFeature] = {
-		List.empty
+	private def getDrinkFeatures(row : Row, dataTemplate : DrinkDataTemplate) : List[DrinkFeature] = {
+			featureLoader.drinkFeatures(row, dataTemplate)
 	}
 
+	// TODO: If this is needed to be the base class of different loaders then  implement these methods.
 	/**
 	 * Convert the raw value of the drink ABV to a double value that is displayed as (e.g.) 4.1%.
 	 *

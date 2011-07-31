@@ -36,6 +36,13 @@ class RichRow(row : Row) {
 	def getStringCellValue(cellIndex : Int) : Option[String] = {
 		if (correctCellType(row, cellIndex, Cell.CELL_TYPE_STRING)) Some(row(cellIndex).getStringCellValue) else None
 	}
+	
+	/**
+	 * Checks if a cell is not blank or null 
+	 */
+	def isNotBlank(cellIndex : Int) : Boolean = {
+		row(cellIndex) != null && row(cellIndex).getCellType !=Cell.CELL_TYPE_BLANK
+	}
 
 	/**
 	 * Checks is a row is a drink data row
