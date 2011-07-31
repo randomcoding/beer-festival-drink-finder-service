@@ -81,25 +81,7 @@ class FestivalData(val festivalName : String) extends Logger {
 	/**
 	 * Get all the drinks that match all the matchers provided
 	 */
-	def getMatching(matchers : List[DrinkMatcher[_]]) : Set[Drink] = {
-		// TODO: This could be done more concisely and more elegantly, possibly with recursion or filtering and joining
-		// results.
-		drinks.filterNot(drink => matchers.map(matcher => matcher(drink)).contains(false))
-
-		/*val matches = for {
-			drink <- drinks
-			val drinkMatches = for {
-				matcher <- matchers
-			} yield {
-				matcher(drink)
-			}
-			if drinkMatches.contains(false) == false
-		} yield {
-			drink
-		}
-
-		matches.toSet*/
-	}
+	def getMatching(matchers : List[DrinkMatcher[_]]) : Set[Drink] = drinks.filterNot(drink => matchers.map(matcher => matcher(drink)).contains(false))
 
 	/**
 	 * Get the brewer with the name or return [[brewer.NoBrewer]] if there is no Brewer with that name.
@@ -107,19 +89,28 @@ class FestivalData(val festivalName : String) extends Logger {
 	def getBrewer(brewerName : String) : Brewer = brewers.find(_.name equals brewerName).getOrElse(NoBrewer)
 
 	private def addDrinkFeatures(drink : Drink) = {
-		val drinkType = drink.getClass.getSimpleName match {
+		val typeOfDrink = drinkType(drink)
+
+		drinkFeatures.get(typeOfDrink) match {
+			case None => drinkFeatures = drinkFeatures + (typeOfDrink -> MSet(drink.features : _*))
+			case Some(currentFeats) => drinkFeatures = drinkFeatures + (typeOfDrink -> (currentFeats ++ drink.features))
+		}
+	}
+	
+	private def drinkType(drink: Drink) = {
+		drink.getClass.getSimpleName match {
 			case "Beer" => BEER
 			case "Cider" => CIDER
 			case "Perry" => PERRY
 		}
-
-		drinkFeatures.get(drinkType) match {
-			case None => drinkFeatures = drinkFeatures + (drinkType -> MSet(drink.features : _*))
-			case Some(currentFeats) => drinkFeatures = drinkFeatures + (drinkType -> (currentFeats ++ drink.features))
-		}
 	}
 }
 
+/**
+ * This is the accessor object for the Festival Data for any festival.
+ * 
+ * '''''All''''' getting of a festival data should be done through this Object.
+ */
 object FestivalData {
 	type FestivalId = String
 
