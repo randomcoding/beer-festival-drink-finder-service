@@ -39,7 +39,7 @@ class FestivalData(val festivalName : String) extends Logger {
 
 	/**
 	 * Remove a drink from the festival data.
-	 * 
+	 *
 	 * This does not remove the drink's features
 	 */
 	def removeDrink(drink : Drink) = drinks = drinks - drink
@@ -84,8 +84,9 @@ class FestivalData(val festivalName : String) extends Logger {
 	def getMatching(matchers : List[DrinkMatcher[_]]) : Set[Drink] = {
 		// TODO: This could be done more concisely and more elegantly, possibly with recursion or filtering and joining
 		// results.
+		drinks.filterNot(drink => matchers.map(matcher => matcher(drink)).contains(false))
 
-		val matches = for {
+		/*val matches = for {
 			drink <- drinks
 			val drinkMatches = for {
 				matcher <- matchers
@@ -97,7 +98,7 @@ class FestivalData(val festivalName : String) extends Logger {
 			drink
 		}
 
-		matches.toSet
+		matches.toSet*/
 	}
 
 	/**
