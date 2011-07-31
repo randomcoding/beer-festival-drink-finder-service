@@ -131,4 +131,8 @@ object FestivalData {
 			case Some(data) => data
 		}
 	}
+	
+	def apply(festivalId: FestivalId, festivalData: FestivalData) = {
+		festivals = festivals + (festivalId -> festivalData)
+	}
 }

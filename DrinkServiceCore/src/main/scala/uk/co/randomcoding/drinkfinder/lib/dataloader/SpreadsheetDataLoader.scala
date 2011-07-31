@@ -3,27 +3,28 @@
  */
 package uk.co.randomcoding.drinkfinder.lib.dataloader
 
-import scala.collection.JavaConverters._
 import java.io.InputStream
-import org.apache.poi.ss.usermodel.{ WorkbookFactory, Row, Cell }
-import util.RichRow
-import util.RichRow._
-import uk.co.randomcoding.drinkfinder.model.data.FestivalData
-import uk.co.randomcoding.drinkfinder.model.brewer.{ Brewer, NoBrewer }
-import uk.co.randomcoding.drinkfinder.model.drink.DrinkFactory._
-import uk.co.randomcoding.drinkfinder.model.drink.DrinkFeature
+import net.liftweb.common.Logger
+import org.apache.poi.ss.usermodel.{WorkbookFactory, Row}
+import scala.collection.JavaConverters.asScalaIteratorConverter
 import uk.co.randomcoding.drinkfinder.lib.dataloader.template.DrinkDataTemplate
+import uk.co.randomcoding.drinkfinder.lib.dataloader.util.RichRow
+import uk.co.randomcoding.drinkfinder.lib.dataloader.util.RichRow._
+import uk.co.randomcoding.drinkfinder.model.brewer.{NoBrewer, Brewer}
+import uk.co.randomcoding.drinkfinder.model.data.FestivalData
+import uk.co.randomcoding.drinkfinder.model.drink.{NoDrink, DrinkFeature}
+import uk.co.randomcoding.drinkfinder.model.drink.DrinkFactory.{perry, cider, beer}
 
 /**
  * @author RandomCoder
  *
  */
-class SpreadsheetDataLoader {
+class SpreadsheetDataLoader extends Logger {
 	private val featureLoader = new DrinkFeatureLoader()
 	/**
-	 * Read the data from an Excel spreadsheet input stream according to the provided data template
+	 * Read the data from an Excel spreadsheet input stream according to the provided data template and store it in the [[uk.co.randomcoding.drinkfinder.model.data.FestivalData]] object
 	 */
-	def loadData(excelDataFile : InputStream, dataTemplate : DrinkDataTemplate) : FestivalData = {
+	def loadData(excelDataFile : InputStream, dataTemplate : DrinkDataTemplate) = {
 
 		val wb = WorkbookFactory.create(excelDataFile)
 		wb.setMissingCellPolicy(Row.CREATE_NULL_AS_BLANK)
@@ -34,7 +35,7 @@ class SpreadsheetDataLoader {
 		val physicalRows = dataSheet.rowIterator.asScala
 		physicalRows.foreach(row => if (row.isDataRow(dataTemplate)) addRowToData(row, festivalData, dataTemplate))
 
-		festivalData
+		//FestivalData(dataTemplate.festivalName, festivalData)
 	}
 
 	private def addRowToData(row : Row, festivalData : FestivalData, dataTemplate : DrinkDataTemplate) {
@@ -44,13 +45,14 @@ class SpreadsheetDataLoader {
 				case "cider" => cider(getDrinkName(row, dataTemplate), getDrinkDescription(row, dataTemplate), getDrinkAbv(row, dataTemplate), getDrinkPrice(row, dataTemplate), getDrinkFeatures(row, dataTemplate))
 				case "perry" => perry(getDrinkName(row, dataTemplate), getDrinkDescription(row, dataTemplate), getDrinkAbv(row, dataTemplate), getDrinkPrice(row, dataTemplate), getDrinkFeatures(row, dataTemplate))
 			}
-			case None => error("No drink type for data found")
+			case None => error("No drink type for data found"); NoDrink
 		}
 
 		val brewer = getBrewer(row, dataTemplate)
 		festivalData.addBrewer(brewer)
 		drink.brewer = brewer
 
+		debug("Adding drink %s to Festival Data".format(drink))
 		festivalData.addDrink(drink)
 	}
 
