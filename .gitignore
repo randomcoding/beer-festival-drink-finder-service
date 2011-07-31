@@ -4,3 +4,5 @@ target/
 bin/
 *.class
 *.jar
+*.swap
+.~lock
