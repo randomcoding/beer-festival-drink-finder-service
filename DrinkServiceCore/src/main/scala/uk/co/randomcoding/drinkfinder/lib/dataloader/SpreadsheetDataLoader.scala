@@ -34,8 +34,6 @@ class SpreadsheetDataLoader extends Logger {
 
 		val physicalRows = dataSheet.rowIterator.asScala
 		physicalRows.foreach(row => if (row.isDataRow(dataTemplate)) addRowToData(row, festivalData, dataTemplate))
-
-		//FestivalData(dataTemplate.festivalName, festivalData)
 	}
 
 	private def addRowToData(row : Row, festivalData : FestivalData, dataTemplate : DrinkDataTemplate) {
@@ -52,7 +50,7 @@ class SpreadsheetDataLoader extends Logger {
 		festivalData.addBrewer(brewer)
 		drink.brewer = brewer
 
-		debug("Adding drink %s to Festival Data".format(drink))
+		info("Adding drink %s to Festival Data".format(drink))
 		festivalData.addDrink(drink)
 	}
 
