@@ -54,6 +54,10 @@ package object id {
   case object BREWER_NAME extends MatcherId("brewer.name") {
     def unapply(matcherId : String) : Option[MatcherId] = if (matcherId == id) Some(BREWER_NAME) else None
   }
+  
+  case object FESTIVAL_NAME extends MatcherId("festival.name") {
+	  def unapply(matcherId : String) : Option[MatcherId] = if (matcherId == id) Some(FESTIVAL_NAME) else None
+  }
 
   case object ALWAYS_TRUE extends MatcherId("always.true") {
     def unapply(matcherId : String) : Option[MatcherId] = if (matcherId == id) Some(BREWER_NAME) else None

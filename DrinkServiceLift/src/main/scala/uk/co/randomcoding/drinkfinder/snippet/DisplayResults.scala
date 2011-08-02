@@ -28,10 +28,11 @@ class DisplayResults extends Logger {
     import uk.co.randomcoding.drinkfinder.model.matcher.Matcher
 
     val params = S.queryString openOr "No Query String"
-    val festivalName = params.split("&").find(_.startsWith("festival.name")) match {
+    val festivalName = urlDecode(S.param(FESTIVAL_NAME.toString).openOr( "Worcester Beer, Cider and Perry Festival")) 
+    	/*params.split("&").find(_.startsWith("festival.name")) match {
     	case None => "Worcester Beer, Cider and Perry Festival"
     	case Some(festivalNameParam) => festivalNameParam.split("=")(1) 
-    }
+    }*/
 
     val festivalData = FestivalData(festivalName)
     debug("Received Query String: %s".format(params))

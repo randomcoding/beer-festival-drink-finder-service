@@ -104,6 +104,8 @@ class FestivalData(val festivalName : String) extends Logger {
 			case "Perry" => PERRY
 		}
 	}
+	
+	def allBrewers() : List[Brewer] = brewers.toList
 }
 
 /**

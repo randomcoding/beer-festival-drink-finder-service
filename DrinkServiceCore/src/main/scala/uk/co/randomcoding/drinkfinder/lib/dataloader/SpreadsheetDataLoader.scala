@@ -88,7 +88,7 @@ class SpreadsheetDataLoader extends Logger {
 			featureLoader.drinkFeatures(row, dataTemplate)
 	}
 
-	// TODO: If this is needed to be the base class of different loaders then  implement these methods.
+	// If this is needed to be the base class of different loaders then  override these methods.
 	/**
 	 * Convert the raw value of the drink ABV to a double value that is displayed as (e.g.) 4.1%.
 	 *

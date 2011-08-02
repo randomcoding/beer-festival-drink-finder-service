@@ -3,13 +3,14 @@
  */
 package uk.co.randomcoding.drinkfinder.snippet
 
-import uk.co.randomcoding.drinkfinder.model.matcher.id._
+
 import net.liftweb.http.js.JsCmds._
 import net.liftweb.common._
 import net.liftweb.http._
 import net.liftweb.http.js._
 import net.liftweb._
 import net.liftweb.util.Helpers._
+import uk.co.randomcoding.drinkfinder.model.data.FestivalData
 import uk.co.randomcoding.drinkfinder.model.matcher.id._
 
 /**
@@ -23,6 +24,8 @@ object DrinkSearch extends Logger {
   // global form values
   private val comparisonTypes = List(("Any" -> "Any"), ("Equal" -> "Equal To"), ("Greater Than" -> "Greater Than"), ("Less Than" -> "Less Than"))
   private val drinkTypes = List(("Any" -> "Any"), ("Beer" -> "Beer"), ("Cider" -> "Cider"), ("Perry" -> "Perry"))
+  
+  private def brewers = List(("Any" -> "Any" )) ::: (FestivalData("Worcester Beer, Cider and Perry Festival").allBrewers.sortBy(_.name).map(brewer => (brewer.name -> brewer.name)))
 
   def render = {
     // where did we come here from
@@ -34,7 +37,7 @@ object DrinkSearch extends Logger {
     var abv = "0.0"
     var abvValue = 0.0
     var abvComparisonType = ""
-    var priceLessThan = "0.0"
+    var priceLessThan = "0.00"
     var priceValue = 0.0
     var drinkType = ""
     var brewerName = ""
@@ -131,7 +134,8 @@ object DrinkSearch extends Logger {
       "name=ABV" #> SHtml.text(abv, abv = _) &
       "name=AbvComparisonType" #> SHtml.select(comparisonTypes, Box("Any"), abvComparisonType = _) &
       "name=DrinkType" #> (SHtml.select(drinkTypes, Box("Any"), drinkType = _)) &
-      "name=BrewerName" #> (SHtml.text(brewerName, brewerName = _)) &
+      //"name=BrewerName" #> (SHtml.text(brewerName, brewerName = _)) &
+      "name=BrewerName" #> (SHtml.select(brewers, Box("Any"), brewerName = _)) &
       "name=PriceLessThan" #> (SHtml.text(priceLessThan, priceLessThan = _)) &
       "type=submit" #> (SHtml.onSubmitUnit(process))
   }
