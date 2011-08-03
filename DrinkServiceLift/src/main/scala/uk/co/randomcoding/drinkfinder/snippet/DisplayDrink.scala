@@ -20,7 +20,7 @@ class DisplayDrink extends Logger {
 	  val features = S.param(DRINK_HAS_FEATURES.toString).openOr("Unknown Features")
 	   debug("Got Drink Name: %s, Description: %s, ABV: %s, Price: %s, Brewer: %s, Features: %s".format(drinkName, drinkDescription, drinkAbv, drinkPrice, drinkBrewer, features))
 	  
-	   "#drinkFeatures" #> drinkFeatures(features) &
+	   "#drinkFeatures" #> features.split(",").toList.sortBy(_.toString).mkString("(", "," , ")") &
 	   "#drinkName" #> drinkName &
 	   "#abvDetail" #> Text("%.1f".format(drinkAbv.toDouble)) &
 	   "#priceDetail" #> Text("%.2f".format(drinkPrice.toDouble)) &
@@ -28,20 +28,5 @@ class DisplayDrink extends Logger {
 		"#descriptionDetail" #> Text(drinkDescription)
 	}
 	
-	private def brewerHref(brewerName: String) : String =  "brewer?%s=%s".format(BREWER_NAME, brewerName)
-
-	private def drinkFeatures(featuresString: String) : NodeSeq = {
-	  val features = for {
-	    feature <- featuresString.split(",")
-	  } yield {
-	    // TODO add feature
-	    Text(feature)
-	  }
-	
-	
-	var nodes : NodeSeq = Text("")
-	features.foreach((node : NodeSeq) => nodes = nodes ++ node)
-	
-	nodes
-	}
+	private def brewerHref(brewerName: String) : String =  "brewer?%s=%s".format(BREWER_NAME, brewerName)	
 }

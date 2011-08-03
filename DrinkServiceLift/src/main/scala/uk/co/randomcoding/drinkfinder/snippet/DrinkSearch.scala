@@ -25,7 +25,7 @@ object DrinkSearch extends Logger {
   private val comparisonTypes = List(("Any" -> "Any"), ("Equal" -> "Equal To"), ("Greater Than" -> "Greater Than"), ("Less Than" -> "Less Than"))
   private val drinkTypes = List(("Any" -> "Any"), ("Beer" -> "Beer"), ("Cider" -> "Cider"), ("Perry" -> "Perry"))
   
-  private def brewers = List(("Any" -> "Any" )) ::: (FestivalData("Worcester Beer, Cider and Perry Festival").allBrewers.sortBy(_.name).map(brewer => (brewer.name -> brewer.name)))
+  private def brewers = List(("" -> "Any" )) ::: (FestivalData("Worcester Beer, Cider and Perry Festival").allBrewers.sortBy(_.name).map(brewer => (brewer.name -> brewer.name)))
 
   def render = {
     // where did we come here from
@@ -89,7 +89,7 @@ object DrinkSearch extends Logger {
     }
     
     def isOnlyBrewerSearch() : Boolean = {
-    	brewerName.nonEmpty && drinkName.isEmpty && descriptionContains.isEmpty && (abvValue equals 0.0) && (priceValue equals 0.0)
+    	(brewerName.nonEmpty && !brewerName.equals("Any")) && drinkName.isEmpty && descriptionContains.isEmpty && (abvValue equals 0.0) && (priceValue equals 0.0)
     }
 
     def getParameterValues() : String = {
