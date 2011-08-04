@@ -62,19 +62,19 @@ class SpreadsheetDataLoader extends Logger {
 	}
 
 	private def getDrinkName(row : Row, dataTemplate : DrinkDataTemplate) : String = {
-		row.getStringCellValue(dataTemplate.drinkNameColumn).get
+		row.getStringCellValue(dataTemplate.drinkNameColumn).getOrElse("Unknown Drink")
 	}
 
 	private def getDrinkDescription(row : Row, dataTemplate : DrinkDataTemplate) : String = {
-		row.getStringCellValue(dataTemplate.drinkDescriptionColumn).get
+		row.getStringCellValue(dataTemplate.drinkDescriptionColumn).getOrElse("")
 	}
 
 	private def getDrinkPrice(row : Row, dataTemplate : DrinkDataTemplate) : Double = {
-		convertDrinkPriceValue(row.getNumericCellValue(dataTemplate.drinkPriceColumn).get)
+		convertDrinkPriceValue(row.getNumericCellValue(dataTemplate.drinkPriceColumn).getOrElse(0.0))
 	}
 
 	private def getDrinkAbv(row : Row, dataTemplate : DrinkDataTemplate) : Double = {
-		convertDrinkAbvValue(row.getNumericCellValue(dataTemplate.drinkAbvColumn).get)
+		convertDrinkAbvValue(row.getNumericCellValue(dataTemplate.drinkAbvColumn).getOrElse(0.0))
 	}
 
 	private def getDrinkType(row : Row, dataTemplate : DrinkDataTemplate) : Option[String] = {
