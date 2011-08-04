@@ -8,7 +8,10 @@ package uk.co.randomcoding.drinkfinder.model.drink
  * The identifier is used, ignoring case, to determine equality and uniqueness. So Dry is the same as dry and DRY
  */
 case class DrinkFeature(val feature : String) {
-	val displayName = feature.split("\\s").map(word => word.charAt(0).toUpper + word.substring(1)).mkString("", " ", "")
+	val displayName =feature.nonEmpty match {
+		case true =>feature.split("\\s").map(word => word.charAt(0).toUpper + word.substring(1)).mkString("", " ", "")
+		case false => ""
+	}
 	
 	override def canEqual(other : Any) : Boolean = other.isInstanceOf[DrinkFeature]
 

@@ -66,7 +66,10 @@ class SpreadsheetDataLoader extends Logger {
 	}
 
 	private def getDrinkDescription(row : Row, dataTemplate : DrinkDataTemplate) : String = {
-		row.getStringCellValue(dataTemplate.drinkDescriptionColumn).getOrElse("")
+		dataTemplate.drinkDescriptionColumn match {
+			case Some(col) => row.getStringCellValue(col).getOrElse("")
+			case None => ""
+		}
 	}
 
 	private def getDrinkPrice(row : Row, dataTemplate : DrinkDataTemplate) : Double = {

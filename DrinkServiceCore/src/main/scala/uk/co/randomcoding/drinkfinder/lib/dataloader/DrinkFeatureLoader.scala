@@ -45,7 +45,12 @@ class DrinkFeatureLoader {
 					name
 				}).toList
 			}
-			case "SingleColumn" => List.empty
+			case "SingleColumn" => {
+				row.getStringCellValue(dataTemplate.drinkFeatureColumn) match {
+					case Some(feature) => List(feature)
+					case _ => Nil
+				}
+			}
 		}
 	}
 }
