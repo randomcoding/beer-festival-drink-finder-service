@@ -5,6 +5,7 @@ package uk.co.randomcoding.drinkfinder.model.matcher
 
 import net.liftweb.common.Logger
 import id._
+import uk.co.randomcoding.drinkfinder.model.drink.DrinkFeature
 
 /**
  * Factory object to generate matchers from a supplied query string
@@ -34,7 +35,7 @@ object MatcherFactory extends Logger {
       case DRINK_ABV_GREATER_THAN(queryId) => DrinkAbvGreaterThanMatcher(queryValue.toDouble)
       case DRINK_ABV_LESS_THAN(queryId) => DrinkAbvLessThanMatcher(queryValue.toDouble)
       case DRINK_DESCRIPTION(queryId) => DrinkDescriptionMatcher(queryValue)
-      //case DRINK_HAS_FEATURES(queryId) => DrinkFeatureMatcher(queryValue)
+      case DRINK_HAS_FEATURES(queryId) => DrinkFeatureMatcher(DrinkFeature(queryValue))
       case DRINK_NAME(queryId) => DrinkNameMatcher(queryValue)
       case DRINK_PRICE(queryId) => DrinkPriceMatcher(queryValue.toDouble)
       case DRINK_TYPE(queryId) => DrinkTypeMatcher(queryValue)

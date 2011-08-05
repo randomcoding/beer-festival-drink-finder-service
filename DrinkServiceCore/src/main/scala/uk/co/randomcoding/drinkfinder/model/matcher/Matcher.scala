@@ -2,7 +2,7 @@ package uk.co.randomcoding.drinkfinder.model.matcher
 
 import scala.Some
 import id._
-import uk.co.randomcoding.drinkfinder.model.drink._
+import uk.co.randomcoding.drinkfinder.model.drink.{Drink, DrinkFeature, Beer, Cider, Perry}
 import net.liftweb.common.Logger
 
 /**

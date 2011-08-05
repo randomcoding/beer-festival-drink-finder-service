@@ -3,7 +3,6 @@
  */
 package uk.co.randomcoding.drinkfinder.snippet
 
-
 import net.liftweb.http.js.JsCmds._
 import net.liftweb.common._
 import net.liftweb.http._
@@ -11,6 +10,7 @@ import net.liftweb.http.js._
 import net.liftweb._
 import net.liftweb.util.Helpers._
 import uk.co.randomcoding.drinkfinder.model.data.FestivalData
+import uk.co.randomcoding.drinkfinder.model.drink.DrinkFeature
 import uk.co.randomcoding.drinkfinder.model.matcher.id._
 
 /**
@@ -21,126 +21,146 @@ import uk.co.randomcoding.drinkfinder.model.matcher.id._
  *
  */
 object DrinkSearch extends Logger {
-  // global form values
-  private val comparisonTypes = List(("Any" -> "Any"), ("Equal" -> "Equal To"), ("Greater Than" -> "Greater Than"), ("Less Than" -> "Less Than"))
-  private val drinkTypes = List(("Any" -> "Any"), ("Beer" -> "Beer"), ("Cider" -> "Cider"), ("Perry" -> "Perry"))
-  
-  private def brewers = List(("" -> "Any" )) ::: (FestivalData("Worcester Beer, Cider and Perry Festival").allBrewers.sortBy(_.name).map(brewer => (brewer.name -> brewer.name)))
+	// hack to provide access to the (currently) only data object
+	private lazy val festivalData = FestivalData("Worcester Beer, Cider and Perry Festival")
 
-  def render = {
-    // where did we come here from
-    val whence = S.referer openOr "/"
+	// function to convert a Drink Feature into a combo box tuple
+	private val featureToDisplay = (feature : DrinkFeature, drinkType : String) => (feature.feature -> "%s (%s)".format(feature.displayName, drinkType))
+	
+	// global form values
+	private val comparisonTypes = List(("" -> "Any"), ("Equal" -> "Equal To"), ("Greater Than" -> "Greater Than"), ("Less Than" -> "Less Than"))
+	
+	private val drinkTypes = List(("" -> "Any"), ("Beer" -> "Beer"), ("Cider" -> "Cider"), ("Perry" -> "Perry"))
 
-    // store state from fields
-    var drinkName = ""
-    var descriptionContains = ""
-    var abv = "0.0"
-    var abvValue = 0.0
-    var abvComparisonType = ""
-    var priceLessThan = "0.00"
-    var priceValue = 0.0
-    var drinkType = ""
-    var brewerName = ""
+	private def brewers = List(("" -> "Any")) ::: (festivalData.allBrewers.sortBy(_.name).map(brewer => (brewer.name -> brewer.name)))
 
-    Focus("DrinkName")
+	private def drinkFeatures = {
+		val beerFeatures = festivalData.beerFeatures.sortBy(_.feature)
+		val ciderAndPerryFeatures = { 
+			val uniqueList = (festivalData.ciderFeatures ::: festivalData.perryFeatures).toSet.toList
+			uniqueList.sortBy(_.feature)
+		}
+		List(("" -> "Any")) ::: beerFeatures.map(featureToDisplay(_, "Beer")) ::: ciderAndPerryFeatures.map(featureToDisplay(_, "Cider & Perry"))
+	}
 
-    def process() : JsCmd = {
-      Thread.sleep(500) // allow time to show ajax spinner
-      var valid = true
+	def render = {
+		// where did we come here from
+		val whence = S.referer openOr "/"
 
-      val setInvalid : ((String, String) => Double) = ((errorId : String, errorMessage : String) => {
-        displayError(errorId, errorMessage)
-        valid = false
-        -1.0
-      })
+		// store state from fields
+		var drinkName = ""
+		var descriptionContains = ""
+		var abv = "0.0"
+		var abvValue = 0.0
+		var abvComparisonType = ""
+		var priceLessThan = "0.00"
+		var priceValue = 0.0
+		var drinkType = ""
+		var brewerName = ""
+			var drinkFeature = ""
 
-      abvValue = asDouble(abv) match {
-        case Full(a) => {
-          debug("ABV=%f and comparison=%s".format(a, abvComparisonType))
-          if (abvComparisonType equals "Any") {
-            if (a > 0) setInvalid("ABVError", "Please Enter an ABV for Comparison") else a
-          } else {
-            if (a equals 0) setInvalid("ABVError", "Please Select a Comparison Type") else a
-          }
-        }
-        case _ => {
-          setInvalid("ABVError", "ABV Value is not a number")
-        }
-      }
+		Focus("DrinkName")
 
-      priceValue = asDouble(priceLessThan) match {
-        case Full(a) => a
-        case _ => {
-          displayError("PriceError", "Price Value is not a number")
-          valid = false
-          -1.0
-        }
-      }
+		def process() : JsCmd = {
+			Thread.sleep(500) // allow time to show ajax spinner
+			var valid = true
 
-      valid match {
-        case true => {
-          val resultString = getParameterValues()
-          val redirectTo = if (isOnlyBrewerSearch()) "/brewer?%s" else "/results?%s"
-          S.notice("Name: " + drinkName)
-          S.redirectTo(redirectTo.format(resultString))
-        }
-        case false => // do nothing - the user is shown an error and can correct it
-      }
-    }
-    
-    def isOnlyBrewerSearch() : Boolean = {
-    	(brewerName.nonEmpty && !brewerName.equals("Any")) && drinkName.isEmpty && descriptionContains.isEmpty && (abvValue equals 0.0) && (priceValue equals 0.0)
-    }
+			val setInvalid : ((String, String) => Double) = ((errorId : String, errorMessage : String) => {
+				displayError(errorId, errorMessage)
+				valid = false
+				-1.0
+			})
 
-    def getParameterValues() : String = {
-      var paramsList = List.empty[String]
-      if (drinkName.nonEmpty) {
-        paramsList = (DRINK_NAME + "=" + drinkName) :: paramsList
-      }
+			abvValue = asDouble(abv) match {
+				case Full(a) => {
+					debug("ABV=%f and comparison=%s".format(a, abvComparisonType))
+					if (abvComparisonType equals "Any") {
+						if (a > 0) setInvalid("ABVError", "Please Enter an ABV for Comparison") else a
+					} else {
+						if (a equals 0) setInvalid("ABVError", "Please Select a Comparison Type") else a
+					}
+				}
+				case _ => {
+					setInvalid("ABVError", "ABV Value is not a number")
+				}
+			}
 
-      if (descriptionContains.nonEmpty) {
-        paramsList = (DRINK_DESCRIPTION + "=" + descriptionContains) :: paramsList
-      }
+			priceValue = asDouble(priceLessThan) match {
+				case Full(a) => a
+				case _ => {
+					displayError("PriceError", "Price Value is not a number")
+					valid = false
+					-1.0
+				}
+			}
 
-      if (abvValue > 0.0) {
-        val abvParam = abvComparisonType match {
-          case "Equal" => DRINK_ABV_EQUAL_TO
-          case "Less Than" => DRINK_ABV_LESS_THAN
-          case "Greater Than" => DRINK_ABV_GREATER_THAN
-        }
+			valid match {
+				case true => {
+					val resultString = getParameterValues()
+					val redirectTo = if (isOnlyBrewerSearch()) "/brewer?%s" else "/results?%s"
+					S.notice("Name: " + drinkName)
+					S.redirectTo(redirectTo.format(resultString))
+				}
+				case false => // do nothing - the user is shown an error and can correct it
+			}
+		}
 
-        paramsList = (abvParam + "=%.1f".format(abvValue)) :: paramsList
-      }
+		def isOnlyBrewerSearch() : Boolean = {
+			(brewerName.nonEmpty && !brewerName.equals("Any")) && drinkName.isEmpty && descriptionContains.isEmpty && (abvValue equals 0.0) && (priceValue equals 0.0)
+		}
 
-      if (priceValue > 0.0) {
-        paramsList = ("%s=%.2f".format(DRINK_PRICE, priceValue)) :: paramsList
-      }
+		def getParameterValues() : String = {
+			var paramsList = List.empty[String]
+			if (drinkName.nonEmpty) {
+				paramsList = (DRINK_NAME + "=" + drinkName) :: paramsList
+			}
 
-      if (drinkType.nonEmpty && !drinkType.equals("Any")) {
-        paramsList = ("%s=%s".format(DRINK_TYPE, drinkType)) :: paramsList
-      }
+			if (descriptionContains.nonEmpty) {
+				paramsList = (DRINK_DESCRIPTION + "=" + descriptionContains) :: paramsList
+			}
 
-      debug("BrewerName is" + brewerName)
-      if (brewerName.nonEmpty) {
-        paramsList = (BREWER_NAME + "=" + brewerName) :: paramsList
-      }
+			if (abvValue > 0.0) {
+				val abvParam = abvComparisonType match {
+					case "Equal" => DRINK_ABV_EQUAL_TO
+					case "Less Than" => DRINK_ABV_LESS_THAN
+					case "Greater Than" => DRINK_ABV_GREATER_THAN
+				}
 
-      paramsList.mkString("", "&", "")
-    }
+				paramsList = (abvParam + "=%.1f".format(abvValue)) :: paramsList
+			}
 
-    // bind form to vars and create display
-    "name=DrinkName" #> SHtml.text(drinkName, drinkName = _, "id" -> "the_name") &
-      "name=DescriptionContains" #> SHtml.text(descriptionContains, descriptionContains = _) &
-      "name=ABV" #> SHtml.text(abv, abv = _) &
-      "name=AbvComparisonType" #> SHtml.select(comparisonTypes, Box("Any"), abvComparisonType = _) &
-      "name=DrinkType" #> (SHtml.select(drinkTypes, Box("Any"), drinkType = _)) &
-      //"name=BrewerName" #> (SHtml.text(brewerName, brewerName = _)) &
-      "name=BrewerName" #> (SHtml.select(brewers, Box("Any"), brewerName = _)) &
-      "name=PriceLessThan" #> (SHtml.text(priceLessThan, priceLessThan = _)) &
-      "type=submit" #> (SHtml.onSubmitUnit(process))
-  }
+			if (priceValue > 0.0) {
+				paramsList = ("%s=%.2f".format(DRINK_PRICE, priceValue)) :: paramsList
+			}
 
-  private def displayError(formId : String, errorMessage : String) = {
-    S.error(formId, errorMessage)
-  }
+			if (drinkType.nonEmpty) {
+				paramsList = ("%s=%s".format(DRINK_TYPE, drinkType)) :: paramsList
+			}
+
+			if (brewerName.nonEmpty) {
+				paramsList = (BREWER_NAME + "=" + brewerName) :: paramsList
+			}
+			
+			if (drinkFeature.nonEmpty) {
+				paramsList = ("%s=%s".format(DRINK_HAS_FEATURES, drinkFeature)) :: paramsList
+			}
+
+			paramsList.mkString("", "&", "")
+		}
+
+		// bind form to vars and create display
+		"#DrinkName" #> SHtml.text(drinkName, drinkName = _, "id" -> "the_name") &
+			"#DescriptionContains" #> SHtml.text(descriptionContains, descriptionContains = _) &
+			"#ABV" #> SHtml.text(abv, abv = _) &
+			"#AbvComparisonType" #> SHtml.select(comparisonTypes, Box("Any"), abvComparisonType = _) &
+			"#DrinkType" #> (SHtml.select(drinkTypes, Box("Any"), drinkType = _)) &			
+			"#DrinkFeature" #> (SHtml.select(drinkFeatures, Box("Any"), drinkFeature = _)) &
+			"#BrewerName" #> (SHtml.select(brewers, Box("Any"), brewerName = _)) &
+			"#PriceLessThan" #> (SHtml.text(priceLessThan, priceLessThan = _)) &
+			"type=submit" #> (SHtml.onSubmitUnit(process))
+	}
+
+	private def displayError(formId : String, errorMessage : String) = {
+		S.error(formId, errorMessage)
+	}
 }
