@@ -97,7 +97,7 @@ class DrinkFeatureLoaderTest extends FunSuite with ShouldMatchers {
 				(7 -> List("Mild")),
 				(8 -> List("Strong", "Brown")),
 				(9 -> List("Golden", "Lager")),
-				(10 -> List("Speciality")),
+				(10 -> List("Speciality", "Stout / Porter")),
 				(11 -> List("Strong")),
 				(12 -> List("Golden", "Lager")),
 				(13 -> List("Best Bitter", "Brown")),
