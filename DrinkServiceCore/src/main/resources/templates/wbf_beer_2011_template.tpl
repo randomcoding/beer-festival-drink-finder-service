@@ -1,0 +1,21 @@
+# These are all indexed from 0
+festival.name=Worcester Beer, Cider and Perry Festival
+data.start.line=7
+drink.name.column=F
+drink.description.column=M
+drink.price.column=BJ
+drink.abv.column=G
+brewer.name.column=E
+brewer.location.column=N
+drink.type=beer
+drink.quantity.remaining.column=-1
+drink.feature.column=Q
+drink.feature.format=Mixed
+drink.feature.Mild.column=Y
+drink.feature.Dark.column=AA
+drink.feature.Brown.column=AC
+drink.feature.Golden.column=AE
+drink.feature.Stout/Porter.column=AG
+drink.feature.Lager.column=AI
+drink.feature.Speciality.column=AK
+drink.feature.Organic.column=AM

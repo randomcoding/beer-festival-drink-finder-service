@@ -37,4 +37,4 @@ build.log
 # switch to regexp syntax.
 #  syntax: regexp
 #  ^\.pc/
-
+-template
