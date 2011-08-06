@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package uk.co.randomcoding.drinkfinder.lib.dataloader
 
@@ -10,47 +10,50 @@ import util.RichRow
 import util.RichRow._
 
 /**
- * A Trait for all drink feature loaders to inherit from providing the basic glue to the resto of the system.
- * 
+ * Loads drink features from a spreadsheet row for a single drink.
+ *
  * @author RandomCoder
  *
  */
 class DrinkFeatureLoader {
 
+	private def firstLetterCaps(inString: String) : String = inString.split(" ").map(elem => elem.charAt(0).toUpper + elem.substring(1).toLowerCase).mkString("", " ", "")
+	
 	/**
 	 * Reads the [[DrinkFeature]]s from the given '''Row'''
 	 */
-	def drinkFeatures(row: Row, dataTemplate: DrinkDataTemplate) : List[DrinkFeature] = {
+	def drinkFeatures(row : Row, dataTemplate : DrinkDataTemplate) : List[DrinkFeature] = {
 		for {
-			featureName <- featuresForDrink(row, dataTemplate)
+			featureName <- featuresForDrink(row, dataTemplate).map(firstLetterCaps(_)).distinct
 		} yield {
 			DrinkFeature(featureName)
 		}
 	}
-	
+
 	/**
-	 * Function to read the features for a drink.
-	 * 
-	 * This needs to be implemented for each type of feature loader as the means of reading the data will be different.
-	 * 
-	 * This should read the drink features form the data source and return a list of strings where each element is the name of a single feature.
+	 * Function to read the features for a drink and return the names as a list of strings
 	 */
-	private def featuresForDrink(row: Row, dataTemplate: DrinkDataTemplate) : List[String] = {
-		dataTemplate.drinkFeatureFormat match {
-			case "SeparateColumns" => {
-				(for {
-					(name, column) <- dataTemplate.drinkFeatureColumns
-					if row.isNotBlank(column)
-				} yield {
-					name
-				}).toList
-			}
-			case "SingleColumn" => {
-				row.getStringCellValue(dataTemplate.drinkFeatureColumn) match {
-					case Some(feature) => List(feature)
-					case _ => Nil
-				}
-			}
+	private def featuresForDrink(row : Row, dataTemplate : DrinkDataTemplate) : List[String] = {
+		dataTemplate.drinkFeatureFormat.toLowerCase match {
+			case "separatecolumns" => readFeaturesFromSeparateColumns(row, dataTemplate)
+			case "singlecolumn" => readFeaturesFromSingleColumn(row, dataTemplate)
+			case "mixed" => readFeaturesFromSingleColumn(row, dataTemplate) ::: readFeaturesFromSeparateColumns(row, dataTemplate)
 		}
+	}
+
+	private def readFeaturesFromSingleColumn(row : Row, dataTemplate : DrinkDataTemplate) = {
+		row.getStringCellValue(dataTemplate.drinkFeatureColumn) match {
+			case Some(feature) => List(feature)
+			case _ => Nil
+		}
+	}
+
+	private def readFeaturesFromSeparateColumns(row : Row, dataTemplate : DrinkDataTemplate) = {
+		(for {
+			(name, column) <- dataTemplate.drinkFeatureColumns
+			if row.isNotBlank(column)
+		} yield {
+			name
+		}).toList
 	}
 }

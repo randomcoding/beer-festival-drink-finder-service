@@ -33,24 +33,25 @@ class DrinkFeatureLoaderTest extends FunSuite with ShouldMatchers {
 	private val beerTemplate = new DrinkDataTemplate(beerTemplateSource)
 
 	test("Feature Loader correctly identifies drink features for beers sheet") {
-		val testRowResults = Map((7 -> "Golden"),
-			(8 -> "Brown"),
-			(9 -> "Brown"),
-			(10, "Golden"),
-			(11 -> "Stout"),
-			(12 -> "Brown"),
-			(13 -> "Brown"),
-			(14 -> "Brown"),
-			(15 -> "Golden"),
-			(16 -> "Brown"),
-			(17 -> "Lager"),
-			(18 -> "Unusual"),
-			(19 -> "Organic"))
+		val testRowResults = Map((7 -> List("Golden", "Bitter")),
+			(8 -> List("Brown", "Bitter")),
+			(9 -> List("Brown", "Strong")),
+			(10, List("Golden", "Best Bitter")),
+			(11 -> List("Stout", "Premium")),
+			(12 -> List("Brown", "Bitter")),
+			(13 -> List("Brown", "Best Bitter")),
+			(14 -> List("Brown", "Unusual")),
+			(15 -> List("Golden", "Bitter")),
+			(16 -> List("Brown", "Best Bitter")),
+			(17 -> List("Lager")),
+			(18 -> List("Unusual", "Best Bitter")),
+			(19 -> List("Organic", "Premium")))
 
-		testRowResults.foreach(tuple => {
-			val (row, name) = tuple
-			featureLoader.drinkFeatures(beerSheet.getRow(row), beerTemplate) should be(List(DrinkFeature(name)))
-		}
+		testRowResults.foreach(
+			tuple => {
+				val (row, name) = tuple
+				featureLoader.drinkFeatures(beerSheet.getRow(row), beerTemplate).sortBy(_.feature) should be(name.map(DrinkFeature(_)).sortBy(_.feature))
+			}
 		)
 	}
 
@@ -61,10 +62,11 @@ class DrinkFeatureLoaderTest extends FunSuite with ShouldMatchers {
 	test("Feature loader correctly loads cider") {
 		val testRowResults = Map((1 -> "Medium Dry"), (2 -> "Medium Sweet"), (3 -> "Medium"), (4 -> "Dry"))
 
-		testRowResults.foreach(tuple => {
-			val (row, name) = tuple
-			featureLoader.drinkFeatures(ciderSheet.getRow(row), ciderTemplate) should be(List(DrinkFeature(name)))
-		}
+		testRowResults.foreach(
+			tuple => {
+				val (row, name) = tuple
+				featureLoader.drinkFeatures(ciderSheet.getRow(row), ciderTemplate) should be(List(DrinkFeature(name)))
+			}
 		)
 	}
 
@@ -75,15 +77,14 @@ class DrinkFeatureLoaderTest extends FunSuite with ShouldMatchers {
 	test("Feature loader correctly loads perry features") {
 		val testRowResults = Map((1 -> ""), (2 -> ""), (3 -> "Medium"))
 
-		testRowResults.foreach(tuple => {
-			val (row, name) = tuple
-			name match {
-				case featureName if featureName.nonEmpty => featureLoader.drinkFeatures(perrySheet.getRow(row), ciderTemplate) should be(List(DrinkFeature(featureName)))
-				case _ => featureLoader.drinkFeatures(perrySheet.getRow(row), ciderTemplate) should be(List())
+		testRowResults.foreach(
+			tuple => {
+				val (row, name) = tuple
+				name match {
+					case featureName if featureName.nonEmpty => featureLoader.drinkFeatures(perrySheet.getRow(row), ciderTemplate) should be(List(DrinkFeature(featureName)))
+					case _ => featureLoader.drinkFeatures(perrySheet.getRow(row), ciderTemplate) should be(List())
+				}
 			}
-
-		}
 		)
-
 	}
 }
