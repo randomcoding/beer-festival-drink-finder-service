@@ -24,23 +24,16 @@
 	
 }
 
+.pageTitle {
+	font-size: xx-large;
+	font-weight: bold
+}
+
 .drinkTitle {
 	font-size: x-large;
 	font-weight: bold
 }
 
-.drinkData {
-	
-}
-
 .drinkText {
 	font-size: large
-}
-
-.drinkHeading {
-	font-weight: bold;
-}
-
-.drinkDescription {
-	
 }
