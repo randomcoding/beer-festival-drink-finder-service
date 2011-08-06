@@ -26,17 +26,17 @@ object DrinkSearch extends Logger {
 
 	// function to convert a Drink Feature into a combo box tuple
 	private val featureToDisplay = (feature : DrinkFeature, drinkType : String) => (feature.feature -> "%s (%s)".format(feature.displayName, drinkType))
-	
+
 	// global form values
 	private val comparisonTypes = List(("" -> "Any"), ("Equal" -> "Equal To"), ("Greater Than" -> "Greater Than"), ("Less Than" -> "Less Than"))
-	
+
 	private val drinkTypes = List(("" -> "Any"), ("Beer" -> "Beer"), ("Cider" -> "Cider"), ("Perry" -> "Perry"))
 
 	private def brewers = List(("" -> "Any")) ::: (festivalData.allBrewers.sortBy(_.name).map(brewer => (brewer.name -> brewer.name)))
 
 	private def drinkFeatures = {
 		val beerFeatures = festivalData.beerFeatures.sortBy(_.feature)
-		val ciderAndPerryFeatures = { 
+		val ciderAndPerryFeatures = {
 			val uniqueList = (festivalData.ciderFeatures ::: festivalData.perryFeatures).toSet.toList
 			uniqueList.sortBy(_.feature)
 		}
@@ -50,19 +50,18 @@ object DrinkSearch extends Logger {
 		// store state from fields
 		var drinkName = ""
 		var descriptionContains = ""
-		var abv = "0.0"
+		var abv = "Any"
 		var abvValue = 0.0
 		var abvComparisonType = ""
-		var priceLessThan = "0.00"
+		var priceLessThan = "Any"
 		var priceValue = 0.0
 		var drinkType = ""
 		var brewerName = ""
-			var drinkFeature = ""
+		var drinkFeature = ""
 
 		Focus("DrinkName")
 
 		def process() : JsCmd = {
-			Thread.sleep(500) // allow time to show ajax spinner
 			var valid = true
 
 			val setInvalid : ((String, String) => Double) = ((errorId : String, errorMessage : String) => {
@@ -81,15 +80,19 @@ object DrinkSearch extends Logger {
 					}
 				}
 				case _ => {
-					setInvalid("ABVError", "ABV Value is not a number")
+					if (abv.nonEmpty && !abv.equals("Any")) {
+						setInvalid("ABVError", "ABV Value is not a number")
+					}
+					-1.0
 				}
 			}
 
 			priceValue = asDouble(priceLessThan) match {
 				case Full(a) => a
 				case _ => {
-					displayError("PriceError", "Price Value is not a number")
-					valid = false
+					if (priceLessThan.nonEmpty && ! priceLessThan.equals("Any")) {
+						setInvalid("PriceError", "Price Value is not a number")
+					}
 					-1.0
 				}
 			}
@@ -140,7 +143,7 @@ object DrinkSearch extends Logger {
 			if (brewerName.nonEmpty) {
 				paramsList = (BREWER_NAME + "=" + brewerName) :: paramsList
 			}
-			
+
 			if (drinkFeature.nonEmpty) {
 				paramsList = ("%s=%s".format(DRINK_HAS_FEATURES, drinkFeature)) :: paramsList
 			}
@@ -153,7 +156,7 @@ object DrinkSearch extends Logger {
 			"#DescriptionContains" #> SHtml.text(descriptionContains, descriptionContains = _) &
 			"#ABV" #> SHtml.text(abv, abv = _) &
 			"#AbvComparisonType" #> SHtml.select(comparisonTypes, Box("Any"), abvComparisonType = _) &
-			"#DrinkType" #> (SHtml.select(drinkTypes, Box("Any"), drinkType = _)) &			
+			"#DrinkType" #> (SHtml.select(drinkTypes, Box("Any"), drinkType = _)) &
 			"#DrinkFeature" #> (SHtml.select(drinkFeatures, Box("Any"), drinkFeature = _)) &
 			"#BrewerName" #> (SHtml.select(brewers, Box("Any"), brewerName = _)) &
 			"#PriceLessThan" #> (SHtml.text(priceLessThan, priceLessThan = _)) &
