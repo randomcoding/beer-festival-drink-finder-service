@@ -87,4 +87,31 @@ class DrinkFeatureLoaderTest extends FunSuite with ShouldMatchers {
 			}
 		)
 	}
+	
+	val beers2011FileLocation = "/Beers2011Test.xls"
+	private val beer2011TemplateSource = Source.fromInputStream(getClass().getResourceAsStream("/templates/wbf_beer_2011_template.tpl"))
+	private val beer2011Template = new DrinkDataTemplate(beer2011TemplateSource)
+	private val beer2011Sheet = loadSheet(beers2011FileLocation)
+	test("Feature loader correctly loads 2011 Beers") {
+		val testRowResults = Map(
+				(7 -> List("Mild")),
+				(8 -> List("Strong", "Brown")),
+				(9 -> List("Golden", "Lager")),
+				(10 -> List("Speciality")),
+				(11 -> List("Strong")),
+				(12 -> List("Golden", "Lager")),
+				(13 -> List("Best Bitter", "Brown")),
+				(14 -> List("Golden")),
+				(15 -> List("Strong", "Dark")),
+				(16 -> List("Golden", "Lager"))
+		)
+
+
+		testRowResults.foreach(
+			tuple => {
+				val (row, name) = tuple
+				featureLoader.drinkFeatures(beer2011Sheet.getRow(row), beer2011Template).sortBy(_.feature) should be(name.map(DrinkFeature(_)).sortBy(_.feature))
+			}
+		)
+	}
 }
