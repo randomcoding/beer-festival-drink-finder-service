@@ -8,6 +8,6 @@ drink.abv.column=B
 brewer.name.column=E
 brewer.location.column=F
 drink.type=perry
-drink.quantity.remaining.column=-1
+drink.quantity.remaining.column=G
 drink.feature.format=SingleColumn
 drink.feature.column=D
