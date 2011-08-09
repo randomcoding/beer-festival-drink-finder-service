@@ -18,7 +18,8 @@ object TransformUtils {
 			"#Features" #> displayFeatures(drink) &
 			"#ABV" #> displayAbv(drink) &
 			"#Price" #> displayPrice(drink) &
-			"#Description" #> drink.description
+			"#Description" #> drink.description &
+			"#Quantity" #> displayQuantity(drink)
 	})
 
 	/**
@@ -31,13 +32,19 @@ object TransformUtils {
 			"#ABV" #> displayAbv(drink) &
 			"#Price" #> displayPrice(drink) &
 			"#Description" #> drink.description &
-			"#Brewer" #> displayBrewer(drink)
+			"#Brewer" #> displayBrewer(drink) &
+			"#Quantity" #> displayQuantity(drink)
 	})
 	
 	/*
 	 * Helper functions to generate displayed values
 	 */
-	private def displayBrewer(drink: Drink) = SHtml.link(brewerHref(drink.brewer), () => Unit, Text(drink.brewer.name))
+	private def displayQuantity(drink: Drink) = {
+		val style = drink.quantityRemaining.toLowerCase.replaceAll(" ", "")
+		SHtml.span(Text(drink.quantityRemaining), (), "class" -> style)
+	}
+		
+	private def displayBrewer(drink: Drink) = SHtml.link(brewerHref(drink.brewer), () => (), Text(drink.brewer.name))
 	
 	private def displayPrice(drink: Drink) = "%.2f".format(drink.price)
 
@@ -49,13 +56,6 @@ object TransformUtils {
 
 	private def brewerHref(brewer : Brewer) : String = "brewer?%s=%s".format(BREWER_NAME, brewer.name)
 
-	private def drinkHref(drink : Drink) : String = {
-		"drink?%s=%s&%s=%s&%s=%.1f&%s=%.2f&%s=%s&%s=%s".format(DRINK_NAME, drink.name,
-			DRINK_DESCRIPTION, drink.description,
-			DRINK_ABV_EQUAL_TO, drink.abv,
-			DRINK_PRICE, drink.price,
-			BREWER_NAME, drink.brewer.name,
-			DRINK_HAS_FEATURES, drink.features.map(_.feature).mkString("", ",", ""))
-	}
+	private def drinkHref(drink : Drink) : String = "drink?%s=%s&%s=%s".format(DRINK_NAME, drink.name, FESTIVAL_NAME, "Worcester Beer, Cider and Perry Festival")
 
 }

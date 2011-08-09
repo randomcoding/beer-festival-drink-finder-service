@@ -37,3 +37,18 @@
 .drinkText {
 	font-size: large
 }
+
+.allgone {
+	font-weight: bold;
+	color: red
+}
+
+.runningout {
+	font-weight: bold;
+	color: orange	
+}
+
+.plenty {	
+	font-weight: bold;
+	color: green	
+}
