@@ -99,7 +99,7 @@ class SpreadsheetDataLoader extends Logger {
 				quantity match {
 					//case num if num >= 0.99 => "All"
 					case num if num >= 0.5 => "Plenty"
-					case num if num >= 0.15 => "Running Out"
+					case num if num >= 0.25 => "Being Drunk"
 					case num if num >= 0.01 => "Nearly Gone"
 					case _ => "All Gone"
 				}
