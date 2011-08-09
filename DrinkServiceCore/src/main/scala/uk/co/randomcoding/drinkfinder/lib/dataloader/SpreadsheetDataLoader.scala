@@ -97,7 +97,6 @@ class SpreadsheetDataLoader extends Logger {
 			case Some(col) => {
 				val quantity = row(col).getNumericCellValue
 				quantity match {
-					//case num if num >= 0.99 => "All"
 					case num if num >= 0.5 => "Plenty"
 					case num if num >= 0.25 => "Being Drunk"
 					case num if num >= 0.01 => "Nearly Gone"
