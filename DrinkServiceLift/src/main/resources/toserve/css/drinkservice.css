@@ -42,10 +42,13 @@
 	font-weight: bold;
 	color: red
 }
-
+.beingdrunk {
+	font-weight: bold;
+	color: #D18017;	
+}
 .runningout {
 	font-weight: bold;
-	color: orange	
+	color: olive;
 }
 
 .plenty {	
