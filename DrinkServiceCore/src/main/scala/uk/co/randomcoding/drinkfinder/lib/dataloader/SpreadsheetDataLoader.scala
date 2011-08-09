@@ -49,6 +49,7 @@ class SpreadsheetDataLoader extends Logger {
 		val brewer = getBrewer(row, dataTemplate)
 		festivalData.addBrewer(brewer)
 		drink.brewer = brewer
+		drink.quantityRemaining = getQuantityRemaining(row, dataTemplate)
 
 		info("Adding drink %s to Festival Data".format(drink))
 		festivalData.addDrink(drink)
@@ -89,6 +90,22 @@ class SpreadsheetDataLoader extends Logger {
 
 	private def getDrinkFeatures(row : Row, dataTemplate : DrinkDataTemplate) : List[DrinkFeature] = {
 			featureLoader.drinkFeatures(row, dataTemplate)
+	}
+	
+	private def getQuantityRemaining(row: Row, dataTemplate: DrinkDataTemplate) : String = {
+		dataTemplate.quantityRemainingColumn match {
+			case Some(col) => {
+				val quantity = row(col).getNumericCellValue
+				quantity match {
+					//case num if num >= 0.99 => "All"
+					case num if num >= 0.5 => "Plenty"
+					case num if num >= 0.15 => "Running Out"
+					case num if num >= 0.01 => "Nearly Gone"
+					case _ => "All Gone"
+				}
+			}
+			case None => "Not  Measured"
+		}
 	}
 
 	// If this is needed to be the base class of different loaders then  override these methods.

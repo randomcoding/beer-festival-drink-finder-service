@@ -6,6 +6,8 @@ sealed case class Drink(name: String, description: String, abv: Double, price: D
 
   private var drinkFeatures = List.empty[DrinkFeature]
   
+  var quantityRemaining : String = "Unknown";
+  
   var brewer: Brewer = NoBrewer
 
   def addFeature(drinkFeature: DrinkFeature) {
