@@ -32,9 +32,10 @@ class FestivalData(val festivalName : String) extends Logger {
 	 * This also updates the features for the drink type by adding the drink's features to the feature set for its type
 	 */
 	def addDrink(drink : Drink) = {
-		drinks = drinks + drink
-
-		addDrinkFeatures(drink)
+		drinks.contains(drink) match {
+			case false => addNewDrink(drink)
+			case true => updateDrink(drink)
+		}
 	}
 
 	/**
@@ -88,6 +89,11 @@ class FestivalData(val festivalName : String) extends Logger {
 	 */
 	def getBrewer(brewerName : String) : Brewer = brewers.find(_.name equals brewerName).getOrElse(NoBrewer)
 
+	/**
+	 * Accessor for a list of all the brewers stored in this FesitvalData
+	 */
+	def allBrewers() : List[Brewer] = brewers.toList
+
 	private def addDrinkFeatures(drink : Drink) = {
 		val typeOfDrink = drinkType(drink)
 
@@ -96,8 +102,8 @@ class FestivalData(val festivalName : String) extends Logger {
 			case Some(currentFeats) => drinkFeatures = drinkFeatures + (typeOfDrink -> (currentFeats ++ drink.features))
 		}
 	}
-	
-	private def drinkType(drink: Drink) = {
+
+	private def drinkType(drink : Drink) = {
 		drink.getClass.getSimpleName match {
 			case "Beer" => BEER
 			case "Cider" => CIDER
@@ -105,12 +111,24 @@ class FestivalData(val festivalName : String) extends Logger {
 		}
 	}
 	
-	def allBrewers() : List[Brewer] = brewers.toList
+	private def addNewDrink(drink: Drink) = {
+		drinks = drinks + drink
+		addDrinkFeatures(drink)
+	}
+
+	private def updateDrink(drink : Drink) = {
+		val currentDrink = drinks.find(_.name.equals(drink.name)).get
+
+		if (currentDrink.quantityRemaining != drink.quantityRemaining) {
+			debug("Quantity is different (current: %s -> new: %s)".format(currentDrink.quantityRemaining, drink.quantityRemaining))
+			currentDrink.quantityRemaining = drink.quantityRemaining
+		}
+	}
 }
 
 /**
  * This is the accessor object for the Festival Data for any festival.
- * 
+ *
  * '''''All''''' getting of a festival data should be done through this Object.
  */
 object FestivalData {
@@ -133,8 +151,8 @@ object FestivalData {
 			case Some(data) => data
 		}
 	}
-	
-	def apply(festivalId: FestivalId, festivalData: FestivalData) = {
+
+	def apply(festivalId : FestivalId, festivalData : FestivalData) = {
 		festivals = festivals + (festivalId -> festivalData)
 	}
 }
