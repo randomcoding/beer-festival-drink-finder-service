@@ -6,11 +6,9 @@
 </head>
 <body class="lift:content_id=main">
 	<div id="main" class="lift:surround?with=defaultjquery&at=content">
-		<div class="lift:DisplayBrewer.showBrewer column span-18 last">
+		<div class="lift:DisplayWishlist column span-18 last">
 			<div class="column span-18 last" style="text-align: left">
-				<h1 class="alt pageTitle">
-					<span id="brewerName">Brewer Name is Displayed Here</span>
-				</h1>
+				<h1 class="alt pageTitle">Drinks Wishlist</h1>
 			</div>
 			<div class="column span-18 drinkText last">
 				<div id="drinks">
@@ -27,8 +25,11 @@
 						<div class="column span-4">
 							<span class="drinkText">&pound;<span id="Price">Price Here</span>/pint </span>
 						</div>
-							<div class="column span-4 last">
-								<span class="drinkText"><span id="Quantity">Quantity Here</span> </span>
+							<div class="column span-4">
+								<span class="drinkText"><span id="Quantity">Quantity</span> </span>
+							</div>
+							<div class="column span-5 last" style="text-align: right; font-size: x-small;">
+								<input id="removeFromWishlist" />
 							</div>
 						<div class="column span-17 last">
 							<span class="drinkText"><span id="Description">Description Here</span> </span>
@@ -37,6 +38,7 @@
 				</div>
 			</div>
 		</div>
+		<div class="column span-18 last"><hr class="space"></hr><hr></div>
 	</div>
 </body>
 </html>

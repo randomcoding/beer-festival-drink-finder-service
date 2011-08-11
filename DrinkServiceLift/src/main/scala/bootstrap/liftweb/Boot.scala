@@ -39,6 +39,7 @@ class Boot extends Loggable {
 			Menu.i("Results") / "results",
 			Menu.i("Drink Display") / "drink",
 			Menu.i("Brewer Display") / "brewer",
+			Menu.i("Wishlist") / "wishlist",
 			Menu.i("Data Upload") / "admin" / "upload",
 			Menu.i("Upload Completed") / "admin" / "uploadcompleted",
 

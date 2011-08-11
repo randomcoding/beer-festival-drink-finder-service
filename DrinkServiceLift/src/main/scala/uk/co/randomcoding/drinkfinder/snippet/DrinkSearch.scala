@@ -20,7 +20,9 @@ import uk.co.randomcoding.drinkfinder.model.matcher.id._
  * @author RandomCoder
  *
  */
-object DrinkSearch extends Logger {
+object DrinkSearch extends StatefulSnippet with Logger {
+	def dispatch = {case "render" => render }
+	
 	// hack to provide access to the (currently) only data object
 	private lazy val festivalData = FestivalData("Worcester Beer, Cider and Perry Festival")
 
