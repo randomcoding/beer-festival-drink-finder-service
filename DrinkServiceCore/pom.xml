@@ -17,10 +17,6 @@
 			<groupId>org.scala-lang</groupId>
 			<artifactId>scala-library</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>net.liftweb</groupId>
-			<artifactId>lift-common_2.8.1</artifactId>
-		</dependency>
 
 		<!-- Test -->
 		<dependency>
@@ -36,8 +32,12 @@
 			<artifactId>poi-ooxml</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-simple</artifactId>
+			<groupId>com.mongodb.casbah</groupId>
+			<artifactId>casbah-commons_2.8.1</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.mongodb.casbah</groupId>
+			<artifactId>casbah-query_2.8.1</artifactId>
 		</dependency>
 	</dependencies>
 </project>

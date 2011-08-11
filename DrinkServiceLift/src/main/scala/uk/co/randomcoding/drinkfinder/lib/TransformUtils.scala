@@ -1,8 +1,10 @@
 package uk.co.randomcoding.drinkfinder.lib
 
-import uk.co.randomcoding.drinkfinder.model.drink.{ Drink, NoDrink , DrinkFeature}
-import uk.co.randomcoding.drinkfinder.model.brewer.Brewer
-import uk.co.randomcoding.drinkfinder.model.matcher.id._
+import uk.co.randomcoding.drinkfinder.model._
+import drink.{ Drink, NoDrink , DrinkFeature}
+import brewer.Brewer
+import matcher.id._
+import comment.{Comment, DrinkComments}
 import net.liftweb.util.Helpers._
 import net.liftweb.http.SHtml
 import net.liftweb.http.RequestVar
@@ -34,6 +36,13 @@ object TransformUtils {
 			"#Description" #> drink.description &
 			"#Brewer" #> displayBrewer(drink) &
 			"#Quantity" #> displayQuantity(drink)
+	})
+	
+	def commentDisplay(comments : List[Comment]) = comments.map (comment => {
+		"#drinkName" #> comment.drinkName &
+		"#author" #> comment.author &
+		"#date" #> comment.date.toString(DrinkComments.dateFormat) &
+		"#comment" #> comment.comment
 	})
 	
 	/*
