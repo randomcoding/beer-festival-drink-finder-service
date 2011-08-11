@@ -10,10 +10,8 @@ import net.liftweb.util.Helpers._
 import uk.co.randomcoding.drinkfinder.model.matcher.id._
 import uk.co.randomcoding.drinkfinder.model.matcher.{ DrinkNameMatcher, BrewerNameMatcher, MatcherFactory }
 
-class DisplayBrewer extends StatefulSnippet with Logger {
+class DisplayBrewer extends Logger {
 
-	def dispatch = { case "showBrewer" => showBrewer }
-	
 	def showBrewer = {
 
 		val festivalName = urlDecode(S.param(FESTIVAL_NAME.toString).openOr("Worcester Beer, Cider and Perry Festival"))

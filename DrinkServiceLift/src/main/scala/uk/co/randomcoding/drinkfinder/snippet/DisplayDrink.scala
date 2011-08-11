@@ -12,9 +12,7 @@ import uk.co.randomcoding.drinkfinder.model.matcher.DrinkNameMatcher
 import uk.co.randomcoding.drinkfinder.lib.TransformUtils._
 import uk.co.randomcoding.drinkfinder.model.data.FestivalData
 
-class DisplayDrink extends StatefulSnippet with Logger {
-	
-	def dispatch = {case "displayDrink" => displayDrink}
+class DisplayDrink extends Logger {
 	
 	def displayDrink = {
 	  val drinkName = urlDecode( S.param(DRINK_NAME.toString).openOr("Unknown Drink"))
