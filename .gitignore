@@ -5,3 +5,12 @@ bin/
 *.jar
 *.swap
 .~lock
+*.ser
+.scala_dependencies
+.bak
+.old
+*~
+build/
+temp/
+tmp/
+
