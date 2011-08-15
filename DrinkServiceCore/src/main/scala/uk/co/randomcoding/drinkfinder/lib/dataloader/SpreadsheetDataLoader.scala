@@ -100,7 +100,7 @@ class SpreadsheetDataLoader extends Logger {
 					case num if num > 1.0 => "Not Yet Ready"
 					case num if num >= 0.5 => "Plenty"
 					case num if num >= 0.25 => "Being Drunk"
-					case num if num >= 0.01 => "Nearly Gone"
+					case num if num >= 0.1 => "Nearly Gone"
 					case _ => "All Gone"
 				}
 			}

@@ -82,7 +82,7 @@ class FestivalData(val festivalName : String) extends Logger {
 	/**
 	 * Get all the drinks that match all the matchers provided that are not '''All Gone'''
 	 */
-	def getMatching(matchers : List[DrinkMatcher[_]]) : Set[Drink] = drinks.filterNot(drink => (drink.quantityRemaining != "All Gone" && matchers.map(matcher => matcher(drink)).contains(false)))
+	def getMatching(matchers : List[DrinkMatcher[_]]) : Set[Drink] = drinks.filter(drink => (drinkRemaining(drink) &&  matchesAll(drink, matchers)))
 
 	/**
 	 * Get the brewer with the name or return [[brewer.NoBrewer]] if there is no Brewer with that name.
@@ -93,6 +93,12 @@ class FestivalData(val festivalName : String) extends Logger {
 	 * Accessor for a list of all the brewers stored in this FesitvalData
 	 */
 	def allBrewers() : List[Brewer] = brewers.toList
+	
+	private def drinkRemaining(drink: Drink) : Boolean = drink.quantityRemaining.toLowerCase != "all gone"
+	
+	private def matchesAll(drink: Drink, matchers : List[DrinkMatcher[_]]) : Boolean = {
+		matchers.filterNot(_.apply(drink)).isEmpty
+	}
 
 	private def addDrinkFeatures(drink : Drink) = {
 		val typeOfDrink = drinkType(drink)

@@ -25,7 +25,7 @@ class WbfSpreadsheetLoaderTest extends FunSuite with ShouldMatchers {
 	val perriesLocation = "/PerriesTest.xls"
 
 	private val loader = new SpreadsheetDataLoader()
-	//private val templateSource = Source.fromInputStream(getClass().getResourceAsStream("/templates/wbf_template.tpl"))
+	
 	private val templateSource = (sourceFile : String) => Source.fromInputStream(getClass().getResourceAsStream(sourceFile))
 	private val beerTemplate = new DrinkDataTemplate(templateSource("/templates/wbf_template.tpl"))
 	private val ciderTemplate = new DrinkDataTemplate(templateSource("/templates/wbf_cider_template.tpl"))
