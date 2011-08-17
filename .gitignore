@@ -13,4 +13,5 @@ bin/
 build/
 temp/
 tmp/
+*.o
 
