@@ -21,13 +21,14 @@ object MongoConfig extends Loggable {
 
 	private implicit val formats = DefaultFormats
 
+	// Case classes required to parse CloudFoundry JSON
 	case class CloudFoundryMongo(name : String, label : String, plan : String, credentials : CloudFoundryMongoCredentials)
 	case class CloudFoundryMongoCredentials(hostname : String, port : String, username : String, password : String, name : String, db : String)
 
 	/**
-	 * Private holder for the MongoDB object
+	 * Private holder for the MongoDB objects
 	 */
-	private val db = init()
+	private val dbs = Map.empty[String, MongoDB].withDefault(dbName => init(dbName))
 	
 	/**
 	 * Initialise the MongoDB system to create connections etc.
@@ -36,25 +37,25 @@ object MongoConfig extends Loggable {
 	 * 
 	 * @return The [[com.mongobd.casbah.MongoDB]] object
 	 */
-	private def init() : MongoDB = {
-		val (host : String, port: Int, user: String, pass: String, db: String) = Option(System.getenv("VCAP_SERVICES")) match {
+	private def init(dbName: String) : MongoDB = {
+		val (host : String, port: Int, user: String, pass: String) = Option(System.getenv("VCAP_SERVICES")) match {
 			case Some(s) => {
 				try {
 					parse(s) \\ "mongodb-1.8" match {
 						case JArray(ary) => ary foreach { mongoJson =>
 							val mongo = mongoJson.extract[CloudFoundryMongo]
 							val credentials = mongo.credentials
-							(credentials.hostname, credentials.port.toInt, credentials.password, credentials.db)
+							(credentials.hostname, credentials.port.toInt, credentials.password)
 						}
 						case x => logger.warn("Json parse error: %s".format(x))
 					}
 				}
 			}
-			case _ => ("localhost", 27017, "", "", "DrinkService")
+			case _ => ("localhost", 27017, "", "")
 		}
 		
 		val connection = MongoConnection(host, port)
-		val mongoDb = connection(db)
+		val mongoDb = connection(dbName)
 		if (user.nonEmpty) {
 			mongoDb.authenticate(user, pass)
 		}
@@ -65,7 +66,7 @@ object MongoConfig extends Loggable {
 	/**
 	 * Get or create a named collection in the current database
 	 */
-	def getCollection(collectionId: String) : MongoCollection = {
-		db(collectionId)
+	def getCollection(dbName: String, collectionId: String) : MongoCollection = {
+		dbs(dbName)(collectionId)
 	}
 }

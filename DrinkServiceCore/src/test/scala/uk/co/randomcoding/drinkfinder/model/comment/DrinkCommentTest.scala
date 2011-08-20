@@ -8,6 +8,8 @@ import org.scalatest.matchers.ShouldMatchers
 import com.mongodb.casbah.Imports._
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.DateTime
+import uk.co.randomcoding.drinkfinder.lib.mongodb.FestivalMongoCollection
+import org.scalatest.BeforeAndAfterAll
 
 /**
  * @author RandomCoder
@@ -15,13 +17,19 @@ import org.joda.time.DateTime
  * Created On: 10 Aug 2011
  *
  */
-class DrinkCommentTest extends FunSuite with ShouldMatchers {
+class DrinkCommentTest extends FunSuite with ShouldMatchers with BeforeAndAfterAll {
 	import DrinkComments._
-	
+
+	val festivalId = "TestFestival"
+
+	val drinkComments = DrinkComments(festivalId)
+
 	private def cleanup(comments : Comment*) = {
-		val mongo = MongoConnection()("FestivalDrinkFinderComments")("FestivalComments")
+		val mongo = new FestivalMongoCollection(festivalId).comments
 		comments.foreach(comment => mongo.remove(commentToMongo(comment)))
 	}
+	
+	override def afterAll() = MongoConnection().dropDatabase(festivalId)
 
 	private def commentToMongo(comment : Comment) : MongoDBObject = {
 		MongoDBObject("drinkName" -> comment.drinkName,
@@ -34,13 +42,13 @@ class DrinkCommentTest extends FunSuite with ShouldMatchers {
 	test("New Comment can be added and retrieved") {
 		val comment = Comment("First Beer", "Test User", "Lovely Drink")
 
-		addComment(comment)
+		drinkComments.addComment(comment)
 
-		commentsForDrink("First Beer") should be(List(comment))
+		drinkComments.commentsForDrink("First Beer") should be(List(comment))
 
 		cleanup(comment)
 
-		commentsForDrink("FirstBeer") should be('empty)
+		drinkComments.commentsForDrink("FirstBeer") should be('empty)
 	}
 
 	test("Multiple New Comments can be added and retrieved") {
@@ -50,20 +58,20 @@ class DrinkCommentTest extends FunSuite with ShouldMatchers {
 		val comment4 = Comment("Second Beer", "Test User 2", "Horrible")
 		val comment5 = Comment("Second Beer", "Test User", "Lovely Drink, Again")
 
-		addComment(comment1)
-		addComment(comment2)
-		addComment(comment3)
-		addComment(comment4)
-		addComment(comment5)
+		drinkComments.addComment(comment1)
+		drinkComments.addComment(comment2)
+		drinkComments.addComment(comment3)
+		drinkComments.addComment(comment4)
+		drinkComments.addComment(comment5)
 
-		commentsForDrink("First Beer") should (
+		drinkComments.commentsForDrink("First Beer") should (
 			have size (3) and
 			contain(comment1) and
 			contain(comment2) and
 			contain(comment3)
 		)
 
-		commentsForDrink("Second Beer") should (
+		drinkComments.commentsForDrink("Second Beer") should (
 			have size (2) and
 			contain(comment4) and
 			contain(comment5)
@@ -71,22 +79,22 @@ class DrinkCommentTest extends FunSuite with ShouldMatchers {
 
 		cleanup(comment1, comment2, comment3, comment4, comment5)
 
-		commentsForDrink("FirstBeer") should be('empty)
-		commentsForDrink("Second Beer") should be('empty)
+		drinkComments.commentsForDrink("FirstBeer") should be('empty)
+		drinkComments.commentsForDrink("Second Beer") should be('empty)
 	}
 
 	test("Duplicate Comment is not added") {
 		val comment1 = Comment("Beer", "Tester", "Yum")
 		val comment2 = Comment("Beer", "Tester", "Yum")
 
-		addComment(comment1)
-		addComment(comment2)
+		drinkComments.addComment(comment1)
+		drinkComments.addComment(comment2)
 
-		commentsForDrink("Beer") should (have size (1) and
+		drinkComments.commentsForDrink("Beer") should (have size (1) and
 			contain(comment1) or
 			contain(comment2)
 		)
-		
+
 		cleanup(comment1, comment2)
 	}
 
@@ -95,14 +103,14 @@ class DrinkCommentTest extends FunSuite with ShouldMatchers {
 		val comment2 = Comment("Beer", "Tester 2", "Yum Yum")
 		comment1.date = "2011-08-11T12:00:00Z"
 		comment2.date = "2011-08-11T11:00:00Z"
-			
-			addComment(comment1)
-			addComment(comment2)
 
-		commentsForDrink("Beer") should be(List(comment2, comment1))
+		drinkComments.addComment(comment1)
+		drinkComments.addComment(comment2)
+
+		drinkComments.commentsForDrink("Beer") should be(List(comment2, comment1))
 
 		cleanup(comment1, comment2)
-		commentsForDrink("Beer") should be('empty)
+		drinkComments.commentsForDrink("Beer") should be('empty)
 	}
 
 	private implicit def stringToDate(dateString : String) : DateTime = new DateTime(dateString)

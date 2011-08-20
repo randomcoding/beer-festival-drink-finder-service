@@ -14,7 +14,7 @@ import MongoConfig._
  *
  */
 class FestivalMongoCollection(festivalId : String) {
-	val templates = getCollection("%s-templates".format(festivalId))
-	val comments = getCollection("%s-comments".format(festivalId))
-	val drinks = getCollection("%s-drinks".format(festivalId))
+	val templates = getCollection(festivalId, "%s-templates".format(festivalId))
+	val comments = getCollection(festivalId, "%s-comments".format(festivalId))
+	val drinks = getCollection(festivalId, "%s-drinks".format(festivalId))
 }
