@@ -39,5 +39,17 @@
 			<groupId>com.mongodb.casbah</groupId>
 			<artifactId>casbah-query_2.8.1</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>net.liftweb</groupId>
+			<artifactId>lift-common_2.8.1</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.mongodb.casbah</groupId>
+			<artifactId>casbah-core_2.8.1</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.liftweb</groupId>
+			<artifactId>lift-json_2.8.1</artifactId>
+		</dependency>
 	</dependencies>
 </project>

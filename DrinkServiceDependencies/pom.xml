@@ -104,6 +104,11 @@
 				<artifactId>casbah-commons_2.8.1</artifactId>
 				<version>2.1.5-1</version>
 			</dependency>
+			<dependency>
+				<groupId>net.liftweb</groupId>
+				<artifactId>lift-json_2.8.1</artifactId>
+				<version>2.3</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<build>
@@ -178,36 +183,4 @@
 		</plugins>
 	</reporting>
 -->
-	<dependencies>
-		<dependency>
-			<groupId>com.mongodb.casbah</groupId>
-			<artifactId>casbah-core_2.8.1</artifactId>
-			<exclusions>
-				<exclusion>
-					<artifactId>slf4j-api</artifactId>
-					<groupId>org.slf4j</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-simple</artifactId>
-			<exclusions>
-				<exclusion>
-					<artifactId>slf4j-api</artifactId>
-					<groupId>org.slf4j</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>net.liftweb</groupId>
-			<artifactId>lift-common_2.8.1</artifactId>
-			<exclusions>
-				<exclusion>
-					<artifactId>slf4j-api</artifactId>
-					<groupId>org.slf4j</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-	</dependencies>
 </project>
