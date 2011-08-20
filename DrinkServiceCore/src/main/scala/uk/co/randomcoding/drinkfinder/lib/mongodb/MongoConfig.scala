@@ -25,9 +25,18 @@ object MongoConfig extends Loggable {
 	case class CloudFoundryMongoCredentials(hostname : String, port : String, username : String, password : String, name : String, db : String)
 
 	/**
-	 * Initialise the MongoDB system to create connections etc.
+	 * Private holder for the MongoDB object
 	 */
-	def init() {
+	private val db = init()
+	
+	/**
+	 * Initialise the MongoDB system to create connections etc.
+	 * 
+	 * If the connection is local (i.e. offline or testing, then will connect to a database called '''DrinkService''')
+	 * 
+	 * @return The [[com.mongobd.casbah.MongoDB]] object
+	 */
+	private def init() : MongoDB = {
 		val (host : String, port: Int, user: String, pass: String, db: String) = Option(System.getenv("VCAP_SERVICES")) match {
 			case Some(s) => {
 				try {
@@ -41,7 +50,7 @@ object MongoConfig extends Loggable {
 					}
 				}
 			}
-			case _ => ("localhost", 27017, "", "", "mongo")
+			case _ => ("localhost", 27017, "", "", "DrinkService")
 		}
 		
 		val connection = MongoConnection(host, port)
@@ -49,5 +58,14 @@ object MongoConfig extends Loggable {
 		if (user.nonEmpty) {
 			mongoDb.authenticate(user, pass)
 		}
+		
+		mongoDb
+	}
+	
+	/**
+	 * Get or create a named collection in the current database
+	 */
+	def getCollection(collectionId: String) : MongoCollection = {
+		db(collectionId)
 	}
 }

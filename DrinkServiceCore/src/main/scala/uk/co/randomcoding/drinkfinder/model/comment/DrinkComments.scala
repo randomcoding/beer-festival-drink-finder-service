@@ -9,6 +9,7 @@ import com.mongodb.casbah.commons.conversions.scala._
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 import net.liftweb.common.Logger
+import uk.co.randomcoding.drinkfinder.lib.mongodb.FestivalMongoCollection
 
 /**
  * Object to provide access to the comments database
@@ -20,7 +21,9 @@ import net.liftweb.common.Logger
  */
 object DrinkComments extends Logger {
 	RegisterJodaTimeConversionHelpers()
-	private val mongo = MongoConnection()("FestivalDrinkFinderComments")("FestivalComments")
+	private val mongoCollection = new FestivalMongoCollection("Festival") 
+	private val mongo = mongoCollection.comments
+		//MongoConnection()("FestivalDrinkFinderComments")("FestivalComments")
 
 	val dateFormat = DateTimeFormat.forStyle("MM")
 
