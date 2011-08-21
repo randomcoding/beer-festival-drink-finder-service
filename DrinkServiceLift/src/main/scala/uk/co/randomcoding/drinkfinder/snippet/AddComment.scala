@@ -6,11 +6,11 @@ package uk.co.randomcoding.drinkfinder.snippet
 import net.liftweb.http._
 import js.JsCmd
 import net.liftweb.util.Helpers._
-
 import uk.co.randomcoding.drinkfinder.model._
 import matcher.id.DRINK_NAME
 import comment.Comment
 import comment.DrinkComments
+import uk.co.randomcoding.drinkfinder.lib.UserSession
 
 /**
  * Snippet to provide logic to add a comment for a drink.
@@ -26,7 +26,8 @@ class AddComment {
 		var author = ""
 		val drinkName = urlDecode(S.param(DRINK_NAME.toString).get)
 		var commentText = ""
-		val comments = DrinkComments("Festiavl")
+		val currentFestival = UserSession.currentFestival.is.getOrElse("Festival")
+		val comments = DrinkComments(currentFestival)
 
 		def process() : JsCmd = {
 			if (!commentText.isEmpty) {

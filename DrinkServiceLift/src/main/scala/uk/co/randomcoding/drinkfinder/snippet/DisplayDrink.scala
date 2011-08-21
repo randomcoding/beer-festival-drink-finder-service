@@ -12,6 +12,7 @@ import scala.xml.Text
 import scala.xml.NodeSeq
 import net.liftweb.http._
 import net.liftweb.util.Helpers._
+import uk.co.randomcoding.drinkfinder.lib.UserSession
 
 class DisplayDrink extends Logger {
 	
@@ -20,7 +21,13 @@ class DisplayDrink extends Logger {
 	  val festivalName = urlDecode(S.param(FESTIVAL_NAME.toString).openOr("Worcester Beer, Cider and Perry Festival"))
 	  val nameMatcher = DrinkNameMatcher(drinkName)
 	  "#drinkData" #> toDetailedDisplay(List(FestivalData(festivalName).getMatching(List(nameMatcher)).headOption.getOrElse(NoDrink))) &
-	  "#comments" #> commentDisplay(DrinkComments.commentsForDrink(drinkName)) &
+	  "#comments" #> commentDisplay(displayComments(drinkName)) &
 	  "#addcomment" #> SHtml.link("/addcomment?%s=%s".format(DRINK_NAME, drinkName), () => (), Text("Add Comment"))
+	}
+	
+	def displayComments(drinkName: String) = {
+		val currentFestival = UserSession.currentFestival.is.getOrElse("Festival")
+		val comments = DrinkComments(currentFestival)
+		comments.commentsForDrink(drinkName)
 	}
 }

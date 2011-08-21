@@ -43,6 +43,10 @@
 			<groupId>net.liftweb</groupId>
 			<artifactId>lift-webkit_2.8.1</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+		</dependency>
 	</dependencies>
 
 	<packaging>war</packaging>
