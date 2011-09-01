@@ -5,15 +5,15 @@ package uk.co.randomcoding.drinkfinder.lib.dataloader
 
 import java.io.InputStream
 import net.liftweb.common.Logger
-import org.apache.poi.ss.usermodel.{WorkbookFactory, Row}
+import org.apache.poi.ss.usermodel.{ WorkbookFactory, Row }
 import scala.collection.JavaConverters.asScalaIteratorConverter
 import uk.co.randomcoding.drinkfinder.lib.dataloader.template.DrinkDataTemplate
 import uk.co.randomcoding.drinkfinder.lib.dataloader.util.RichRow
 import uk.co.randomcoding.drinkfinder.lib.dataloader.util.RichRow._
-import uk.co.randomcoding.drinkfinder.model.brewer.{NoBrewer, Brewer}
+import uk.co.randomcoding.drinkfinder.model.brewer.{ NoBrewer, Brewer }
 import uk.co.randomcoding.drinkfinder.model.data.FestivalData
-import uk.co.randomcoding.drinkfinder.model.drink.{NoDrink, DrinkFeature}
-import uk.co.randomcoding.drinkfinder.model.drink.DrinkFactory.{perry, cider, beer}
+import uk.co.randomcoding.drinkfinder.model.drink.{ NoDrink, DrinkFeature }
+import uk.co.randomcoding.drinkfinder.model.drink.DrinkFactory.{ perry, cider, beer }
 
 /**
  * @author RandomCoder
@@ -56,8 +56,11 @@ class SpreadsheetDataLoader extends Logger {
 	}
 
 	private def getBrewer(row : Row, dataTemplate : DrinkDataTemplate) : Brewer = {
-		row.getStringCellValue(dataTemplate.brewerNameColumn) match {
-			case Some(x) => Brewer(x)
+		dataTemplate.brewerNameColumn match {
+			case Some(col) => row.getStringCellValue(col) match {
+				case Some(x) => Brewer(x)
+				case _ => NoBrewer
+			}
 			case _ => NoBrewer
 		}
 	}
@@ -74,7 +77,10 @@ class SpreadsheetDataLoader extends Logger {
 	}
 
 	private def getDrinkPrice(row : Row, dataTemplate : DrinkDataTemplate) : Double = {
-		convertDrinkPriceValue(row.getNumericCellValue(dataTemplate.drinkPriceColumn).getOrElse(0.0))
+			dataTemplate.drinkPriceColumn match {
+				case Some(col) => convertDrinkPriceValue(row.getNumericCellValue(col).getOrElse(0.0))
+				case None => 0.0
+			}
 	}
 
 	private def getDrinkAbv(row : Row, dataTemplate : DrinkDataTemplate) : Double = {
@@ -89,10 +95,10 @@ class SpreadsheetDataLoader extends Logger {
 	}
 
 	private def getDrinkFeatures(row : Row, dataTemplate : DrinkDataTemplate) : List[DrinkFeature] = {
-			featureLoader.drinkFeatures(row, dataTemplate)
+		featureLoader.drinkFeatures(row, dataTemplate)
 	}
-	
-	private def getQuantityRemaining(row: Row, dataTemplate: DrinkDataTemplate) : String = {
+
+	private def getQuantityRemaining(row : Row, dataTemplate : DrinkDataTemplate) : String = {
 		dataTemplate.quantityRemainingColumn match {
 			case Some(col) => {
 				val quantity = row(col).getNumericCellValue
@@ -115,7 +121,10 @@ class SpreadsheetDataLoader extends Logger {
 	 * Often spreadsheets return percentages as doubles in the range 0 -> 1. So 4.1% is returned as 0.041.
 	 * Therefore this needs to be multiplied by 100 to display correctly.
 	 */
-	protected def convertDrinkAbvValue(drinkAbvValue : Double) : Double = drinkAbvValue * 100.0D
+	protected def convertDrinkAbvValue(drinkAbvValue : Double) : Double = drinkAbvValue < 0.5 match {
+		case true => drinkAbvValue * 100.0D
+		case false => drinkAbvValue
+	}
 
 	/**
 	 * Convert the raw value of the the drink price value to the value per pint that is required by the system.

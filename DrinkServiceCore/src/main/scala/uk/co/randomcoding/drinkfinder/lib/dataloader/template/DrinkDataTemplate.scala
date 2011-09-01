@@ -16,50 +16,71 @@ class DrinkDataTemplate(templateSource : Source) extends Logger {
 	
 	private val lines = templateSource.getLines.toList
 
-	private def getValueFor(key : String) : String = {
+	private def getValueFor(key : String) : Option[String] = {
 		lines.find(_.startsWith(key)) match {
-			case Some(line) if line.matches(""".+=.+""") => line.split("=")(1).trim
-			case _ => "NOT_FOUND"
+			case Some(line) if line.matches(""".+=.+""") => line.split("=")(1).trim match {
+				case "-1" => None
+				case value => Some(value)
+			}
+			case _ => None
 		}
 	}
 	
 	lazy val quantityRemainingColumn = getValueFor("drink.quantity.remaining") match {
-		case "NOT_FOUND" => None
-		case value => Some(columnIndex(value))
+		case Some(index) => Some(columnIndex(index))
+		case _ => None 
 	}
 
-	lazy val festivalName = getValueFor("festival.name")
+	lazy val singleDrinkFeaturePrefix = getValueFor("drink.feature.prefix").getOrElse("")/* match {
+		case Some(s) : String => s + " "
+		case "NOT_FOUND" => ""
+	}*/
+	
+	lazy val festivalName = getValueFor("festival.name").get
 
-	lazy val dataStartLine = getValueFor("data.start.line").toInt
+	lazy val dataStartLine = getValueFor("data.start.line").getOrElse("0").toInt
 
-	lazy val drinkNameColumn = columnIndex(getValueFor("drink.name.column"))
+	lazy val drinkNameColumn = columnIndex(getValueFor("drink.name.column").get)
 
 	lazy val drinkDescriptionColumn = getValueFor("drink.description.column") match {
-		case "NOT_FOUND" => None
-		case col => Some(columnIndex(col))
+		case Some(col) => Some(columnIndex(col))
+		case None => None
 	}
 
-	lazy val drinkPriceColumn = columnIndex(getValueFor("drink.price.column"))
+	lazy val drinkPriceColumn = getValueFor("drink.price.column") match {
+		case Some(col) => Some(columnIndex(col))
+		case None => None
+	}
 
-	lazy val drinkAbvColumn = columnIndex(getValueFor("drink.abv.column"))
+	lazy val drinkAbvColumn = columnIndex(getValueFor("drink.abv.column").get)
+	/*match {
+		case Some(col) => Some(columnIndex(col))
+		case None => None
+	}*/
 
-	lazy val brewerNameColumn = columnIndex(getValueFor("brewer.name.column"))
+	lazy val brewerNameColumn = getValueFor("brewer.name.column") match {
+		case Some(col) => Some(columnIndex(col))
+		case None => None
+	}
 
-	lazy val drinkFeatureColumn = columnIndex(getValueFor("drink.feature.column"))
+	lazy val drinkFeatureColumn = getValueFor("drink.feature.column") match {
+		case Some(col) => Some(columnIndex(col))
+		case None => None
+	}
 
 	lazy val drinkTypeColumn = getValueFor("drink.type.column") match {
-		case "NOT_FOUND" => -1
-		case col => columnIndex(col)
+		case None => -1
+		case Some(col) => columnIndex(col)
 	}
 
-	lazy val drinkType = getValueFor("drink.type") match {
+	lazy val drinkType = getValueFor("drink.type") /*match {
 		case "NOT_FOUND" => None
 		case t => Some(t)
-	}
+	}*/
 
 	lazy val drinkRemainingColumn = getValueFor("drink.quantity.remaining.column") match {
-		case "NOT_FOUND" => -1
-		case col => columnIndex(col)
+		case None => -1
+		case Some(col) => columnIndex(col)
 	}
 
 	lazy val drinkFeatureFormat = getValueFor("drink.feature.format")
@@ -87,7 +108,7 @@ class DrinkDataTemplate(templateSource : Source) extends Logger {
 	
 	private def columnIndex(columnName: String) : Int = {
 		columnName.toUpperCase match {
-			case numberString if numberString.matches("""\d+""") => numberString.toInt
+			case numberString if numberString.matches("""-?\d+""") => numberString.toInt
 			case charString if charString.matches("""[A-Z]""") => LETTERS.indexOf(charString(0))
 			case letterString if letterString.matches("""[A-Z]{2}""") => {
 				((letterIndex(letterString(0)) + 1) * 26) + letterIndex(letterString(1))

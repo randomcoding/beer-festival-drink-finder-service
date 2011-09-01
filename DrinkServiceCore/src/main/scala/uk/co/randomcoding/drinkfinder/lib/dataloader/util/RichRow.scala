@@ -5,6 +5,8 @@ package uk.co.randomcoding.drinkfinder.lib.dataloader.util
 
 import uk.co.randomcoding.drinkfinder.lib.dataloader.template.DrinkDataTemplate
 import org.apache.poi.ss.usermodel.{ Row, Cell }
+import org.apache.poi.ss.usermodel.FormulaEvaluator
+import scala.MatchError
 
 /**
  * This augments the default [[org.apache.poi.ss.usermodel.Row]] class with helper functions to get cells and their values
@@ -14,6 +16,7 @@ import org.apache.poi.ss.usermodel.{ Row, Cell }
 class RichRow(row : Row) {
 	import RichRow._
 
+	private val evaluator = row.getSheet().getWorkbook().getCreationHelper().createFormulaEvaluator()
 	/**
 	 * Get the cell at the given index
 	 */
@@ -25,7 +28,20 @@ class RichRow(row : Row) {
 	 * @return '''Some(value)''' if the cell contains a numeric value or '''None''' otherwise
 	 */
 	def getNumericCellValue(cellIndex : Int) : Option[Double] = {
-		if (correctCellType(row, cellIndex, Cell.CELL_TYPE_NUMERIC)) Some(row(cellIndex).getNumericCellValue) else None
+		row(cellIndex).getCellType() match {
+			case Cell.CELL_TYPE_NUMERIC => Some(row(cellIndex).getNumericCellValue)
+			case Cell.CELL_TYPE_FORMULA if evaluator.evaluateFormulaCell(row(cellIndex)) == Cell.CELL_TYPE_NUMERIC => Some(row(cellIndex).getNumericCellValue)
+			case Cell.CELL_TYPE_STRING => {
+				val numberRegex = """\s*(\d+(?:\.\d+))%*""".r
+				try {
+					val numberRegex(number) = row(cellIndex).getStringCellValue().trim
+					Some(number.toDouble)
+				} catch {
+					case e : MatchError => None
+				}
+			}
+			case _ => None
+		}
 	}
 
 	/**
@@ -36,12 +52,12 @@ class RichRow(row : Row) {
 	def getStringCellValue(cellIndex : Int) : Option[String] = {
 		if (correctCellType(row, cellIndex, Cell.CELL_TYPE_STRING)) Some(row(cellIndex).getStringCellValue) else None
 	}
-	
+
 	/**
-	 * Checks if a cell is not blank or null 
+	 * Checks if a cell is not blank or null
 	 */
 	def isNotBlank(cellIndex : Int) : Boolean = {
-		row(cellIndex) != null && row(cellIndex).getCellType !=Cell.CELL_TYPE_BLANK
+		row(cellIndex) != null && row(cellIndex).getCellType != Cell.CELL_TYPE_BLANK
 	}
 
 	/**
@@ -54,8 +70,8 @@ class RichRow(row : Row) {
 			case true => println("Row is null"); false
 			case _ => {
 				val abvColumn = dataTemplate.drinkAbvColumn
-				correctCellType(row, dataTemplate.drinkNameColumn, Cell.CELL_TYPE_STRING) &&
-					correctCellType(row, dataTemplate.drinkAbvColumn, Cell.CELL_TYPE_NUMERIC)
+				getNumericCellValue(dataTemplate.drinkAbvColumn).isDefined &&
+					correctCellType(row, dataTemplate.drinkNameColumn, Cell.CELL_TYPE_STRING)
 			}
 		}
 	}

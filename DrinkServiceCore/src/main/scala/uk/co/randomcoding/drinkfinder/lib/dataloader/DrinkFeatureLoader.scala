@@ -17,8 +17,8 @@ import util.RichRow._
  */
 class DrinkFeatureLoader {
 
-	private def firstLetterCaps(inString: String) : String = inString.split(" ").map(elem => elem.charAt(0).toUpper + elem.substring(1).toLowerCase).mkString("", " ", "")
-	
+	private def firstLetterCaps(inString : String) : String = inString.split(" ").map(elem => elem.charAt(0).toUpper + elem.substring(1).toLowerCase).mkString("", " ", "")
+
 	/**
 	 * Reads the [[DrinkFeature]]s from the given '''Row'''
 	 */
@@ -34,16 +34,24 @@ class DrinkFeatureLoader {
 	 * Function to read the features for a drink and return the names as a list of strings
 	 */
 	private def featuresForDrink(row : Row, dataTemplate : DrinkDataTemplate) : List[String] = {
-		dataTemplate.drinkFeatureFormat.toLowerCase match {
+		dataTemplate.drinkFeatureFormat.getOrElse("unknown").toLowerCase match {
 			case "separatecolumns" => readFeaturesFromSeparateColumns(row, dataTemplate)
 			case "singlecolumn" => readFeaturesFromSingleColumn(row, dataTemplate)
 			case "mixed" => readFeaturesFromSingleColumn(row, dataTemplate) ::: readFeaturesFromSeparateColumns(row, dataTemplate)
+			case _ => Nil
 		}
 	}
 
 	private def readFeaturesFromSingleColumn(row : Row, dataTemplate : DrinkDataTemplate) = {
-		row.getStringCellValue(dataTemplate.drinkFeatureColumn) match {
-			case Some(feature) => List(feature)
+		val prefix = dataTemplate.singleDrinkFeaturePrefix match {
+			case s if s.nonEmpty => s + " "
+			case _ => ""
+		}
+		dataTemplate.drinkFeatureColumn match {
+			case Some(col) => row.getStringCellValue(col) match {
+				case Some(feature) => List("%s%s".format(prefix, feature))
+				case _ => Nil
+			}
 			case _ => Nil
 		}
 	}
