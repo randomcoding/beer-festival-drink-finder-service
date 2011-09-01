@@ -22,7 +22,8 @@ import uk.co.randomcoding.drinkfinder.model.matcher.id._
  */
 object DrinkSearch extends Logger {
 	// hack to provide access to the (currently) only data object
-	private lazy val festivalData = FestivalData("Worcester Beer, Cider and Perry Festival")
+	//private lazy val festivalData = FestivalData("Worcester Beer, Cider and Perry Festival")
+	private lazy val festivalData = FestivalData("Chappel Beer Festival")
 
 	// function to convert a Drink Feature into a combo box tuple
 	private val featureToDisplay = (feature : DrinkFeature, drinkType : String) => (feature.feature -> "%s (%s)".format(feature.displayName, drinkType))
@@ -90,7 +91,7 @@ object DrinkSearch extends Logger {
 			priceValue = asDouble(priceLessThan) match {
 				case Full(a) => a
 				case _ => {
-					if (priceLessThan.nonEmpty && ! priceLessThan.equals("Any")) {
+					if (priceLessThan.nonEmpty && !priceLessThan.equals("Any")) {
 						setInvalid("PriceError", "Price Value is not a number")
 					}
 					-1.0

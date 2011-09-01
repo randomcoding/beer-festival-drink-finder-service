@@ -18,7 +18,8 @@ class DisplayDrink extends Logger {
 	
 	def displayDrink = {
 	  val drinkName = urlDecode( S.param(DRINK_NAME.toString).openOr("Unknown Drink"))
-	  val festivalName = urlDecode(S.param(FESTIVAL_NAME.toString).openOr("Worcester Beer, Cider and Perry Festival"))
+	 // val festivalName = urlDecode(S.param(FESTIVAL_NAME.toString).openOr("Worcester Beer, Cider and Perry Festival"))
+	  val festivalName = urlDecode(S.param(FESTIVAL_NAME.toString).openOr("Chappel Beer Festival"))
 	  val nameMatcher = DrinkNameMatcher(drinkName)
 	  "#drinkData" #> toDetailedDisplay(List(FestivalData(festivalName).getMatching(List(nameMatcher)).headOption.getOrElse(NoDrink))) &
 	  "#comments" #> commentDisplay(displayComments(drinkName)) &

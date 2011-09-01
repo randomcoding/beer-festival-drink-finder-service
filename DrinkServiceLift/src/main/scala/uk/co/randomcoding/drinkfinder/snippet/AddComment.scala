@@ -26,7 +26,8 @@ class AddComment {
 		var author = ""
 		val drinkName = urlDecode(S.param(DRINK_NAME.toString).get)
 		var commentText = ""
-		val currentFestival = UserSession.currentFestival.is.getOrElse("Festival")
+		//val currentFestival = UserSession.currentFestival.is.getOrElse("Festival")
+		val currentFestival = UserSession.currentFestival.is.getOrElse("Chappel Beer Festival")
 		val comments = DrinkComments(currentFestival)
 
 		def process() : JsCmd = {
