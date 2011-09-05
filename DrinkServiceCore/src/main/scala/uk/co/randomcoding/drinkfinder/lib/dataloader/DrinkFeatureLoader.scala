@@ -8,6 +8,7 @@ import uk.co.randomcoding.drinkfinder.lib.dataloader.template.DrinkDataTemplate
 import uk.co.randomcoding.drinkfinder.model.drink.DrinkFeature
 import util.RichRow
 import util.RichRow._
+import uk.co.randomcoding.drinkfinder.lib.util.TextUtils._
 
 /**
  * Loads drink features from a spreadsheet row for a single drink.
@@ -16,9 +17,6 @@ import util.RichRow._
  *
  */
 class DrinkFeatureLoader {
-
-	private def firstLetterCaps(inString : String) : String = inString.split(" ").map(elem => elem.charAt(0).toUpper + elem.substring(1).toLowerCase).mkString("", " ", "")
-
 	/**
 	 * Reads the [[DrinkFeature]]s from the given '''Row'''
 	 */

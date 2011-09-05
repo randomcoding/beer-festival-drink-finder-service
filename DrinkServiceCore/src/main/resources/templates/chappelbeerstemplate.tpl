@@ -11,4 +11,4 @@ drink.type=beer
 drink.quantity.remaining.column=F
 drink.feature.format=singlecolumn
 drink.feature.column=D
-drink.feature.prefix=Bar:
+drink.feature.prefix=
