@@ -12,6 +12,7 @@ import net.liftweb.util.Helpers._
 import uk.co.randomcoding.drinkfinder.model.data.FestivalData
 import uk.co.randomcoding.drinkfinder.model.drink.DrinkFeature
 import uk.co.randomcoding.drinkfinder.model.matcher.id._
+import uk.co.randomcoding.drinkfinder.lib.util.TextUtils._
 
 /**
  * Snippet code to handle the display of the search form.
@@ -26,14 +27,15 @@ object DrinkSearch extends Logger {
 	private lazy val festivalData = FestivalData("Chappel Beer Festival")
 
 	// function to convert a Drink Feature into a combo box tuple
-	private val featureToDisplay = (feature : DrinkFeature, drinkType : String) => (feature.feature -> "%s (%s)".format(feature.displayName, drinkType))
+	//private val featureToDisplay = (feature : DrinkFeature, drinkType : String) => (feature.feature -> "%s (%s)".format(feature.displayName, drinkType))
+	private val featureToDisplay = (feature : DrinkFeature, drinkType : String) => (feature.feature -> "%s Bar".format(feature.displayName))
 
 	// global form values
 	private val comparisonTypes = List(("" -> "Any"), ("Equal" -> "Equal To"), ("Greater Than" -> "Greater Than"), ("Less Than" -> "Less Than"))
 
 	private val drinkTypes = List(("" -> "Any"), ("Beer" -> "Beer"), ("Cider" -> "Cider"), ("Perry" -> "Perry"))
 
-	private def brewers = List(("" -> "Any")) ::: (festivalData.allBrewers.sortBy(_.name).map(brewer => (brewer.name -> brewer.name)))
+	private def brewers = List(("" -> "Any")) ::: (festivalData.allBrewers.sortBy(_.name).map(brewer => (brewer.name -> firstLetterCaps(brewer.name))))
 
 	private def drinkFeatures = {
 		val beerFeatures = festivalData.beerFeatures.sortBy(_.feature)

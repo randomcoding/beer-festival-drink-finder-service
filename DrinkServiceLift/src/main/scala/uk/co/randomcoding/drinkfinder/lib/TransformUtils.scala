@@ -5,9 +5,11 @@ import drink.{ Drink, NoDrink , DrinkFeature}
 import brewer.Brewer
 import matcher.id._
 import comment.{Comment, DrinkComments}
+
 import net.liftweb.util.Helpers._
 import net.liftweb.http.SHtml
 import net.liftweb.http.RequestVar
+
 import scala.xml.Text
 
 object TransformUtils {
@@ -21,7 +23,8 @@ object TransformUtils {
 			"#ABV" #> displayAbv(drink) &
 			"#Price" #> displayPrice(drink) &
 			"#Description" #> drink.description &
-			"#Quantity" #> displayQuantity(drink)
+			"#Quantity" #> displayQuantity(drink) &
+			"#Location" #> drink.features.mkString("", ", ", "")
 	})
 
 	/**
@@ -35,7 +38,8 @@ object TransformUtils {
 			"#Price" #> displayPrice(drink) &
 			"#Description" #> drink.description &
 			"#Brewer" #> displayBrewer(drink) &
-			"#Quantity" #> displayQuantity(drink)
+			"#Quantity" #> displayQuantity(drink) &
+			"#Location" #> drink.features.mkString("", ", ", "")
 	})
 	
 	def commentDisplay(comments : List[Comment]) = comments.map (comment => {
@@ -61,10 +65,10 @@ object TransformUtils {
 	
 	private def displayName(drink : Drink) = SHtml.link(drinkHref(drink), () => (), Text(drink.name))
 	
-	private def displayFeatures(drink : Drink) = drink.features.map(_.displayName).sortWith(_ < _).mkString("(", ", ", ")")
+	private def displayFeatures(drink : Drink) = drink.features.map(_.displayName).sortWith(_ < _).mkString("", ", ", "")
 
 	private def brewerHref(brewer : Brewer) : String = "brewer?%s=%s".format(BREWER_NAME, brewer.name)
 
-	private def drinkHref(drink : Drink) : String = "drink?%s=%s&%s=%s".format(DRINK_NAME, drink.name, FESTIVAL_NAME, "Worcester Beer, Cider and Perry Festival")
+	private def drinkHref(drink : Drink) : String = "drink?%s=%s&%s=%s".format(DRINK_NAME, drink.name, FESTIVAL_NAME, "Chappel Beer Festival")
 
 }
