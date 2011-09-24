@@ -44,7 +44,7 @@ object MongoConfig extends Loggable {
 		logger.info("Env: VCAP_SERVICES: %s".format(Option(System.getenv("VCAP_SERVICES"))))
 		var user = ""
 		var port = 27017
-		var host = "localhost"
+		var host = ""
 		var pass = ""
 		var db = dbName
 
@@ -68,14 +68,19 @@ object MongoConfig extends Loggable {
 						}
 					}
 				}
-				case _ => logger.info("Not running on Cloud FOundry, assuming localhost connection on port 27017")
+				case _ => logger.info("Not running on Cloud Foundry, assuming localhost connection on port 27017")
 			}
 		} catch {
-			case e : MatchError => logger.error("Match Error: %s\n%s\n%s".format(e.getMessage(), e.getCause(), e.getStackTrace().mkString("", "\n", "")))
+			case e : MatchError => logger.error("Match Error: %s\n%s\n%s.\n\nAssuming a service is running locally on port 27017".format(e.getMessage(), e.getCause(), e.getStackTrace().mkString("", "\n", "")))
 		}
 
-		val connection = MongoConnection(host, port)
+		val connection = host match {
+			case "" => MongoConnection()
+			case h => MongoConnection(h, port)
+		}
+		
 		val mongoDb = connection(db)
+		
 		if (user.nonEmpty) {
 			mongoDb.authenticate(user, pass)
 		}
