@@ -19,13 +19,7 @@
 		</dependency>
 		<dependency>
 			<groupId>net.liftweb</groupId>
-			<artifactId>lift-common_2.8.1</artifactId>
-		</dependency>
-
-		<!-- Test -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
+			<artifactId>lift-common_${scala.version}</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.scalatest</groupId>
@@ -37,11 +31,11 @@
 		</dependency>
 		<dependency>
 			<groupId>net.liftweb</groupId>
-			<artifactId>lift-util_2.8.1</artifactId>
+			<artifactId>lift-util_${scala.version}</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>net.liftweb</groupId>
-			<artifactId>lift-webkit_2.8.1</artifactId>
+			<artifactId>lift-webkit_${scala.version}</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>

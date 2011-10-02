@@ -17,12 +17,6 @@
 			<groupId>org.scala-lang</groupId>
 			<artifactId>scala-library</artifactId>
 		</dependency>
-
-		<!-- Test -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.scalatest</groupId>
 			<artifactId>scalatest_${scala.version}</artifactId>
@@ -33,23 +27,23 @@
 		</dependency>
 		<dependency>
 			<groupId>com.mongodb.casbah</groupId>
-			<artifactId>casbah-commons_2.8.1</artifactId>
+			<artifactId>casbah-commons_${scala.version}</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.mongodb.casbah</groupId>
-			<artifactId>casbah-query_2.8.1</artifactId>
+			<artifactId>casbah-query_${scala.version}</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>net.liftweb</groupId>
-			<artifactId>lift-common_2.8.1</artifactId>
+			<artifactId>lift-common_${scala.version}</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.mongodb.casbah</groupId>
-			<artifactId>casbah-core_2.8.1</artifactId>
+			<artifactId>casbah-core_${scala.version}</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>net.liftweb</groupId>
-			<artifactId>lift-json_2.8.1</artifactId>
+			<artifactId>lift-json_${scala.version}</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
