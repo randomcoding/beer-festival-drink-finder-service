@@ -22,8 +22,8 @@ import uk.co.randomcoding.drinkfinder.model.matcher.id._
  */
 object DrinkSearch extends Logger {
 	// hack to provide access to the (currently) only data object
-	//private lazy val festivalData = FestivalData("Worcester Beer, Cider and Perry Festival")
-	private lazy val festivalData = FestivalData("Chappel Beer Festival")
+	private lazy val festivalData = FestivalData("Worcester Beer, Cider and Perry Festival")
+	//private lazy val festivalData = FestivalData("Chappel Beer Festival")
 
 	// function to convert a Drink Feature into a combo box tuple
 	private val featureToDisplay = (feature : DrinkFeature, drinkType : String) => (feature.feature -> "%s (%s)".format(feature.displayName, drinkType))
@@ -156,10 +156,10 @@ object DrinkSearch extends Logger {
 		"#DrinkName" #> SHtml.text(drinkName, drinkName = _, "id" -> "the_name") &
 			"#DescriptionContains" #> SHtml.text(descriptionContains, descriptionContains = _) &
 			"#ABV" #> SHtml.text(abv, abv = _) &
-			"#AbvComparisonType" #> SHtml.select(comparisonTypes, Box("Any"), abvComparisonType = _) &
-			"#DrinkType" #> (SHtml.select(drinkTypes, Box("Any"), drinkType = _)) &
-			"#DrinkFeature" #> (SHtml.select(drinkFeatures, Box("Any"), drinkFeature = _)) &
-			"#BrewerName" #> (SHtml.select(brewers, Box("Any"), brewerName = _)) &
+			"#AbvComparisonType" #> SHtml.select(comparisonTypes, Full("Any"), abvComparisonType = _) &
+			"#DrinkType" #> (SHtml.select(drinkTypes, Full("Any"), drinkType = _)) &
+			"#DrinkFeature" #> (SHtml.select(drinkFeatures, Full("Any"), drinkFeature = _)) &
+			"#BrewerName" #> (SHtml.select(brewers, Full("Any"), brewerName = _)) &
 			"#PriceLessThan" #> (SHtml.text(priceLessThan, priceLessThan = _)) &
 			"type=submit" #> (SHtml.onSubmitUnit(process))
 	}

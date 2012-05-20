@@ -14,8 +14,8 @@ class DisplayBrewer extends Logger {
 
 	def showBrewer = {
 
-		//val festivalName = urlDecode(S.param(FESTIVAL_NAME.toString).openOr("Worcester Beer, Cider and Perry Festival"))
-		val festivalName = urlDecode(S.param(FESTIVAL_NAME.toString).openOr("Chappel Beer Festival"))
+		val festivalName = urlDecode(S.param(FESTIVAL_NAME.toString).openOr("Worcester Beer, Cider and Perry Festival"))
+		//val festivalName = urlDecode(S.param(FESTIVAL_NAME.toString).openOr("Chappel Beer Festival"))
 		val drinkData = FestivalData(festivalName)
 		val brewerName = urlDecode(S.param(BREWER_NAME.toString).openOr("No Brewer"))
 
