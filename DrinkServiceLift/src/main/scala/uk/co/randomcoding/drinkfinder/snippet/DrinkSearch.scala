@@ -37,10 +37,7 @@ object DrinkSearch extends Logger {
 
 	private def drinkFeatures = {
 		val beerFeatures = festivalData.beerFeatures.sortBy(_.feature)
-		val ciderAndPerryFeatures = {
-			val uniqueList = (festivalData.ciderFeatures ::: festivalData.perryFeatures).toSet.toList
-			uniqueList.sortBy(_.feature)
-		}
+		val ciderAndPerryFeatures =  (festivalData.ciderFeatures ::: festivalData.perryFeatures).toList.distinct.sortBy(_.feature)
 		List(("" -> "Any")) ::: beerFeatures.map(featureToDisplay(_, "Beer")) ::: ciderAndPerryFeatures.map(featureToDisplay(_, "Cider & Perry"))
 	}
 
