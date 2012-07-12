@@ -19,7 +19,7 @@ object BuildSettings {
     parallelExecution in Test := false,
     shellPrompt := ShellPrompt.buildShellPrompt,
     scalacOptions := Seq("-deprecation", "-unchecked"),
-    //    EclipseKeys.createSrc := EclipseCreateSrc.Default + EclipseCreateSrc.Resource
+    EclipseKeys.createSrc := EclipseCreateSrc.Default + EclipseCreateSrc.Resource
     unmanagedSourceDirectories in Compile <<= (scalaSource in Compile)(Seq(_)),
     unmanagedSourceDirectories in Test <<= (scalaSource in Test)(Seq(_))
   )
