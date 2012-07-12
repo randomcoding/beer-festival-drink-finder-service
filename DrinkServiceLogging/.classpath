@@ -1,0 +1,11 @@
+<classpath>
+  <classpathentry output=".target/scala-2.9.1/classes" path="src/main/resources" kind="src"></classpathentry>
+  <classpathentry path="/home/tim/.ivy2/cache/ch.qos.logback/logback-classic/jars/logback-classic-1.0.0.jar" kind="lib"></classpathentry>
+  <classpathentry path="/home/tim/.ivy2/cache/ch.qos.logback/logback-core/jars/logback-core-1.0.0.jar" kind="lib"></classpathentry>
+  <classpathentry path="/home/tim/.ivy2/cache/org.slf4j/slf4j-api/jars/slf4j-api-1.6.4.jar" kind="lib"></classpathentry>
+  <classpathentry path="/home/tim/.ivy2/cache/org.codehaus.groovy/groovy-all/jars/groovy-all-1.8.6.jar" kind="lib"></classpathentry>
+  <classpathentry path="/home/tim/.ivy2/cache/net.liftweb/lift-common_2.9.1/jars/lift-common_2.9.1-2.4.jar" kind="lib"></classpathentry>
+  <classpathentry path="org.scala-ide.sdt.launching.SCALA_CONTAINER" kind="con"></classpathentry>
+  <classpathentry path="org.eclipse.jdt.launching.JRE_CONTAINER" kind="con"></classpathentry>
+  <classpathentry path=".target/scala-2.9.1/classes" kind="output"></classpathentry>
+</classpath>
