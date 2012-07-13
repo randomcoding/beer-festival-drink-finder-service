@@ -53,7 +53,7 @@ object UploadData extends Logger {
 		}
 
 		// bind form to vars and create display
-		"#availableTemplates" #> (SHtml.select(availableTemplates.toSeq, Box("--- Select Template ---"), selectedTemplate = _)) &
+		"#availableTemplates" #> (SHtml.select(availableTemplates.toSeq, Full("--- Select Template ---"), selectedTemplate = _)) &
 			"#uploadButton" #> (SHtml.fileUpload((ul => uploadFile(Full(ul))))) &
 			"type=submit" #> (SHtml.onSubmitUnit(process))
 	}

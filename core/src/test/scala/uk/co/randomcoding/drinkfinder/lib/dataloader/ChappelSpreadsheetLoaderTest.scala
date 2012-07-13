@@ -3,7 +3,6 @@
  */
 package uk.co.randomcoding.drinkfinder.lib.dataloader
 
-import org.junit.runner.RunWith
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
 import scala.io.Source
@@ -16,7 +15,6 @@ import uk.co.randomcoding.drinkfinder.model.drink.DrinkFeature
 
 /**
  * @author RandomCoder
- *
  */
 class ChappelSpreadsheetLoaderTest extends FunSuite with ShouldMatchers {
 	val testFileLocation = "/ChappelTestData.xls"
