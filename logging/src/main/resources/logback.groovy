@@ -65,11 +65,7 @@ if (HOST.equalsIgnoreCase("benjymouse")) {
     // Only log at WARN level for testing by default
     def testingLogs = ["uk.co.randomcoding": WARN]
 
-    def debugLogs = ["uk.co.randomcoding.partsdb.lift.model.document.NewLineItemDataHolder": DEBUG,
-            "uk.co.randomcoding.partsdb.lift.util.snippet.LineItemSnippet": DEBUG,
-            "uk.co.randomcoding.partsdb.lift.model.document.DocumentDataHolder": DEBUG,
-            "uk.co.randomcoding.partsdb.lift.snippet.MenuTitle": DEBUG,
-            "uk.co.randomcoding.partsdb.lift.model.document": DEBUG]
+    def debugLogs = []
 
     def logs = debugLogs
     if (isTest.equalsIgnoreCase("yes")) {

@@ -18,7 +18,7 @@ object ProjectBuild extends Build {
   ) aggregate(coreProject, liftProject, loggingProject)
 
   lazy val coreProject: Project = Project("core",
-    file("DrinkServiceCore"),
+    file("core"),
       delegates = root :: Nil,
       settings = buildSettings ++ Seq(libraryDependencies ++= coreProjectDeps,
       name := "DrinkServiceCore"
@@ -26,7 +26,7 @@ object ProjectBuild extends Build {
   ) dependsOn (loggingProject)
 
   lazy val liftProject: Project = Project("lift", 
-    file("DrinkServiceLift"),
+    file("lift"),
     settings = buildSettings ++ Seq(libraryDependencies ++= liftProjectDeps,
       name := "DrinkServiceLift"
     ) ++ webSettings
