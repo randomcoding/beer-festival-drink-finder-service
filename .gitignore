@@ -1,5 +1,6 @@
 .scala_dependencies
 target/
+.target/
 bin/
 *.class
 *.jar
@@ -10,9 +11,13 @@ bin/
 .bak
 .old
 *~
+*swp
 build/
 temp/
 tmp/
 *.o
 .cache
+
+# SBT Generated project stuff
+project/project/
 
