@@ -1,8 +1,6 @@
 import sbt._
 import Keys._
 
-import scala.ValueSet
-
 import com.typesafe.sbteclipse.core.EclipsePlugin._
 
 object ProjectBuild extends Build {
