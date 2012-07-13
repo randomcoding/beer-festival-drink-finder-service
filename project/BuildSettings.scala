@@ -22,7 +22,6 @@ object BuildSettings {
     EclipseKeys.createSrc := EclipseCreateSrc.Default + EclipseCreateSrc.Resource,
     unmanagedSourceDirectories in Compile <<= (scalaSource in Compile)(Seq(_)),
     unmanagedSourceDirectories in Test <<= (scalaSource in Test)(Seq(_))
-//    resourceDirectories in Compile <<= (resourceDirectory in Compile)(Seq(_))
   )
 
 }
