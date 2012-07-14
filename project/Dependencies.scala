@@ -41,12 +41,17 @@ object Dependencies {
 
   val groovy = "org.codehaus.groovy" % "groovy" % "2.0.0"
 
+  // Common Utilities
+  val coreUtils = "uk.co.randomcoding" %% "scala-utilities-core" % "0.1.0-SNAPSHOT"
+  val liftUtils = "uk.co.randomcoding" %% "scala-utilities-lift" % "0.1.0-SNAPSHOT"
+
   // Dependency groups
   val testDeps = Seq(scalatest)
   val liftDeps = Seq(liftUtil, liftCommon, liftWebkit, liftMongoRecord, rogue)
   val loggingDeps = Seq(logback, groovy, liftCommon)
   val jettyDeps = Seq(jetty)
   val jodaDeps = Seq(jodaTime, jodaConvert)
+  val utilsDeps = Seq(coreUtils, liftUtils)
 
   val oldCasbahDeps = Seq(casbahCore, casbahQuery, casbahCommons)
 }
