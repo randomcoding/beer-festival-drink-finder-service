@@ -10,6 +10,7 @@ import uk.co.randomcoding.drinkfinder.model.drink.Drink
  * 
  * @author RandomCoder
  */
+@deprecated("Use [[uk.co.randomcoding.drinkfinder.model.brewer.BrewerRecord]] instead", "0.5.0")
 case class Brewer(val name : String) {
 	
 	private var brewedDrinks : List[Drink] = Nil
