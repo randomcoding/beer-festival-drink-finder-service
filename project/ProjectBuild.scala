@@ -41,7 +41,7 @@ object ProjectBuild extends Build {
     )
   )  
 
-  val commonDeps = testDeps ++ jodaDeps
+  val commonDeps = testDeps ++ jodaDeps ++ utilityDeps
   val coreProjectDeps = commonDeps ++ Seq(liftMongoRecord, rogue, poi) ++ oldCasbahDeps
   val liftProjectDeps = commonDeps ++ liftDeps ++ jettyDeps
 }

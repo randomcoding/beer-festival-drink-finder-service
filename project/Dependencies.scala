@@ -8,7 +8,11 @@ object Dependencies {
   val liftVersion = "2.4"
 
   // Functions to create dependencies
-  val liftDep = (componentId: String, scope: String ) => "net.liftweb" %% componentId % liftVersion % scope
+  //val liftDep = (componentId: String, scope: String ) => "net.liftweb" %% componentId % liftVersion % scope
+  val liftDep = (componentId: String, scope: String ) => {
+    val id = "%s_2.9.1".format(componentId)
+    "net.liftweb" % id % liftVersion % scope
+  }
 	
   // Actual dependencies
   // liftweb
@@ -41,12 +45,16 @@ object Dependencies {
 
   val groovy = "org.codehaus.groovy" % "groovy" % "2.0.0"
 
+  val coreUtilities = "uk.co.randomcoding" %% "scala-utilities-core" % "0.1.0-SNAPSHOT"
+  val liftUtilities = "uk.co.randomcoding" %% "scala-utilities-lift" % "0.1.0-SNAPSHOT"
+
   // Dependency groups
   val testDeps = Seq(scalatest)
   val liftDeps = Seq(liftUtil, liftCommon, liftWebkit, liftMongoRecord, rogue)
   val loggingDeps = Seq(logback, groovy, liftCommon)
   val jettyDeps = Seq(jetty)
   val jodaDeps = Seq(jodaTime, jodaConvert)
+  val utilityDeps = Seq(coreUtilities, liftUtilities)
 
   val oldCasbahDeps = Seq(casbahCore, casbahQuery, casbahCommons)
 }
