@@ -12,3 +12,4 @@ drink.quantity.remaining.column=G
 drink.feature.format=singlecolumn
 drink.feature.column=E
 drink.feature.prefix=Bar:
+festival.id=CHPL

@@ -11,3 +11,4 @@ drink.type=cider
 drink.quantity.remaining.column=G
 drink.feature.format=SingleColumn
 drink.feature.column=D
+festival.id=WCBCF

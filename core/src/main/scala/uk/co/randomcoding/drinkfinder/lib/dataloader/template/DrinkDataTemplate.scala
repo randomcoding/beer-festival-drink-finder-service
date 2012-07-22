@@ -26,7 +26,7 @@ class DrinkDataTemplate(templateSource: Source) extends Logger {
     }
   }
 
-  lazy val festivalId = getValueFor("festival.id").getOrElse("No FesticalId")
+  lazy val festivalId = getValueFor("festival.id").getOrElse("No Festival Id")
 
   lazy val quantityRemainingColumn = getValueFor("drink.quantity.remaining") match {
     case Some(index) => Some(columnIndex(index))
