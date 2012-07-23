@@ -1,5 +1,21 @@
 /**
- * TODO: Add License details
+ * Copyright (C) 2011 - RandomCoder <randomcoder@randomcoding.co.uk>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contributors:
+ *    RandomCoder <randomcoder@randomcoding.co.uk> - initial API and implementation and/or initial documentation
  */
 package uk.co.randomcoding.drinkfinder.model.matcher
 
@@ -16,7 +32,7 @@ import uk.co.randomcoding.drinkfinder.model.drink.DrinkFeature
 
 object MatcherFactory extends Logger {
 
-  def generate(queryString : String) : List[DrinkMatcher[_]] = {
+  def generate(queryString: String): List[DrinkMatcher[_]] = {
     val queryParts = queryString.split("&")
     (for {
       queryPart <- queryParts
@@ -25,7 +41,7 @@ object MatcherFactory extends Logger {
     }).toList
   }
 
-  private def createMatcher(query : (String, String)) : DrinkMatcher[_] = {
+  private def createMatcher(query: (String, String)): DrinkMatcher[_] = {
     val (queryId, queryValue) = query
 
     debug("Query Id: %s, Query Value: %s".format(queryId, queryValue))
@@ -40,9 +56,10 @@ object MatcherFactory extends Logger {
       case DRINK_PRICE(queryId) => DrinkPriceMatcher(queryValue.toDouble)
       case DRINK_TYPE(queryId) => DrinkTypeMatcher(queryValue)
       case BREWER_NAME(queryId) => BrewerNameMatcher(queryValue)
+      case FESTIVAL_ID(queryId) => FestivalIdMatcher(queryValue)
       case _ => AlwaysTrueDrinkMatcher
     }
   }
 
-  private implicit def arrayTo2Tuple[T](array : Array[T]) : (T, T) = (array(0), array(1))
+  private implicit def arrayTo2Tuple[T](array: Array[T]): (T, T) = (array(0), array(1))
 }
