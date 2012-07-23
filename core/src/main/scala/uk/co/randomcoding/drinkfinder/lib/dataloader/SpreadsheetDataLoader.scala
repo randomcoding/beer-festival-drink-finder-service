@@ -30,10 +30,10 @@ class SpreadsheetDataLoader extends Logger {
     wb.setMissingCellPolicy(Row.CREATE_NULL_AS_BLANK)
     val dataSheet = wb.getSheetAt(0);
 
-    val festivalData = FestivalData(dataTemplate.festivalName)
+    val festivalId = dataTemplate.festivalId
+    val festivalData = FestivalData(festivalId, dataTemplate.festivalName)
 
     val physicalRows = dataSheet.rowIterator.asScala
-    val festivalId = dataTemplate.festivalId
     physicalRows.foreach(row => if (row.isDataRow(dataTemplate)) addRowToData(row, festivalData, dataTemplate, festivalId))
   }
 

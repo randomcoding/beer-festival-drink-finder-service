@@ -26,7 +26,7 @@ class ChappelSpreadsheetLoaderTest extends FunSuite with ShouldMatchers {
   private val beerTemplate = new DrinkDataTemplate(templateSource("/templates/chappelbeerstemplate.tpl"))
   private val data = {
     loader.loadData(getClass().getResourceAsStream(testFileLocation), beerTemplate)
-    FestivalData(beerTemplate.festivalName)
+    FestivalData(beerTemplate.festivalId, beerTemplate.festivalName)
   }
 
   test("Load Beer Data from sample spreadsheet with loaded source") {
