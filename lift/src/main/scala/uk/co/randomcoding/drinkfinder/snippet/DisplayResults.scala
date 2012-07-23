@@ -28,16 +28,17 @@ class DisplayResults extends Logger {
     import uk.co.randomcoding.drinkfinder.model.matcher.Matcher
 
     val params = S.queryString openOr "No Query String"
-    val festivalName = urlDecode(S.param(FESTIVAL_NAME.toString).openOr( "Worcester Beer, Cider and Perry Festival"))
+    //val festivalName = urlDecode(S.param(FESTIVAL_NAME.toString).openOr( "Worcester Beer, Cider and Perry Festival"))
+    val festivalId = urlDecode(S.param(FESTIVAL_NAME.toString).openOr("WCBCF"))
     //val festivalName = urlDecode(S.param(FESTIVAL_NAME.toString).openOr( "Chappel Beer Festival"))
 
-    val festivalData = FestivalData(festivalName)
+    val festivalData = FestivalData(festivalId)
     debug("Received Query String: %s".format(params))
 
     val matchers = params match {
       case "No Query String" => List(AlwaysTrueDrinkMatcher)
-      case paramString : String if paramString.trim.isEmpty => List(AlwaysTrueDrinkMatcher)
-      case paramString : String => MatcherFactory.generate(urlDecode(paramString))
+      case paramString: String if paramString.trim.isEmpty => List(AlwaysTrueDrinkMatcher)
+      case paramString: String => MatcherFactory.generate(urlDecode(paramString))
     }
     debug("Generated %d matchers:\n%s".format(matchers.size, matchers.mkString("\n\t")))
 
@@ -57,9 +58,9 @@ class DisplayResults extends Logger {
       "#perries *" #> toSummaryDisplay(perries)
   }
 
-  val anchorRef = ((anchor : String) => "#" + anchor)
+  val anchorRef = ((anchor: String) => "#" + anchor)
 
-  private[this] def generateResultTabs(beers : Iterable[Drink], ciders : Iterable[Drink], perries : Iterable[Drink]) : NodeSeq = {
+  private[this] def generateResultTabs(beers: Iterable[Drink], ciders: Iterable[Drink], perries: Iterable[Drink]): NodeSeq = {
     val beersLink = beers.toList match {
       case Nil => Text("")
       case _ => <li><a href={ anchorRef(beerResultsId) }>Beers ({ beers.size })</a></li>
