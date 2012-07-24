@@ -20,9 +20,12 @@
 package uk.co.randomcoding.drinkfinder.lib.rest
 
 import net.liftweb.http.rest.RestHelper
+import net.liftweb.json.Extraction._
+import net.liftweb.json.JsonAST._
 import uk.co.randomcoding.drinkfinder.model.data.FestivalData
 import uk.co.randomcoding.drinkfinder.model.matcher.id.FESTIVAL_ID
 import uk.co.randomcoding.drinkfinder.model.matcher.MatcherFactory
+import uk.co.randomcoding.drinkfinder.model.drink.Drink
 
 /**
  * Handler for REST dispatch for data access
@@ -38,8 +41,20 @@ object DefaultRestHelper extends RestHelper {
     case "api" :: festivalId :: "drinks" :: "all" :: Nil JsonGet _ => {
       val query = "%s=%s".format(FESTIVAL_ID, festivalId)
       val data = FestivalData(festivalId)
-      val drinks = data.getMatching(MatcherFactory.generate(query))
-      // COnvert to JSON
+      val drinks = data.getMatching(MatcherFactory.generate(query)).toList
+      // Convert to JSON
+      toJson(drinks)
     }
+    case "api" :: festivalId :: "drinks" :: "all" :: Nil Get _ => {
+      val query = "%s=%s".format(FESTIVAL_ID, festivalId)
+      val data = FestivalData(festivalId)
+      val drinks = data.getMatching(MatcherFactory.generate(query)).toList
+      // Convert to JSON
+      toJson(drinks)
+    }
+  }
+
+  private[this] def toJson(drinks: Seq[Drink]): JValue = {
+    decompose(drinks)
   }
 }
