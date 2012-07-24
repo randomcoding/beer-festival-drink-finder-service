@@ -22,27 +22,26 @@ import uk.co.randomcoding.drinkfinder.lib.UserSession
  */
 class AddComment {
 
-	def render = {
-		var author = ""
-		val drinkName = urlDecode(S.param(DRINK_NAME.toString).get)
-		var commentText = ""
-		//val currentFestival = UserSession.currentFestival.is.getOrElse("Festival")
-		val currentFestival = UserSession.currentFestival.is.getOrElse("Chappel Beer Festival")
-		val comments = DrinkComments(currentFestival)
+  def render = {
+    var author = ""
+    val drinkName = urlDecode(S.param(DRINK_NAME.toString).get)
+    var commentText = ""
+    val currentFestivalId = UserSession.currentFestivalId.openTheBox
+    val comments = DrinkComments(currentFestivalId)
 
-		def process() : JsCmd = {
-			if (!commentText.isEmpty) {
-				if (author isEmpty) author = "Anonymous"
-				val comment = Comment(drinkName, author, commentText)
-				comments.addComment(comment)
-			}
+    def process(): JsCmd = {
+      if (!commentText.isEmpty) {
+        if (author isEmpty) author = "Anonymous"
+        val comment = Comment(drinkName, author, commentText)
+        comments.addComment(comment)
+      }
 
-			S.redirectTo("/drink?%s=%s".format(DRINK_NAME.toString, drinkName))
-		}
+      S.redirectTo("/drink?%s=%s".format(DRINK_NAME.toString, drinkName))
+    }
 
-		"#author" #> SHtml.text(author, author = _) &
-			"#commentText" #> SHtml.textarea(commentText, commentText = _) &
-			"type=submit" #> (SHtml.onSubmitUnit(process))
-	}
+    "#author" #> SHtml.text(author, author = _) &
+      "#commentText" #> SHtml.textarea(commentText, commentText = _) &
+      "type=submit" #> (SHtml.onSubmitUnit(process))
+  }
 
 }

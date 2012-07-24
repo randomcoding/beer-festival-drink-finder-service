@@ -5,6 +5,7 @@ package uk.co.randomcoding.drinkfinder.snippet
 
 import uk.co.randomcoding.drinkfinder.model.matcher.id._
 import uk.co.randomcoding.drinkfinder.lib.TransformUtils._
+import uk.co.randomcoding.drinkfinder.lib.UserSession
 import net.liftweb.http._
 import net.liftweb.util.Helpers._
 import scala.xml.{ NodeSeq, Text }
@@ -29,10 +30,11 @@ class DisplayResults extends Logger {
 
     val params = S.queryString openOr "No Query String"
     //val festivalName = urlDecode(S.param(FESTIVAL_NAME.toString).openOr( "Worcester Beer, Cider and Perry Festival"))
-    val festivalId = urlDecode(S.param(FESTIVAL_NAME.toString).openOr("WCBCF"))
+    //val festivalId = urlDecode(S.param(FESTIVAL_NAME.toString).openOr("WCBCF"))
+    val currentFestivalId = UserSession.currentFestivalId.openTheBox
     //val festivalName = urlDecode(S.param(FESTIVAL_NAME.toString).openOr( "Chappel Beer Festival"))
 
-    val festivalData = FestivalData(festivalId)
+    val festivalData = FestivalData(currentFestivalId).get
     debug("Received Query String: %s".format(params))
 
     val matchers = params match {

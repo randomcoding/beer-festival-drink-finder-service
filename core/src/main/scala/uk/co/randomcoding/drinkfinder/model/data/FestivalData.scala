@@ -161,19 +161,10 @@ object FestivalData {
   /**
    * Get the festival data for a given festival id.
    *
-   * @return If there is no data for the festival then a new, empty one is created with the '''festivalId''' as the ''festivalName'' parameter.
+   * @return If there is no data for the festival then returns `None`.
    */
-  @deprecated("Use FestivalData(String, String) instead.", "0.1.0")
-  def apply(festivalId: FestivalId): FestivalData = {
-    festivals.get(festivalId) match {
-      case None => {
-        val data = new FestivalData(festivalId)
-        festivals = festivals + (festivalId -> data)
-        data
-      }
-      case Some(data) => data
-    }
-  }
+  //@deprecated("Use FestivalData(String, String) instead.", "0.5.0")
+  def apply(festivalId: FestivalId): Option[FestivalData] = festivals.get(festivalId)
 
   def apply(festivalId: FestivalId, festivalData: FestivalData) = {
     festivals = festivals + (festivalId -> festivalData)

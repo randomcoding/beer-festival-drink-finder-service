@@ -19,13 +19,16 @@
  */
 package uk.co.randomcoding.drinkfinder.lib.rest
 
-import net.liftweb.http.rest.RestHelper
-import net.liftweb.json.Extraction._
-import net.liftweb.json.JsonAST._
+import uk.co.randomcoding.drinkfinder.lib.UserSession
 import uk.co.randomcoding.drinkfinder.model.data.FestivalData
+import uk.co.randomcoding.drinkfinder.model.drink._
 import uk.co.randomcoding.drinkfinder.model.matcher.id.FESTIVAL_ID
 import uk.co.randomcoding.drinkfinder.model.matcher.MatcherFactory
-import uk.co.randomcoding.drinkfinder.model.drink.Drink
+
+import net.liftweb.http.rest.RestHelper
+import net.liftweb.json.Extraction.decompose
+import net.liftweb.json.JsonAST.JValue
+import net.liftweb.util.AnyVar.whatVarIs
 
 /**
  * Handler for REST dispatch for data access
@@ -35,19 +38,20 @@ import uk.co.randomcoding.drinkfinder.model.drink.Drink
  * Created On: 23 Jul 2012
  */
 object DefaultRestHelper extends RestHelper {
-  private val festivalId = "WCBCF"
 
   serve {
     case "api" :: festivalId :: "drinks" :: "all" :: Nil JsonGet _ => {
+      val currentFestivalId = UserSession.currentFestivalId.openTheBox
       val query = "%s=%s".format(FESTIVAL_ID, festivalId)
-      val data = FestivalData(festivalId)
+      val data = FestivalData(currentFestivalId).get
       val drinks = data.getMatching(MatcherFactory.generate(query)).toList
       // Convert to JSON
       toJson(drinks)
     }
     case "api" :: festivalId :: "drinks" :: "all" :: Nil Get _ => {
+      val currentFestivalId = UserSession.currentFestivalId.openTheBox
       val query = "%s=%s".format(FESTIVAL_ID, festivalId)
-      val data = FestivalData(festivalId)
+      val data = FestivalData(currentFestivalId).get
       val drinks = data.getMatching(MatcherFactory.generate(query)).toList
       // Convert to JSON
       toJson(drinks)
