@@ -53,7 +53,12 @@ object DefaultRestHelper extends RestHelper with Logger {
   }
 
   private[this] def drinkToJValue(drink: Drink): JValue = {
-    ("name" -> drink.name) ~
+    ("drinkType" -> (drink match {
+      case c: Cider => "Cider"
+      case p: Perry => "Perry"
+      case _ => "Beer"
+    })) ~
+      ("name" -> drink.name) ~
       ("description" -> drink.description) ~
       ("abv" -> "%.1f".format(drink.abv)) ~
       ("price" -> "£%.2f".format(drink.price)) ~
