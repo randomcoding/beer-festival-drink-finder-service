@@ -25,10 +25,10 @@ import uk.co.randomcoding.drinkfinder.model.drink._
 import uk.co.randomcoding.drinkfinder.model.matcher.id.FESTIVAL_ID
 import uk.co.randomcoding.drinkfinder.model.matcher.MatcherFactory
 
+import net.liftweb.common.Logger
 import net.liftweb.http.rest.RestHelper
-import net.liftweb.json.Extraction.decompose
-import net.liftweb.json.JsonAST.JValue
-import net.liftweb.util.AnyVar.whatVarIs
+import net.liftweb.json.JsonAST.{ JValue, JArray }
+import net.liftweb.json.JsonDSL._
 
 /**
  * Handler for REST dispatch for data access
@@ -37,28 +37,28 @@ import net.liftweb.util.AnyVar.whatVarIs
  *
  * Created On: 23 Jul 2012
  */
-object DefaultRestHelper extends RestHelper {
+object DefaultRestHelper extends RestHelper with Logger {
+
+  private[this] implicit val formats = net.liftweb.json.DefaultFormats
 
   serve {
-    case "api" :: festivalId :: "drinks" :: "all" :: Nil JsonGet _ => {
-      val currentFestivalId = UserSession.currentFestivalId.openTheBox
-      val query = "%s=%s".format(FESTIVAL_ID, festivalId)
-      val data = FestivalData(currentFestivalId).get
-      val drinks = data.getMatching(MatcherFactory.generate(query)).toList
-      // Convert to JSON
-      toJson(drinks)
-    }
     case "api" :: festivalId :: "drinks" :: "all" :: Nil Get _ => {
       val currentFestivalId = UserSession.currentFestivalId.openTheBox
       val query = "%s=%s".format(FESTIVAL_ID, festivalId)
       val data = FestivalData(currentFestivalId).get
       val drinks = data.getMatching(MatcherFactory.generate(query)).toList
-      // Convert to JSON
-      toJson(drinks)
+
+      (JArray(drinks map (drinkToJValue)))
     }
   }
 
-  private[this] def toJson(drinks: Seq[Drink]): JValue = {
-    decompose(drinks)
+  private[this] def drinkToJValue(drink: Drink): JValue = {
+    ("name" -> drink.name) ~
+      ("description" -> drink.description) ~
+      ("abv" -> "%.1f".format(drink.abv)) ~
+      ("price" -> "£%.2f".format(drink.price)) ~
+      ("remaining" -> drink.quantityRemaining) ~
+      ("brewer" -> drink.brewer.name) ~
+      ("features" -> drink.features.map(_.displayName))
   }
 }

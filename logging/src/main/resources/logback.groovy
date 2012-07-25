@@ -65,15 +65,21 @@ if (HOST.equalsIgnoreCase("benjymouse")) {
     // Only log at WARN level for testing by default
     def testingLogs = ["uk.co.randomcoding": WARN]
 
-    def debugLogs = []
+	def traceLogs = []
+    def debugLogs = ["uk.co.randomcoding.drinkfinder.lib.rest"]
+	def infoLogs = []
 
-    def logs = debugLogs
     if (isTest.equalsIgnoreCase("yes")) {
         addInfo("Using tests logging configuration")
-        logs = testingLogs
+        
+        testingLogs.each() { key, value -> logger(key, value) }
     }
+	else {
+		traceLogs.each() { key -> logger(key, TRACE) }
+		debugLogs.each() { key -> logger(key, DEBUG) }
+		infoLogs.each() { key -> logger(key, INFO) }
+	}
 
-    logs.each() { key, value -> logger(key, value) }
 
     rootLogLevel = DEBUG
 }
