@@ -19,8 +19,14 @@
  */
 package uk.co.randomcoding.drinkfinder.model.drink
 
-import net.liftweb.mongodb.record.field.ObjectIdPk
+import org.bson.types.ObjectId
+import com.foursquare.rogue.Rogue._
+import uk.co.randomcoding.scala.util.lift.mongodb.MongoFieldHelpers._
+import uk.co.randomcoding.scala.util.lift.mongodb.BaseMongoRecordObject
+import net.liftweb.mongodb.record.field.{ ObjectIdPk, ObjectIdRefField }
 import net.liftweb.mongodb.record.{ MongoRecord, MongoMetaRecord }
+import net.liftweb.record.field._
+import uk.co.randomcoding.drinkfinder.model.brewer.BrewerRecord
 
 /**
  * Database record class for a Drink
@@ -31,6 +37,34 @@ import net.liftweb.mongodb.record.{ MongoRecord, MongoMetaRecord }
  */
 class DrinkRecord private () extends MongoRecord[DrinkRecord] with ObjectIdPk[DrinkRecord] {
   override val meta = DrinkRecord
+
+  object name extends StringField(this, 50)
+
+  object description extends StringField(this, 1000)
+
+  object abv extends DoubleField(this)
+
+  object price extends DoubleField(this)
+
+  object quantityRemaining extends EnumField(this, DrinkRemainingStatus)
+
+  object brewer extends ObjectIdRefField(this, BrewerRecord)
+
+  object festivalId extends StringField(this, 50)
+
+  object drinkType extends EnumField(this, DrinkType)
 }
 
-object DrinkRecord extends DrinkRecord with MongoMetaRecord[DrinkRecord]
+/**
+ * Companion Object for `DrinkRecord`s, providing creation, deletion and mutation functions for record instances.
+ */
+object DrinkRecord extends DrinkRecord with BaseMongoRecordObject[DrinkRecord] with MongoMetaRecord[DrinkRecord] {
+
+  def apply(name: String, description: String, abv: Double, price: Double, brewer: BrewerRecord, drinkType: DrinkType.drinkType, festivalId: String): DrinkRecord = {
+    DrinkRecord.createRecord.name(name).description(description).abv(abv).price(price).brewer(brewer.id.get).drinkType(drinkType).festivalId(festivalId)
+  }
+
+  override def findById(oid: ObjectId) = DrinkRecord.where(_.id eqs oid).get
+
+  override def matchingRecord(drink: DrinkRecord): Option[DrinkRecord] = DrinkRecord.where(_.name eqs drink.name).get
+}
