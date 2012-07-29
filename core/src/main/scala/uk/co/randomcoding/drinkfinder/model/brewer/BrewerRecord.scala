@@ -19,9 +19,16 @@
  */
 package uk.co.randomcoding.drinkfinder.model.brewer
 
-import net.liftweb.mongodb.record.{ MongoRecord, MongoMetaRecord }
+import org.bson.types.ObjectId
+
+import com.foursquare.rogue.Rogue._
+
+import uk.co.randomcoding.scala.util.lift.mongodb.MongoFieldHelpers._
+import uk.co.randomcoding.scala.util.lift.mongodb.BaseMongoRecordObject
+
 import net.liftweb.mongodb.record.field.ObjectIdPk
 import net.liftweb.record.field.StringField
+import net.liftweb.mongodb.record.{ MongoRecord, MongoMetaRecord }
 
 /**
  * `MongoRecord` implementation of a Brewer
@@ -44,7 +51,17 @@ class BrewerRecord private () extends MongoRecord[BrewerRecord] with ObjectIdPk[
   override def hashCode = getClass.hashCode + name.get.hashCode
 }
 
-object BrewerRecord extends BrewerRecord with MongoMetaRecord[BrewerRecord] {
+object BrewerRecord extends BrewerRecord with BaseMongoRecordObject[BrewerRecord] with MongoMetaRecord[BrewerRecord] {
 
+  /**
+   * Create a new instance of a brewer record, but do not add it to the database
+   */
   def apply(brewerName: String): BrewerRecord = BrewerRecord.createRecord.name(brewerName)
+
+  override def matchingRecord(brewer: BrewerRecord): Option[BrewerRecord] = findById(brewer.id.get) match {
+    case Some(b) => Some(b)
+    case _ => BrewerRecord.where(_.name eqs brewer.name).get
+  }
+
+  override def findById(oid: ObjectId): Option[BrewerRecord] = BrewerRecord.where(_.id eqs oid).get
 }
