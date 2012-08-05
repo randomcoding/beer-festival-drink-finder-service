@@ -72,7 +72,7 @@ class SpreadsheetDataLoader extends Logger {
 
   private def getDrinkDescription(row: Row, dataTemplate: DrinkDataTemplate): String = {
     dataTemplate.drinkDescriptionColumn match {
-      case Some(col) => row.getStringCellValue(col).getOrElse("")
+      case Some(col) => row.getStringCellValue(col).getOrElse("").trim
       case None => ""
     }
   }
