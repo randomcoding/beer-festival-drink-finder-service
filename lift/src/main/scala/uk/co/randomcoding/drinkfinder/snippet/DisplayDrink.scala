@@ -21,7 +21,7 @@ class DisplayDrink extends Logger {
 
     val nameMatcher = DrinkNameMatcher(drinkName)
     "#drinkData" #> toDetailedDisplay(List(FestivalData(currentFestivalId).get.getMatching(List(nameMatcher)).headOption.getOrElse(NoDrink))) &
-      "#comments" #> commentDisplay(displayComments(drinkName)) &
+      "#comments" #> "" & //commentDisplay(displayComments(drinkName)) &
       "#addcomment" #> SHtml.link("/addcomment?%s=%s".format(DRINK_NAME, drinkName), () => (), Text("Add Comment"))
   }
 

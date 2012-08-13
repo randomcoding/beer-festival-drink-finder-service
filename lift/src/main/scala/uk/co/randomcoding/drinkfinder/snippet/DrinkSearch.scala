@@ -101,6 +101,7 @@ object DrinkSearch extends Logger {
       valid match {
         case true => {
           val resultString = getParameterValues()
+          debug("Query String: %s".format(resultString))
           val redirectTo = if (isOnlyBrewerSearch()) "/brewer?%s" else "/results?%s"
           S.notice("Name: " + drinkName)
           S.redirectTo(redirectTo.format(resultString))

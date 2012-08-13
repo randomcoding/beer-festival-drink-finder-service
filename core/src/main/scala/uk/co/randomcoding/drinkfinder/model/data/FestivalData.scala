@@ -16,7 +16,7 @@ import uk.co.randomcoding.drinkfinder.model.matcher.BrewerNameMatcher
  *
  * @author RandomCoder
  */
-class FestivalData(val festivalName: String) extends Logger {
+class FestivalData(val festivalId: String, val festivalName: String) extends Logger {
 
   private val BEER = "BEER"
   private val CIDER = "CIDER"
@@ -79,6 +79,7 @@ class FestivalData(val festivalName: String) extends Logger {
     case Some(features) => features.toList.sortBy(_.displayName)
   }
 
+  def allDrinks = drinks
   /**
    * Get all the drinks that match all the matchers provided that are not '''All Gone'''
    */
@@ -151,7 +152,7 @@ object FestivalData {
     festivals.get(festivalId) match {
       case Some(data) => data
       case _ => {
-        val data = new FestivalData(festivalName)
+        val data = new FestivalData(festivalId, festivalName)
         festivals = festivals + (festivalId -> data)
         data
       }

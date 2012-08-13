@@ -51,6 +51,7 @@ class SpreadsheetDataLoader extends Logger {
     festivalData.addBrewer(brewer)
     drink.brewer = brewer
     drink.quantityRemaining = getQuantityRemaining(row, dataTemplate)
+    debug("Drink Quantity (%s): %s".format(drink.name, drink.quantityRemaining))
 
     info("Adding drink %s to Festival Data".format(drink))
     festivalData.addDrink(drink)
@@ -103,12 +104,14 @@ class SpreadsheetDataLoader extends Logger {
     dataTemplate.quantityRemainingColumn match {
       case Some(col) => {
         val quantity = row(col).getNumericCellValue
+        debug("Quantity from cell: %.2f".format(quantity))
         quantity match {
           case num if num > 1.0 => "Not Yet Ready"
           case num if num >= 0.5 => "Plenty"
           case num if num >= 0.25 => "Being Drunk"
           case num if num >= 0.1 => "Nearly Gone"
-          case _ => "All Gone"
+          case num if num <= 0.01 => "All Gone"
+          case _ => "Not  Measured"
         }
       }
       case None => "Not  Measured"

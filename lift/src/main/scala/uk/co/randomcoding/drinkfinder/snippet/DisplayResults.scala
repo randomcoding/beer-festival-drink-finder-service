@@ -17,7 +17,6 @@ import uk.co.randomcoding.drinkfinder.model.matcher.AlwaysTrueDrinkMatcher
 
 /**
  * @author RandomCoder
- *
  */
 class DisplayResults extends Logger {
 
@@ -29,13 +28,11 @@ class DisplayResults extends Logger {
     import uk.co.randomcoding.drinkfinder.model.matcher.Matcher
 
     val params = S.queryString openOr "No Query String"
-    //val festivalName = urlDecode(S.param(FESTIVAL_NAME.toString).openOr( "Worcester Beer, Cider and Perry Festival"))
-    //val festivalId = urlDecode(S.param(FESTIVAL_NAME.toString).openOr("WCBCF"))
     val currentFestivalId = UserSession.currentFestivalId.openTheBox
-    //val festivalName = urlDecode(S.param(FESTIVAL_NAME.toString).openOr( "Chappel Beer Festival"))
 
     val festivalData = FestivalData(currentFestivalId).get
     debug("Received Query String: %s".format(params))
+    debug("Data has %d drinks".format(festivalData.allDrinks.size))
 
     val matchers = params match {
       case "No Query String" => List(AlwaysTrueDrinkMatcher)
