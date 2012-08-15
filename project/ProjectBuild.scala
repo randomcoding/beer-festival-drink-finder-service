@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import sbt._
 import Keys._
 

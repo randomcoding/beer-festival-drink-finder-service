@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 RandomCoder <randomcoder@randomcoding.co.uk>
+ * Copyright (C) 2012 - RandomCoder <randomcoder@randomcoding.co.uk>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -15,21 +15,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * Contributors:
- *    RandomCoder - initial API and implementation and/or initial documentation
+ *    RandomCoder <randomcoder@randomcoding.co.uk> - initial API and implementation and/or initial documentation
  */
-package uk.co.randomcoding.drinkfinder.model.data
+package uk.co.randomcoding.drinkfinder.model.drink
 
-class DummyFestivalData extends FestivalData("TST", "Test Festival") {
+/**
+ * Enumeration of the valid statuses of drinks at a festival
+ *
+ * @author RandomCoder <randomcoder@randomcoding.co.uk>
+ *
+ * Created On: 29 Jul 2012
+ */
+object DrinkRemainingStatus extends Enumeration("Plenty", "Less than Half", "Running Out", "Finished", "Being Prepared", "Not Available") {
+  type status = Value
 
-  import uk.co.randomcoding.drinkfinder.model.data.DummyDrinks._
-
-  final def beers = Set(FirstBeer, SecondBeer)
-
-  final def ciders = Set(FirstCider, SecondCider)
-
-  final def perries = Set(FirstPerry, SecondPerry)
-
-  beers.foreach(addDrink(_))
-  ciders.foreach(addDrink(_))
-  perries.foreach(addDrink(_))
+  val PLENTY, LESS_THAN_HALF, RUNNING_OUT, FINISHED, BEING_PREPARED, NOT_AVAILABLE = Value
 }

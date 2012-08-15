@@ -19,3 +19,4 @@ drink.feature.Stout_/_Porter.column=AG
 drink.feature.Lager.column=AI
 drink.feature.Speciality.column=AK
 drink.feature.Organic.column=AM
+festival.id=WCBCF

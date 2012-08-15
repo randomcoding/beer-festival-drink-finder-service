@@ -9,19 +9,20 @@ import net.liftweb.http._
 import net.liftweb.util.Helpers._
 import uk.co.randomcoding.drinkfinder.model.matcher.id._
 import uk.co.randomcoding.drinkfinder.model.matcher.{ DrinkNameMatcher, BrewerNameMatcher, MatcherFactory }
+import uk.co.randomcoding.drinkfinder.lib.UserSession
 
 class DisplayBrewer extends Logger {
 
-	def showBrewer = {
+  def showBrewer = {
+    val currentFestivalId = UserSession.currentFestivalId.openTheBox
+    //val festivalName = urlDecode(S.param(FESTIVAL_NAME.toString).openOr("Worcester Beer, Cider and Perry Festival"))
+    //val festivalName = urlDecode(S.param(FESTIVAL_NAME.toString).openOr("Chappel Beer Festival"))
+    val drinkData = FestivalData(currentFestivalId).get
+    val brewerName = urlDecode(S.param(BREWER_NAME.toString).openOr("No Brewer"))
 
-		val festivalName = urlDecode(S.param(FESTIVAL_NAME.toString).openOr("Worcester Beer, Cider and Perry Festival"))
-		//val festivalName = urlDecode(S.param(FESTIVAL_NAME.toString).openOr("Chappel Beer Festival"))
-		val drinkData = FestivalData(festivalName)
-		val brewerName = urlDecode(S.param(BREWER_NAME.toString).openOr("No Brewer"))
+    val drinks = drinkData.getMatching(MatcherFactory.generate("%s=%s".format(BREWER_NAME.toString, brewerName))).toList.sortBy(_.name)
 
-		val drinks = drinkData.getMatching(MatcherFactory.generate("%s=%s".format(BREWER_NAME.toString, brewerName))).toList.sortBy(_.name)
-
-		"#brewerName" #> Text(brewerName) &
-			"#drinks" #> toSummaryDisplay(drinks)
-	}
+    "#brewerName" #> Text(brewerName) &
+      "#drinks" #> toSummaryDisplay(drinks)
+  }
 }
