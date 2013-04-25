@@ -124,26 +124,26 @@ class FestivalDataTest extends FunSuite with ShouldMatchers {
   }
 
   test("Query for Medium Ciders with ABV Greater Than 7.0") {
-	val ciderMatcher = DrinkTypeMatcher("cider")
+	val ciderMatcher: DrinkMatcher[String] = DrinkTypeMatcher("cider")
 	val mediumMatcher = DrinkFeatureMatcher(Medium)
 	val abvMatcher = DrinkAbvGreaterThanMatcher(7.0)
 
 	checkMatchedDrinks(festivalData.getMatching(List(ciderMatcher, mediumMatcher, abvMatcher)).toList, List(SecondCider))
   }
-  
+
   test("Beer features are added correctly") {
 	  festivalData.beerFeatures should be (List(DrinkFeature("Real Ale"), DrinkFeature("Stout")))
   }
-  
+
   test("Cider features are added correctly") {
 	  festivalData.ciderFeatures should be (List(DrinkFeature("Dry"), DrinkFeature("Medium")))
   }
-  
+
   test("Perry features are added correctly") {
 	  festivalData.perryFeatures should be (List(DrinkFeature("Medium"), DrinkFeature("Sweet")))
   }
-  
-  private def checkMatchedDrinks(matched: List[Drink], expected: List[Drink]) {
+
+  private def checkMatchedDrinks(matched: List[DrinkRecord], expected: List[DrinkRecord]) {
 	val expectedSize = expected.size
 
 	matched should have size (expectedSize)

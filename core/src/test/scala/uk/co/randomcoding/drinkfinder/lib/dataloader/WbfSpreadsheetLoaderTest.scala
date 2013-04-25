@@ -23,11 +23,11 @@ import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
 import scala.io.Source
 import uk.co.randomcoding.drinkfinder.lib.dataloader.template.DrinkDataTemplate
-import uk.co.randomcoding.drinkfinder.model.brewer.Brewer
+import uk.co.randomcoding.drinkfinder.model.brewer.{BrewerRecord, Brewer}
 import uk.co.randomcoding.drinkfinder.model.matcher._
 import uk.co.randomcoding.drinkfinder.model.data.FestivalData
 import uk.co.randomcoding.drinkfinder.model.drink.DrinkFactory._
-import uk.co.randomcoding.drinkfinder.model.drink.DrinkFeature
+import uk.co.randomcoding.drinkfinder.model.drink.{DrinkRecord, DrinkFeature}
 
 /**
  * @author RandomCoder
@@ -52,17 +52,13 @@ class WbfSpreadsheetLoaderTest extends FunSuite with ShouldMatchers {
   }
 
   test("Load Beer Data from sample spreadsheet with loaded source") {
-    var matcher = DrinkNameMatcher("deception")
-    var matched = data.getMatching(List(matcher))
+    val matcher = DrinkNameMatcher("deception")
+    val matched = data.getMatching(List(matcher))
     println("got %d matched drinks: %s".format(matched.size, matched.mkString(",")))
     matched.size should be(1)
     matched.headOption should not be (None)
-    var drink = matched.head
-    drink.name should be("Deception")
-    drink.abv should be(4.1 plusOrMinus 0.1)
-    //drink.price should be(2.4)
-    drink.brewer should be(Brewer("Abbeydale"))
-    drink.description should be("a very pale blonde beer with Nelson Sauvin hops")
+    val drink = matched.head
+    drink should be(beer("Deception", "a very pale blonde beer with Nelson Sauvin hops", 4.1, 2.4, BrewerRecord("Abbeydale"), festivalId, Nil))
   }
 
   test("Correct Ciders are loaded ") {
@@ -71,14 +67,10 @@ class WbfSpreadsheetLoaderTest extends FunSuite with ShouldMatchers {
 
     matched should have size (4)
 
-    matched.find(_.name.equals("Orchard Bull")).get should be(cider("Orchard Bull", "", 6.5, 0.0, festivalId, List(DrinkFeature("Medium Dry"))))
-    matched.find(_.name.equals("Orchard Bull")).get.brewer should be(Brewer("Ashgrove"))
-    matched.find(_.name.equals("Orchard Harvest")).get should be(cider("Orchard Harvest", "", 6.0, 0.0, festivalId, List(DrinkFeature("Medium Sweet"))))
-    matched.find(_.name.equals("Orchard Harvest")).get.brewer should be(Brewer("Ashgrove"))
-    matched.find(_.name.equals("Rum Cask")).get should be(cider("Rum Cask", "", 7.3, 0.0, festivalId, List(DrinkFeature("Medium"))))
-    matched.find(_.name.equals("Rum Cask")).get.brewer should be(Brewer("Barbourne"))
-    matched.find(_.name.equals("Standard Orchard Blend")).get should be(cider("Standard Orchard Blend", "", 6.0, 0.0, festivalId, List(DrinkFeature("Dry"))))
-    matched.find(_.name.equals("Standard Orchard Blend")).get.brewer should be(Brewer("Barbourne"))
+    matched.find(_.name.equals("Orchard Bull")).get should be(cider("Orchard Bull", "", 6.5, 0.0, BrewerRecord("Ashgrove"), festivalId, List(DrinkFeature("Medium Dry"))))
+    matched.find(_.name.equals("Orchard Harvest")).get should be(cider("Orchard Harvest", "", 6.0, 0.0, BrewerRecord("Ashgrove"), festivalId, List(DrinkFeature("Medium Sweet"))))
+    matched.find(_.name.equals("Rum Cask")).get should be(cider("Rum Cask", "", 7.3, 0.0, BrewerRecord("Barbourne"), festivalId, List(DrinkFeature("Medium"))))
+    matched.find(_.name.equals("Standard Orchard Blend")).get should be(cider("Standard Orchard Blend", "", 6.0, 0.0, BrewerRecord("Barbourne"), festivalId, List(DrinkFeature("Dry"))))
   }
 
   test("Correct Perries are loaded") {
@@ -87,11 +79,8 @@ class WbfSpreadsheetLoaderTest extends FunSuite with ShouldMatchers {
 
     matched should have size (3)
 
-    matched.find(_.name.equals("Barland")).get should be(perry("Barland", "", 7.400000000000001, 0.0, festivalId, Nil))
-    matched.find(_.name.equals("Barland")).get.brewer should be(Brewer("Barbourne"))
-    matched.find(_.name.equals("B.U.R.P.")).get should be(perry("B.U.R.P.", "", 6.1, 0.0, festivalId, Nil))
-    matched.find(_.name.equals("B.U.R.P.")).get.brewer should be(Brewer("Barkers"))
-    matched.find(_.name.equals("Blakeney Red")).get should be(perry("Blakeney Red", "", 6.5, 0.0, festivalId, Nil))
-    matched.find(_.name.equals("Blakeney Red")).get.brewer should be(Brewer("Brook Farm"))
+    matched.find(_.name.equals("Barland")).get should be(perry("Barland", "", 7.400000000000001, 0.0, BrewerRecord("Barbourne"), festivalId, Nil))
+    matched.find(_.name.equals("B.U.R.P.")).get should be(perry("B.U.R.P.", "", 6.1, 0.0, BrewerRecord("Barkers"), festivalId, Nil))
+    matched.find(_.name.equals("Blakeney Red")).get should be(perry("Blakeney Red", "", 6.5, 0.0, BrewerRecord("Brook Farm"), festivalId, Nil))
   }
 }

@@ -23,8 +23,8 @@ import scala.collection.mutable.{ Set => MSet }
 import uk.co.randomcoding.drinkfinder.model.matcher.DrinkMatcher
 import uk.co.randomcoding.drinkfinder.model.drink._
 import net.liftweb.common.Logger
-import uk.co.randomcoding.drinkfinder.model.brewer.Brewer
-import uk.co.randomcoding.drinkfinder.model.brewer.NoBrewer
+import uk.co.randomcoding.drinkfinder.model.brewer.BrewerRecord
+import uk.co.randomcoding.drinkfinder.model.drink.DrinkRemainingStatus._
 import uk.co.randomcoding.drinkfinder.model.matcher.BrewerNameMatcher
 
 /**
@@ -38,8 +38,8 @@ class FestivalData(val festivalId: String, val festivalName: String) extends Log
   private val CIDER = "CIDER"
   private val PERRY = "PERRY"
 
-  private var drinks = Set.empty[Drink]
-  private var brewers = Set.empty[Brewer]
+  private var drinks = Set.empty[DrinkRecord]
+  private var brewers = Set.empty[BrewerRecord]
   private var drinkFeatures = Map.empty[String, MSet[DrinkFeature]]
 
   /**
@@ -47,7 +47,7 @@ class FestivalData(val festivalId: String, val festivalName: String) extends Log
    *
    * This also updates the features for the drink type by adding the drink's features to the feature set for its type
    */
-  def addDrink(drink: Drink) = {
+  def addDrink(drink: DrinkRecord) = {
     drinks.contains(drink) match {
       case false => addNewDrink(drink)
       case true => updateDrink(drink)
@@ -59,17 +59,17 @@ class FestivalData(val festivalId: String, val festivalName: String) extends Log
    *
    * This does not remove the drink's features
    */
-  def removeDrink(drink: Drink) = drinks = drinks - drink
+  def removeDrink(drink: DrinkRecord) = drinks = drinks - drink
 
   /**
    * Add a brewer to the festival's data
    */
-  def addBrewer(brewer: Brewer) = brewers = brewers + brewer
+  def addBrewer(brewer: BrewerRecord) = brewers = brewers + brewer
 
   /**
    * Remove a brewer from the festival's data
    */
-  def removeBrewer(brewer: Brewer) = brewers = brewers - brewer
+  def removeBrewer(brewer: BrewerRecord) = brewers = brewers - brewer
 
   /**
    * Returns a sorted list of all the features for Beers.
@@ -99,52 +99,52 @@ class FestivalData(val festivalId: String, val festivalName: String) extends Log
   /**
    * Get all the drinks that match all the matchers provided that are not '''All Gone'''
    */
-  def getMatching(matchers: List[DrinkMatcher[_]]): Set[Drink] = drinks.filter(drink => (drinkRemaining(drink) && matchesAll(drink, matchers)))
+  def getMatching(matchers: List[DrinkMatcher[_]]): Set[DrinkRecord] = drinks.filter(drink => (drinkRemaining(drink) && matchesAll(drink, matchers)))
 
   /**
-   * Get the brewer with the name or return [[brewer.NoBrewer]] if there is no Brewer with that name.
+   * Get the brewer with the name or return [[scala.None]] if there is no Brewer with that name.
    */
-  def getBrewer(brewerName: String): Brewer = brewers.find(_.name equals brewerName).getOrElse(NoBrewer)
+  def getBrewer(brewerName: String): Option[BrewerRecord] = brewers.find(_.name equals brewerName)
 
   /**
    * Accessor for a list of all the brewers stored in this FesitvalData
    */
-  def allBrewers(): List[Brewer] = brewers.toList
+  def allBrewers(): List[BrewerRecord] = brewers.toList
 
-  private def drinkRemaining(drink: Drink): Boolean = drink.quantityRemaining.toLowerCase != "all gone"
+  private def drinkRemaining(drink: DrinkRecord): Boolean = drink.quantityRemaining.get != NOT_AVAILABLE
 
-  private def matchesAll(drink: Drink, matchers: List[DrinkMatcher[_]]): Boolean = {
+  private def matchesAll(drink: DrinkRecord, matchers: List[DrinkMatcher[_]]): Boolean = {
     matchers.filterNot(_.apply(drink)).isEmpty
   }
 
-  private def addDrinkFeatures(drink: Drink) = {
+  private def addDrinkFeatures(drink: DrinkRecord) = {
     val typeOfDrink = drinkType(drink)
 
     drinkFeatures.get(typeOfDrink) match {
-      case None => drinkFeatures = drinkFeatures + (typeOfDrink -> MSet(drink.features: _*))
-      case Some(currentFeats) => drinkFeatures = drinkFeatures + (typeOfDrink -> (currentFeats ++ drink.features))
+      case None => drinkFeatures = drinkFeatures + (typeOfDrink -> MSet(drink.features.get: _*))
+      case Some(currentFeats) => drinkFeatures = drinkFeatures + (typeOfDrink -> (currentFeats ++ drink.features.get))
     }
   }
 
-  private def drinkType(drink: Drink) = {
-    drink.getClass.getSimpleName match {
+  private def drinkType(drink: DrinkRecord) = {
+    drink.drinkType.get.toString match {
       case "Beer" => BEER
       case "Cider" => CIDER
       case "Perry" => PERRY
     }
   }
 
-  private def addNewDrink(drink: Drink) = {
+  private def addNewDrink(drink: DrinkRecord) = {
     drinks = drinks + drink
     addDrinkFeatures(drink)
   }
 
-  private def updateDrink(drink: Drink) = {
+  private def updateDrink(drink: DrinkRecord) = {
     val currentDrink = drinks.find(_.name.equals(drink.name)).get
 
     if (currentDrink.quantityRemaining != drink.quantityRemaining) {
       debug("Quantity is different (current: %s -> new: %s)".format(currentDrink.quantityRemaining, drink.quantityRemaining))
-      currentDrink.quantityRemaining = drink.quantityRemaining
+      DrinkRecord.update(currentDrink.id.get, drink)
     }
   }
 }

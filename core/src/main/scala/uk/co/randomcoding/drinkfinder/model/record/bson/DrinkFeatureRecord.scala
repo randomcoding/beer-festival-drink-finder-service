@@ -17,12 +17,13 @@
  * Contributors:
  *    RandomCoder <randomcoder@randomcoding.co.uk> - initial API and implementation and/or initial documentation
  */
-package uk.co.randomcoding.drinkfinder.model.drink
+package uk.co.randomcoding.drinkfinder.model.record.bson
 
 import uk.co.randomcoding.scala.util.core.string.StringHelpers._
 
 import net.liftweb.mongodb.record.{ BsonRecord, BsonMetaRecord }
 import net.liftweb.record.field.StringField
+import uk.co.randomcoding.drinkfinder.model.record.bson
 
 /**
  * BSON record class for a drink feature
@@ -46,7 +47,7 @@ class DrinkFeatureRecord private () extends BsonRecord[DrinkFeatureRecord] {
 
 object DrinkFeatureRecord extends DrinkFeatureRecord with BsonMetaRecord[DrinkFeatureRecord] {
   /**
-   * Create a new [[uk.co.randomcoding.drinkfinder.model.drink.DrinkFeatureRecord]] instance.
+   * Create a new [[bson.DrinkFeatureRecord]] instance.
    *
    * The feature should be formatted appropriately as this will be used as the display name
    */

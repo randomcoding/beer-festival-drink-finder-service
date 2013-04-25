@@ -51,7 +51,7 @@ object DrinkSearch extends Logger {
 
   private val drinkTypes = List(("" -> "Any"), ("Beer" -> "Beer"), ("Cider" -> "Cider"), ("Perry" -> "Perry"))
 
-  private def brewers = List(("" -> "Any")) ::: (festivalData.allBrewers.sortBy(_.name).map(brewer => (brewer.name -> brewer.name)))
+  private def brewers = List(("" -> "Any")) ::: (festivalData.allBrewers.sortBy(_.name.get).map(brewer => (brewer.name.get -> brewer.name.get)))
 
   private def drinkFeatures = {
     val beerFeatures = festivalData.beerFeatures.sortBy(_.feature)

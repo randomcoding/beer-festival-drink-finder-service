@@ -15,21 +15,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * Contributors:
- *    RandomCoder - initial API and implementation and/or initial documentation
+ * RandomCoder - initial API and implementation and/or initial documentation
  */
 package uk.co.randomcoding.drinkfinder.lib.dataloader
 
 import java.io.InputStream
 import net.liftweb.common.Logger
-import org.apache.poi.ss.usermodel.{ WorkbookFactory, Row }
+import org.apache.poi.ss.usermodel.{WorkbookFactory, Row}
 import scala.collection.JavaConverters.asScalaIteratorConverter
 import uk.co.randomcoding.drinkfinder.lib.dataloader.template.DrinkDataTemplate
-import uk.co.randomcoding.drinkfinder.lib.dataloader.util.RichRow
 import uk.co.randomcoding.drinkfinder.lib.dataloader.util.RichRow._
-import uk.co.randomcoding.drinkfinder.model.brewer.{ NoBrewer, Brewer }
+import uk.co.randomcoding.drinkfinder.model.brewer.BrewerRecord
 import uk.co.randomcoding.drinkfinder.model.data.FestivalData
-import uk.co.randomcoding.drinkfinder.model.drink.{ NoDrink, DrinkFeature }
-import uk.co.randomcoding.drinkfinder.model.drink.DrinkFactory.{ perry, cider, beer }
+import uk.co.randomcoding.drinkfinder.model.drink.{DrinkRecord, DrinkRemainingStatus, DrinkFeature}
+import uk.co.randomcoding.drinkfinder.model.drink.DrinkFactory.{perry, cider, beer}
 
 /**
  * @author RandomCoder
@@ -37,14 +36,15 @@ import uk.co.randomcoding.drinkfinder.model.drink.DrinkFactory.{ perry, cider, b
  */
 class SpreadsheetDataLoader extends Logger {
   private val featureLoader = new DrinkFeatureLoader()
+
   /**
    * Read the data from an Excel spreadsheet input stream according to the provided data template and store it in the [[uk.co.randomcoding.drinkfinder.model.data.FestivalData]] object
    */
-  def loadData(excelDataFile: InputStream, dataTemplate: DrinkDataTemplate) = {
+  def loadData(excelDataFile: InputStream, dataTemplate: DrinkDataTemplate) {
 
     val wb = WorkbookFactory.create(excelDataFile)
     wb.setMissingCellPolicy(Row.CREATE_NULL_AS_BLANK)
-    val dataSheet = wb.getSheetAt(0);
+    val dataSheet = wb.getSheetAt(0)
 
     val festivalId = dataTemplate.festivalId
     val festivalData = FestivalData(festivalId, dataTemplate.festivalName)
@@ -54,32 +54,41 @@ class SpreadsheetDataLoader extends Logger {
   }
 
   private def addRowToData(row: Row, festivalData: FestivalData, dataTemplate: DrinkDataTemplate, festivalId: String) {
-    val drink = getDrinkType(row, dataTemplate) match {
-      case Some(t) => t.toLowerCase match {
-        case "beer" => beer(getDrinkName(row, dataTemplate), getDrinkDescription(row, dataTemplate), getDrinkAbv(row, dataTemplate), getDrinkPrice(row, dataTemplate), festivalId, getDrinkFeatures(row, dataTemplate))
-        case "cider" => cider(getDrinkName(row, dataTemplate), getDrinkDescription(row, dataTemplate), getDrinkAbv(row, dataTemplate), getDrinkPrice(row, dataTemplate), festivalId, getDrinkFeatures(row, dataTemplate))
-        case "perry" => perry(getDrinkName(row, dataTemplate), getDrinkDescription(row, dataTemplate), getDrinkAbv(row, dataTemplate), getDrinkPrice(row, dataTemplate), festivalId, getDrinkFeatures(row, dataTemplate))
-      }
-      case None => error("No drink type for data found"); NoDrink
-    }
-
     val brewer = getBrewer(row, dataTemplate)
-    festivalData.addBrewer(brewer)
-    drink.brewer = brewer
-    drink.quantityRemaining = getQuantityRemaining(row, dataTemplate)
-    debug("Drink Quantity (%s): %s".format(drink.name, drink.quantityRemaining))
 
-    info("Adding drink %s to Festival Data".format(drink))
-    festivalData.addDrink(drink)
+    if (brewer.isDefined) {
+      val drink = getDrinkType(row, dataTemplate) match {
+        case Some(t) => t.toLowerCase match {
+          case "beer" => Some(beer(getDrinkName(row, dataTemplate), getDrinkDescription(row, dataTemplate), getDrinkAbv(row, dataTemplate), getDrinkPrice(row, dataTemplate), brewer.get, festivalId, getDrinkFeatures(row, dataTemplate)))
+          case "cider" => Some(cider(getDrinkName(row, dataTemplate), getDrinkDescription(row, dataTemplate), getDrinkAbv(row, dataTemplate), getDrinkPrice(row, dataTemplate), brewer.get, festivalId, getDrinkFeatures(row, dataTemplate)))
+          case "perry" => Some(perry(getDrinkName(row, dataTemplate), getDrinkDescription(row, dataTemplate), getDrinkAbv(row, dataTemplate), getDrinkPrice(row, dataTemplate), brewer.get, festivalId, getDrinkFeatures(row, dataTemplate)))
+        }
+        case None => {
+          error("No drink type for data found")
+          None
+        }
+      }
+
+      drink match {
+        case Some(d) => {
+          DrinkRecord.remaining(d, getQuantityRemaining(row, dataTemplate))
+          //debug("Drink Quantity (%s): %s".format(drink.name, drink.quantityRemaining))
+
+          info("Adding drink %s to Festival Data".format(drink))
+          festivalData.addDrink(d)
+        }
+        case _ => // log no record
+      }
+    }
   }
 
-  private def getBrewer(row: Row, dataTemplate: DrinkDataTemplate): Brewer = {
+  private def getBrewer(row: Row, dataTemplate: DrinkDataTemplate): Option[BrewerRecord] = {
     dataTemplate.brewerNameColumn match {
       case Some(col) => row.getStringCellValue(col) match {
-        case Some(x) => Brewer(x)
-        case _ => NoBrewer
+        case Some(x) => Some(BrewerRecord(x))
+        case _ => None
       }
-      case _ => NoBrewer
+      case _ => None
     }
   }
 
@@ -116,21 +125,21 @@ class SpreadsheetDataLoader extends Logger {
     featureLoader.drinkFeatures(row, dataTemplate)
   }
 
-  private def getQuantityRemaining(row: Row, dataTemplate: DrinkDataTemplate): String = {
+  private def getQuantityRemaining(row: Row, dataTemplate: DrinkDataTemplate): DrinkRemainingStatus.status = {
     dataTemplate.quantityRemainingColumn match {
       case Some(col) => {
         val quantity = row(col).getNumericCellValue
         debug("Quantity from cell: %.2f".format(quantity))
         quantity match {
-          case num if num > 1.0 => "Not Yet Ready"
-          case num if num >= 0.5 => "Plenty"
-          case num if num >= 0.25 => "Being Drunk"
-          case num if num >= 0.1 => "Nearly Gone"
-          case num if num <= 0.01 => "All Gone"
-          case _ => "Not  Measured"
+          case num if num > 1.0 => DrinkRemainingStatus.NOT_AVAILABLE
+          case num if num >= 0.5 => DrinkRemainingStatus.PLENTY
+          case num if num >= 0.25 => DrinkRemainingStatus.LESS_THAN_HALF
+          case num if num >= 0.1 => DrinkRemainingStatus.RUNNING_OUT
+          case num if num <= 0.01 => DrinkRemainingStatus.FINISHED
+          case _ => DrinkRemainingStatus.BEING_PREPARED
         }
       }
-      case None => "Not  Measured"
+      case None => DrinkRemainingStatus.BEING_PREPARED
     }
   }
 

@@ -29,6 +29,7 @@ import net.liftweb.common.Logger
 import net.liftweb.http.rest.RestHelper
 import net.liftweb.json.JsonAST.{ JValue, JArray }
 import net.liftweb.json.JsonDSL._
+import uk.co.randomcoding.drinkfinder.model.brewer.BrewerRecord
 
 /**
  * Handler for REST dispatch for data access
@@ -52,18 +53,17 @@ object DefaultRestHelper extends RestHelper with Logger {
     }
   }
 
-  private[this] def drinkToJValue(drink: Drink): JValue = {
-    ("drinkType" -> (drink match {
-      case c: Cider => "Cider"
-      case p: Perry => "Perry"
-      case _ => "Beer"
-    })) ~
-      ("name" -> drink.name) ~
-      ("description" -> drink.description) ~
-      ("abv" -> "%.1f".format(drink.abv)) ~
-      ("price" -> "£%.2f".format(drink.price)) ~
-      ("remaining" -> drink.quantityRemaining) ~
-      ("brewer" -> drink.brewer.name) ~
-      ("features" -> drink.features.map(_.displayName))
+  private[this] def drinkToJValue(drink: DrinkRecord): JValue = {
+    ("drinkType" -> (drink.drinkType.get.toString)) ~
+      ("name" -> drink.name.get) ~
+      ("description" -> drink.description.get) ~
+      ("abv" -> "%.1f".format(drink.abv.get)) ~
+      ("price" -> "£%.2f".format(drink.price.get)) ~
+      ("remaining" -> drink.quantityRemaining.get.toString) ~
+      ("brewer" -> (BrewerRecord.findById(drink.brewer.get) match {
+        case Some(brewer) => brewer.name.get
+        case _ => "Unknown Brewer"
+      })) ~
+      ("features" -> drink.features.get.map(_.displayName))
   }
 }

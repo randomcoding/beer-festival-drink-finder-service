@@ -20,6 +20,7 @@
 package uk.co.randomcoding.drinkfinder.model.drink
 
 import uk.co.randomcoding.scala.util.lift.mongodb.test.MongoDbTestBase
+import uk.co.randomcoding.drinkfinder.model.record.bson.DrinkFeatureRecord
 
 /**
  * @author RandomCoder <randomcoder@randomcoding.co.uk>

@@ -20,7 +20,7 @@ class DisplayDrink extends Logger {
     val drinkName = urlDecode(S.param(DRINK_NAME.toString).openOr("Unknown Drink"))
 
     val nameMatcher = DrinkNameMatcher(drinkName)
-    "#drinkData" #> toDetailedDisplay(List(FestivalData(currentFestivalId).get.getMatching(List(nameMatcher)).headOption.getOrElse(NoDrink))) &
+    "#drinkData" #> toDetailedDisplay(FestivalData(currentFestivalId).get.getMatching(List(nameMatcher)).toList) &
       "#comments" #> "" & //commentDisplay(displayComments(drinkName)) &
       "#addcomment" #> SHtml.link("/addcomment?%s=%s".format(DRINK_NAME, drinkName), () => (), Text("Add Comment"))
   }

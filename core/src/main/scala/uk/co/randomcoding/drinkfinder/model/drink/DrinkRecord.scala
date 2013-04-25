@@ -20,13 +20,14 @@
 package uk.co.randomcoding.drinkfinder.model.drink
 
 import org.bson.types.ObjectId
-import com.foursquare.rogue.Rogue._
 import uk.co.randomcoding.scala.util.lift.mongodb.MongoFieldHelpers._
 import uk.co.randomcoding.scala.util.lift.mongodb.BaseMongoRecordObject
-import net.liftweb.mongodb.record.field.{ ObjectIdPk, ObjectIdRefField }
+import net.liftweb.mongodb.record.field.{MongoCaseClassListField, ObjectIdPk, ObjectIdRefField}
 import net.liftweb.mongodb.record.{ MongoRecord, MongoMetaRecord }
 import net.liftweb.record.field._
 import uk.co.randomcoding.drinkfinder.model.brewer.BrewerRecord
+import uk.co.randomcoding.drinkfinder.query._
+import com.mongodb.QueryBuilder
 
 /**
  * Database record class for a Drink
@@ -53,6 +54,8 @@ class DrinkRecord private () extends MongoRecord[DrinkRecord] with ObjectIdPk[Dr
   object festivalId extends StringField(this, 50)
 
   object drinkType extends EnumField(this, DrinkType)
+
+  object features extends MongoCaseClassListField[DrinkRecord, DrinkFeature](this)
 }
 
 /**
@@ -60,11 +63,16 @@ class DrinkRecord private () extends MongoRecord[DrinkRecord] with ObjectIdPk[Dr
  */
 object DrinkRecord extends DrinkRecord with BaseMongoRecordObject[DrinkRecord] with MongoMetaRecord[DrinkRecord] {
 
-  def apply(name: String, description: String, abv: Double, price: Double, brewer: BrewerRecord, drinkType: DrinkType.drinkType, festivalId: String): DrinkRecord = {
-    DrinkRecord.createRecord.name(name).description(description).abv(abv).price(price).brewer(brewer.id.get).drinkType(drinkType).festivalId(festivalId)
+  def apply(name: String, description: String, abv: Double, price: Double, brewer: BrewerRecord, drinkType: DrinkType.drinkType, festivalId: String, features: Seq[DrinkFeature] = Nil): DrinkRecord = {
+    DrinkRecord.createRecord.name(name).description(description).abv(abv).price(price).brewer(brewer.id.get).drinkType(drinkType).festivalId(festivalId).features(features.toList)
   }
 
-  override def findById(oid: ObjectId) = DrinkRecord.where(_.id eqs oid).get
+  override def findById(oid: ObjectId): Option[DrinkRecord] = DrinkRecord.find(byId(oid))
 
-  override def matchingRecord(drink: DrinkRecord): Option[DrinkRecord] = DrinkRecord.where(_.name eqs drink.name).get
+  override def matchingRecord(drink: DrinkRecord): Option[DrinkRecord] = DrinkRecord.find(byName(drink.name))
+
+  def remaining(drink: DrinkRecord, remaining: DrinkRemainingStatus.status) = {
+    val upd = QueryBuilder.start("id").is(drink.id.get).put("quantityRemaining").is(remaining).get
+    DrinkRecord.find(upd)
+  }
 }

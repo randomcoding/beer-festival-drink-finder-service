@@ -20,7 +20,7 @@ class DisplayBrewer extends Logger {
     val drinkData = FestivalData(currentFestivalId).get
     val brewerName = urlDecode(S.param(BREWER_NAME.toString).openOr("No Brewer"))
 
-    val drinks = drinkData.getMatching(MatcherFactory.generate("%s=%s".format(BREWER_NAME.toString, brewerName))).toList.sortBy(_.name)
+    val drinks = drinkData.getMatching(MatcherFactory.generate("%s=%s".format(BREWER_NAME.toString, brewerName))).toList.sortBy(_.name.get)
 
     "#brewerName" #> Text(brewerName) &
       "#drinks" #> toSummaryDisplay(drinks)

@@ -26,10 +26,12 @@ import net.liftweb.http._
 import net.liftweb.util.Helpers._
 import scala.xml.{ NodeSeq, Text }
 import uk.co.randomcoding.drinkfinder.model.data.FestivalData
-import uk.co.randomcoding.drinkfinder.model.drink.{ Beer, Cider, Drink, Perry, DrinkFeature }
+import uk.co.randomcoding.drinkfinder.model.drink._
 import uk.co.randomcoding.drinkfinder.model.matcher.{ MatcherFactory, BrewerNameMatcher }
 import net.liftweb.common.Logger
 import uk.co.randomcoding.drinkfinder.model.matcher.AlwaysTrueDrinkMatcher
+import scala.xml.Text
+import uk.co.randomcoding.drinkfinder.model.drink.Drink
 
 /**
  * @author RandomCoder
@@ -60,11 +62,11 @@ class DisplayResults extends Logger {
     val matchingDrinks = festivalData.getMatching(matchers)
 
     debug("There are %d matching drinks:\n%s".format(matchingDrinks.size, matchingDrinks.mkString("\n\t")))
-    val beers = matchingDrinks.filter(_.isInstanceOf[Beer]).toList.sortBy(_.name)
+    val beers = matchingDrinks.filter(isBeer).toList.sortBy(_.name.get)
     debug("There are %d matching beers".format(beers.size))
-    val ciders = matchingDrinks.filter(_.isInstanceOf[Cider]).toList.sortBy(_.name)
+    val ciders = matchingDrinks.filter(isCider).toList.sortBy(_.name.get)
     debug("There are %d matching ciders".format(ciders.size))
-    val perries = matchingDrinks.filter(_.isInstanceOf[Perry]).toList.sortBy(_.name)
+    val perries = matchingDrinks.filter(isPerry).toList.sortBy(_.name.get)
     debug("There are %d matching perries".format(perries.size))
 
     "#resultTabs" #> generateResultTabs(beers, ciders, perries) &
@@ -73,9 +75,15 @@ class DisplayResults extends Logger {
       "#perries *" #> toSummaryDisplay(perries)
   }
 
+  def isBeer(drink: DrinkRecord) = drink.drinkType.get.toString == DrinkType.BEER
+
+  def isCider(drink: DrinkRecord) = drink.drinkType.get.toString == DrinkType.CIDER
+
+  def isPerry(drink: DrinkRecord) = drink.drinkType.get.toString == DrinkType.PERRY
+
   val anchorRef = ((anchor: String) => "#" + anchor)
 
-  private[this] def generateResultTabs(beers: Iterable[Drink], ciders: Iterable[Drink], perries: Iterable[Drink]): NodeSeq = {
+  private[this] def generateResultTabs(beers: Iterable[DrinkRecord], ciders: Iterable[DrinkRecord], perries: Iterable[DrinkRecord]): NodeSeq = {
     val beersLink = beers.toList match {
       case Nil => Text("")
       case _ => <li><a href={ anchorRef(beerResultsId) }>Beers ({ beers.size })</a></li>

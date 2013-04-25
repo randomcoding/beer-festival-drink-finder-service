@@ -21,6 +21,7 @@ package uk.co.randomcoding.drinkfinder.model.data
 
 import uk.co.randomcoding.drinkfinder.model.drink.DrinkFactory._
 import uk.co.randomcoding.drinkfinder.model.drink._
+import uk.co.randomcoding.drinkfinder.model.brewer.BrewerRecord
 
 /**
  * Object to contain all the drinks used in testing
@@ -37,14 +38,14 @@ object DummyDrinks {
 
   val festivalId = "Festival"
 
-  val FirstBeer = beer("First Beer", "The First Beer Brewed", 4.5, 1.70, festivalId, RealAle)
-  val SecondBeer = beer("Second Beer", "The Second Beer Brewed", 3.7, 1.80, festivalId, Stout)
+  val FirstBeer = beer("First Beer", "The First Beer Brewed", 4.5, 1.70, BrewerRecord("First"), festivalId, RealAle)
+  val SecondBeer = beer("Second Beer", "The Second Beer Brewed", 3.7, 1.80, BrewerRecord("Second"), festivalId, Stout)
 
-  val FirstCider = cider("First Cider", "The First Cider Brewed", 5.7, 1.50, festivalId, Dry)
-  val SecondCider = cider("Second Cider", "The Second Cider Brewed", 7.2, 1.60, festivalId, Medium)
+  val FirstCider = cider("First Cider", "The First Cider Brewed", 5.7, 1.50, BrewerRecord("First"), festivalId, Dry)
+  val SecondCider = cider("Second Cider", "The Second Cider Brewed", 7.2, 1.60, BrewerRecord("Second"), festivalId, Medium)
 
-  val FirstPerry = perry("First Perry", "The First Perry Brewed", 8.1, 1.40, festivalId, Sweet)
-  val SecondPerry = perry("Second Perry", "The Second Perry Brewed", 4.4, 1.50, festivalId, Medium)
+  val FirstPerry = perry("First Perry", "The First Perry Brewed", 8.1, 1.40, BrewerRecord("First"), festivalId, Sweet)
+  val SecondPerry = perry("Second Perry", "The Second Perry Brewed", 4.4, 1.50, BrewerRecord("Second"), festivalId, Medium)
 
   val beers = List(FirstBeer, SecondBeer)
   val ciders = List(FirstCider, SecondCider)

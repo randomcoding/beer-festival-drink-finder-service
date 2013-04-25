@@ -23,16 +23,16 @@ import com.mongodb.casbah.Imports._
 import org.joda.time.DateTime
 
 /**
- * TODO: Comment for 
+ * TODO: Comment for
  *
  * @author RandomCoder
  *
  * Created On: 9 Aug 2011
  *
  */
-case class Comment(val drinkName: String, val author: String, val comment: String) {
+case class Comment(drinkName: String, author: String, comment: String) {
 	var date = new DateTime()
-	
+
 	override def toString() : String = "Comment: %S, %s, %s\n%s".format(drinkName, author, date, comment)
 }
 
