@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (C) 2012 RandomCoder <randomcoder@randomcoding.co.uk>
  *
  * This program is free software: you can redistribute it and/or modify
