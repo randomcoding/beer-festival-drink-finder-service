@@ -7,7 +7,7 @@ object ProjectBuild extends Build {
   import BuildSettings._
   import ShellPrompt._
   import Dependencies._
-  import com.github.siasia.WebPlugin._
+  import com.github.siasia.WebPlugin.webSettings
 
   lazy val root = Project("root", 
     file("."),
@@ -42,7 +42,7 @@ object ProjectBuild extends Build {
   )  
 
   val commonDeps = testDeps ++ jodaDeps ++ utilsDeps
-  val coreProjectDeps = commonDeps ++ Seq(liftMongoRecord, rogue, poi) ++ oldCasbahDeps
+  val coreProjectDeps = commonDeps ++ Seq(liftMongoRecord, poi) ++ oldCasbahDeps ++ rogue
   val liftProjectDeps = commonDeps ++ liftDeps ++ jettyDeps
 }
 

@@ -24,3 +24,9 @@ project/project/
 .project
 .classpath
 org.scala-ide.sdt.core.prefs
+
+# Idea generated files
+.idea*
+
+# Built WAR file
+ROOT.war
