@@ -29,8 +29,9 @@ import MongoConfig._
  * Created On: 20 Aug 2011
  *
  */
+@deprecated("0.6.0", "Use methods on Record Objects for access")
 class FestivalMongoCollection(festivalId : String) {
-	val templates = getCollection(festivalId, "%s-templates".format(festivalId))
-	val comments = getCollection(festivalId, "%s-comments".format(festivalId))
-	val drinks = getCollection(festivalId, "%s-drinks".format(festivalId))
+	//val templates = getCollection(festivalId, "%s-templates".format(festivalId))
+	//val comments = getCollection(festivalId, "%s-comments".format(festivalId))
+	//val drinks = getCollection(festivalId, "%s-drinks".format(festivalId))
 }

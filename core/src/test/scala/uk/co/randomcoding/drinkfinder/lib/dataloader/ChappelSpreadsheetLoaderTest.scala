@@ -23,11 +23,11 @@ import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
 import scala.io.Source
 import uk.co.randomcoding.drinkfinder.lib.dataloader.template.DrinkDataTemplate
-import uk.co.randomcoding.drinkfinder.model.brewer.{BrewerRecord, Brewer}
-import uk.co.randomcoding.drinkfinder.model.matcher._
 import uk.co.randomcoding.drinkfinder.model.data.FestivalData
 import uk.co.randomcoding.drinkfinder.model.drink.DrinkFactory._
-import uk.co.randomcoding.drinkfinder.model.drink.{DrinkRecord, DrinkFeature}
+import uk.co.randomcoding.drinkfinder.model.drink.DrinkFeature
+import uk.co.randomcoding.drinkfinder.model.matcher._
+import uk.co.randomcoding.drinkfinder.model.record.BrewerRecord
 
 /**
  * @author RandomCoder

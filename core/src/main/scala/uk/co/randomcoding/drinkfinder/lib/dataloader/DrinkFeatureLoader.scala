@@ -22,7 +22,6 @@ package uk.co.randomcoding.drinkfinder.lib.dataloader
 import org.apache.poi.ss.usermodel.Row
 import uk.co.randomcoding.drinkfinder.lib.dataloader.template.DrinkDataTemplate
 import uk.co.randomcoding.drinkfinder.model.drink.DrinkFeature
-import util.RichRow
 import util.RichRow._
 
 /**

@@ -19,16 +19,15 @@
  */
 package uk.co.randomcoding.drinkfinder.snippet
 
-import net.liftweb.http.js.JsCmds._
 import net.liftweb.common._
 import net.liftweb.http._
+import net.liftweb.http.js.JsCmds._
 import net.liftweb.http.js._
-import net.liftweb._
 import net.liftweb.util.Helpers._
+import uk.co.randomcoding.drinkfinder.lib.UserSession
 import uk.co.randomcoding.drinkfinder.model.data.FestivalData
 import uk.co.randomcoding.drinkfinder.model.drink.DrinkFeature
 import uk.co.randomcoding.drinkfinder.model.matcher.id._
-import uk.co.randomcoding.drinkfinder.lib.UserSession
 
 /**
  * Snippet code to handle the display of the search form.

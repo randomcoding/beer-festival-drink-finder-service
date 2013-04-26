@@ -19,11 +19,11 @@
  */
 package uk.co.randomcoding.drinkfinder.model.matcher
 
-import org.scalatest.FunSuite
-import uk.co.randomcoding.drinkfinder.model.matcher.id._
 import MatcherFactory._
-import uk.co.randomcoding.drinkfinder.model.data.DummyDrinks._
+import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
+import uk.co.randomcoding.drinkfinder.model.data.DummyDrinks._
+import uk.co.randomcoding.drinkfinder.model.matcher.id._
 
 /**
  * @author RandomCoder

@@ -20,8 +20,8 @@
  */
 package uk.co.randomcoding.drinkfinder.lib
 
-import net.liftweb.http.SessionVar
 import net.liftweb.common.{ Box, Full }
+import net.liftweb.http.SessionVar
 
 /**
  * Contains definitions of session variables to be modified by user sessions as required

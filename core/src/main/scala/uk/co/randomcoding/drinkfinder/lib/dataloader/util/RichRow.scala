@@ -19,10 +19,9 @@
  */
 package uk.co.randomcoding.drinkfinder.lib.dataloader.util
 
-import uk.co.randomcoding.drinkfinder.lib.dataloader.template.DrinkDataTemplate
 import org.apache.poi.ss.usermodel.{ Row, Cell }
-import org.apache.poi.ss.usermodel.FormulaEvaluator
 import scala.MatchError
+import uk.co.randomcoding.drinkfinder.lib.dataloader.template.DrinkDataTemplate
 
 /**
  * This augments the default [[org.apache.poi.ss.usermodel.Row]] class with helper functions to get cells and their values
@@ -30,9 +29,10 @@ import scala.MatchError
  *
  */
 class RichRow(row : Row) {
-	import RichRow._
 
-	private val evaluator = row.getSheet().getWorkbook().getCreationHelper().createFormulaEvaluator()
+  import RichRow._
+
+  private val evaluator = row.getSheet().getWorkbook().getCreationHelper().createFormulaEvaluator()
 	/**
 	 * Get the cell at the given index
 	 */

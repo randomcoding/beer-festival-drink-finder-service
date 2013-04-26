@@ -19,8 +19,8 @@
  */
 package uk.co.randomcoding.drinkfinder.model.matcher
 
-import net.liftweb.common.Logger
 import id._
+import net.liftweb.common.Logger
 import uk.co.randomcoding.drinkfinder.model.drink.DrinkFeature
 
 /**

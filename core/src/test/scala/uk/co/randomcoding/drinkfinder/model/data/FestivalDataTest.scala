@@ -19,12 +19,12 @@
  */
 package uk.co.randomcoding.drinkfinder.model.data
 
-import uk.co.randomcoding.drinkfinder.model.matcher._
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
 import uk.co.randomcoding.drinkfinder.model.drink._
+import uk.co.randomcoding.drinkfinder.model.matcher._
+import uk.co.randomcoding.drinkfinder.model.record.DrinkRecord
 
-import org.scalatest.junit.JUnitRunner
 
 /**
  * Tests for the filter matching capabilities of the Drink Data class/

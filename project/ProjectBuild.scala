@@ -21,7 +21,6 @@ object ProjectBuild extends Build {
 
   lazy val coreProject: Project = Project("core",
     file("core"),
-      delegates = root :: Nil,
       settings = buildSettings ++ Seq(libraryDependencies ++= coreProjectDeps,
       name := "DrinkServiceCore"
     )

@@ -10,8 +10,8 @@ object DataTemplates {
 	 * when loading the spreadsheet source
 	 */
 	val templatesMap : Map[String, String] = {
-		import scala.io.Source
-		val templatesSource = Source.fromInputStream(DataTemplates.getClass().getResourceAsStream("/templates.properties"))
+    import scala.io.Source
+    val templatesSource = Source.fromInputStream(DataTemplates.getClass().getResourceAsStream("/templates.properties"))
 
 		val templateLines = for {
 			line <- templatesSource.getLines
@@ -21,7 +21,7 @@ object DataTemplates {
 			val parts = line.split("=")
 			(parts(1), parts(0))
 		}
-		
+
 		templateLines.toMap
 	}
 }

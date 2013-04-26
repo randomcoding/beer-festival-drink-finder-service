@@ -19,8 +19,8 @@
  */
 package uk.co.randomcoding.drinkfinder.lib.dataloader.template
 
-import scala.io.Source
 import net.liftweb.common.Logger
+import scala.io.Source
 
 /**
  * Representation of a template to load

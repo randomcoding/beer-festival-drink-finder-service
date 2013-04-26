@@ -19,19 +19,15 @@
  */
 package uk.co.randomcoding.drinkfinder.snippet
 
-import net.liftweb.http.js.JsCmds._
 import net.liftweb.common._
 import net.liftweb.http._
 import net.liftweb.http.js._
-import net.liftweb._
-import net.liftweb.util.Helpers._
-import uk.co.randomcoding.drinkfinder.model.matcher.id._
-import uk.co.randomcoding.drinkfinder.model.datatemplate.DataTemplates
-import scala.xml.NodeSeq
 import net.liftweb.util.CssSel
+import net.liftweb.util.Helpers._
+import scala.io.Source
 import uk.co.randomcoding.drinkfinder.lib.dataloader.SpreadsheetDataLoader
 import uk.co.randomcoding.drinkfinder.lib.dataloader.template.DrinkDataTemplate
-import scala.io.Source
+import uk.co.randomcoding.drinkfinder.model.datatemplate.DataTemplates
 
 /**
  * Snippet code to handle the display of the search form.

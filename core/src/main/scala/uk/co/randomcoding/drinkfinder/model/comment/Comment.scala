@@ -19,7 +19,6 @@
  */
 package uk.co.randomcoding.drinkfinder.model.comment
 
-import com.mongodb.casbah.Imports._
 import org.joda.time.DateTime
 
 /**

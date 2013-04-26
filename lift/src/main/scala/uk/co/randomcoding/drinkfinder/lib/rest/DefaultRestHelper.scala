@@ -19,17 +19,16 @@
  */
 package uk.co.randomcoding.drinkfinder.lib.rest
 
-import uk.co.randomcoding.drinkfinder.lib.UserSession
-import uk.co.randomcoding.drinkfinder.model.data.FestivalData
-import uk.co.randomcoding.drinkfinder.model.drink._
-import uk.co.randomcoding.drinkfinder.model.matcher.id.FESTIVAL_ID
-import uk.co.randomcoding.drinkfinder.model.matcher.MatcherFactory
-
 import net.liftweb.common.Logger
 import net.liftweb.http.rest.RestHelper
 import net.liftweb.json.JsonAST.{ JValue, JArray }
 import net.liftweb.json.JsonDSL._
-import uk.co.randomcoding.drinkfinder.model.brewer.BrewerRecord
+import uk.co.randomcoding.drinkfinder.lib.UserSession
+import uk.co.randomcoding.drinkfinder.model.data.FestivalData
+import uk.co.randomcoding.drinkfinder.model.matcher.MatcherFactory
+import uk.co.randomcoding.drinkfinder.model.matcher.id.FESTIVAL_ID
+import uk.co.randomcoding.drinkfinder.model.record.{BrewerRecord, DrinkRecord}
+
 
 /**
  * Handler for REST dispatch for data access

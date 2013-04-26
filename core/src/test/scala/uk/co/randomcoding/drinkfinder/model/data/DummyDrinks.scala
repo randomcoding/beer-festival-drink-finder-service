@@ -21,7 +21,7 @@ package uk.co.randomcoding.drinkfinder.model.data
 
 import uk.co.randomcoding.drinkfinder.model.drink.DrinkFactory._
 import uk.co.randomcoding.drinkfinder.model.drink._
-import uk.co.randomcoding.drinkfinder.model.brewer.BrewerRecord
+import uk.co.randomcoding.drinkfinder.model.record.BrewerRecord
 
 /**
  * Object to contain all the drinks used in testing

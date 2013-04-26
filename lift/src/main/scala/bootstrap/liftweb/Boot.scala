@@ -1,15 +1,10 @@
 package bootstrap.liftweb
 
-import net.liftweb._
-import util._
-import Helpers._
-import common._
-import http._
-import sitemap._
-import Loc._
-import auth.{ AuthRole, HttpBasicAuthentication }
-import http.ParsePath
-import auth._
+import net.liftweb.common._
+import net.liftweb.http._
+import net.liftweb.http.auth.{userRoles, HttpBasicAuthentication, AuthRole}
+import net.liftweb.sitemap.Loc._
+import net.liftweb.sitemap._
 import uk.co.randomcoding.drinkfinder.lib.rest.DefaultRestHelper
 
 /**
@@ -29,7 +24,7 @@ class Boot extends Loggable {
     LiftRules.authentication = HttpBasicAuthentication("Find a Drink") {
       case ("WbfAdmin", "L0aDMyDr1nk5", req) => {
         logger.info("You are now authenticated !")
-        userRoles(AuthRole("admin"))
+        userRoles(List(AuthRole("admin")))
         true
       }
     }

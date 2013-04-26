@@ -1,18 +1,15 @@
 package uk.co.randomcoding.drinkfinder.snippet
 
-import uk.co.randomcoding.drinkfinder._
-import model.drink.{ Drink, NoDrink }
-import model.matcher.id._
-import model.matcher.DrinkNameMatcher
-import lib.TransformUtils._
-import model.data.FestivalData
-import model.comment.DrinkComments
-import net.liftweb.common.{ Full, Logger }
-import scala.xml.Text
-import scala.xml.NodeSeq
+import net.liftweb.common.Logger
 import net.liftweb.http._
 import net.liftweb.util.Helpers._
+import scala.xml.Text
+import uk.co.randomcoding.drinkfinder.lib.TransformUtils._
 import uk.co.randomcoding.drinkfinder.lib.UserSession
+import uk.co.randomcoding.drinkfinder.model.comment.DrinkComments
+import uk.co.randomcoding.drinkfinder.model.data.FestivalData
+import uk.co.randomcoding.drinkfinder.model.matcher.DrinkNameMatcher
+import uk.co.randomcoding.drinkfinder.model.matcher.id.DRINK_NAME
 
 class DisplayDrink extends Logger {
 

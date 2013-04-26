@@ -20,13 +20,11 @@
 package uk.co.randomcoding.drinkfinder.snippet
 
 import net.liftweb.http._
-import js.JsCmd
+import net.liftweb.http.js.JsCmd
 import net.liftweb.util.Helpers._
-import uk.co.randomcoding.drinkfinder.model._
-import matcher.id.DRINK_NAME
-import comment.Comment
-import comment.DrinkComments
 import uk.co.randomcoding.drinkfinder.lib.UserSession
+import uk.co.randomcoding.drinkfinder.model.comment.{Comment, DrinkComments}
+import uk.co.randomcoding.drinkfinder.model.matcher.id.DRINK_NAME
 
 /**
  * Snippet to provide logic to add a comment for a drink.

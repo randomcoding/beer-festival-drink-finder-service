@@ -1,6 +1,6 @@
 package uk.co.randomcoding.drinkfinder.model.drink
 
-import uk.co.randomcoding.drinkfinder.model.brewer.BrewerRecord
+import uk.co.randomcoding.drinkfinder.model.record.{DrinkRecord, BrewerRecord}
 
 /**
  * Object to generate drinks

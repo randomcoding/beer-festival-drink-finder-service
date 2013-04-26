@@ -25,10 +25,10 @@ import org.apache.poi.ss.usermodel.{WorkbookFactory, Row}
 import scala.collection.JavaConverters.asScalaIteratorConverter
 import uk.co.randomcoding.drinkfinder.lib.dataloader.template.DrinkDataTemplate
 import uk.co.randomcoding.drinkfinder.lib.dataloader.util.RichRow._
-import uk.co.randomcoding.drinkfinder.model.brewer.BrewerRecord
 import uk.co.randomcoding.drinkfinder.model.data.FestivalData
-import uk.co.randomcoding.drinkfinder.model.drink.{DrinkRecord, DrinkRemainingStatus, DrinkFeature}
 import uk.co.randomcoding.drinkfinder.model.drink.DrinkFactory.{perry, cider, beer}
+import uk.co.randomcoding.drinkfinder.model.drink.{DrinkRemainingStatus, DrinkFeature}
+import uk.co.randomcoding.drinkfinder.model.record.{BrewerRecord, DrinkRecord}
 
 /**
  * @author RandomCoder
@@ -62,6 +62,7 @@ class SpreadsheetDataLoader extends Logger {
           case "beer" => Some(beer(getDrinkName(row, dataTemplate), getDrinkDescription(row, dataTemplate), getDrinkAbv(row, dataTemplate), getDrinkPrice(row, dataTemplate), brewer.get, festivalId, getDrinkFeatures(row, dataTemplate)))
           case "cider" => Some(cider(getDrinkName(row, dataTemplate), getDrinkDescription(row, dataTemplate), getDrinkAbv(row, dataTemplate), getDrinkPrice(row, dataTemplate), brewer.get, festivalId, getDrinkFeatures(row, dataTemplate)))
           case "perry" => Some(perry(getDrinkName(row, dataTemplate), getDrinkDescription(row, dataTemplate), getDrinkAbv(row, dataTemplate), getDrinkPrice(row, dataTemplate), brewer.get, festivalId, getDrinkFeatures(row, dataTemplate)))
+          case _ => None
         }
         case None => {
           error("No drink type for data found")

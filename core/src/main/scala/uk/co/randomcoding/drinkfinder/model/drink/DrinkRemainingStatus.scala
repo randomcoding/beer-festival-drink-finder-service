@@ -26,8 +26,13 @@ package uk.co.randomcoding.drinkfinder.model.drink
  *
  * Created On: 29 Jul 2012
  */
-object DrinkRemainingStatus extends Enumeration("Plenty", "Less than Half", "Running Out", "Finished", "Being Prepared", "Not Available") {
-  type status = Value
+object DrinkRemainingStatus {
+  type status = String
 
-  val PLENTY, LESS_THAN_HALF, RUNNING_OUT, FINISHED, BEING_PREPARED, NOT_AVAILABLE = Value
+  val PLENTY = "Plenty"
+  val LESS_THAN_HALF = "Less than Half"
+  val RUNNING_OUT = "Running Out"
+  val FINISHED = "Finished"
+  val BEING_PREPARED = "Being Prepared"
+  val NOT_AVAILABLE = "Not Available"
 }

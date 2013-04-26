@@ -66,14 +66,14 @@ if (HOST.equalsIgnoreCase("benjymouse")) {
     def testingLogs = ["uk.co.randomcoding": WARN]
 
 	def traceLogs = []
-    def debugLogs = ["uk.co.randomcoding.drinkfinder.lib.rest",
+    def debugLogs = [/*"uk.co.randomcoding.drinkfinder.lib.rest",
 		"uk.co.randomcoding.drinkfinder.snippet",
-		"uk.co.randomcoding.drinkfinder.lib.dataloader"]
+		"uk.co.randomcoding.drinkfinder.lib.dataloader"*/]
 	def infoLogs = []
 
     if (isTest.equalsIgnoreCase("yes")) {
         addInfo("Using tests logging configuration")
-        
+
         testingLogs.each() { key, value -> logger(key, value) }
     }
 	else {
@@ -83,7 +83,7 @@ if (HOST.equalsIgnoreCase("benjymouse")) {
 	}
 
 
-    rootLogLevel = DEBUG
+    //rootLogLevel = DEBUG
 }
 else {
     addInfo("Using default logging configuration")

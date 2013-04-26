@@ -26,8 +26,11 @@ package uk.co.randomcoding.drinkfinder.model.drink
  *
  * Created On: 30 Jul 2012
  */
-object DrinkType extends Enumeration("Beer", "Cider", "Perry", "Wine") {
-  type drinkType = Value
+object DrinkType {
+  type drinkType = String
 
-  val BEER, CIDER, PERRY, WINE = Value
+  val BEER = "Beer"
+  val CIDER = "Cider"
+  val PERRY = "Perry"
+  val WINE = "Wine"
 }

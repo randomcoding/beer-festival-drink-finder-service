@@ -25,7 +25,6 @@ import org.scalatest.matchers.ShouldMatchers
 import scala.io.Source
 import uk.co.randomcoding.drinkfinder.lib.dataloader.template.DrinkDataTemplate
 import uk.co.randomcoding.drinkfinder.model.drink.DrinkFeature
-import org.apache.poi.ss.usermodel.Sheet
 
 /**
  * @author RandomCoder
@@ -103,7 +102,7 @@ class DrinkFeatureLoaderTest extends FunSuite with ShouldMatchers {
 			}
 		)
 	}
-	
+
 	val beers2011FileLocation = "/Beers2011Test.xls"
 	private val beer2011TemplateSource = Source.fromInputStream(getClass().getResourceAsStream("/templates/wbf_beer_2011_template.tpl"))
 	private val beer2011Template = new DrinkDataTemplate(beer2011TemplateSource)

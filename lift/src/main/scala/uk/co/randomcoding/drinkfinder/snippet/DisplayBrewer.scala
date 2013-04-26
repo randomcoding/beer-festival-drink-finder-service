@@ -1,15 +1,14 @@
 package uk.co.randomcoding.drinkfinder.snippet
 
-import uk.co.randomcoding.drinkfinder.model.data.FestivalData
-import uk.co.randomcoding.drinkfinder.lib.TransformUtils._
-import net.liftweb.common.{ Full, Logger }
-import scala.xml.Text
-import scala.xml.NodeSeq
+import net.liftweb.common.Logger
 import net.liftweb.http._
 import net.liftweb.util.Helpers._
-import uk.co.randomcoding.drinkfinder.model.matcher.id._
-import uk.co.randomcoding.drinkfinder.model.matcher.{ DrinkNameMatcher, BrewerNameMatcher, MatcherFactory }
+import scala.xml.Text
+import uk.co.randomcoding.drinkfinder.lib.TransformUtils._
 import uk.co.randomcoding.drinkfinder.lib.UserSession
+import uk.co.randomcoding.drinkfinder.model.data.FestivalData
+import uk.co.randomcoding.drinkfinder.model.matcher.MatcherFactory
+import uk.co.randomcoding.drinkfinder.model.matcher.id._
 
 class DisplayBrewer extends Logger {
 

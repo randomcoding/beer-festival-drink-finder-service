@@ -19,11 +19,10 @@
  */
 package uk.co.randomcoding.drinkfinder.model.record.bson
 
-import uk.co.randomcoding.scala.util.core.string.StringHelpers._
-
 import net.liftweb.mongodb.record.{ BsonRecord, BsonMetaRecord }
 import net.liftweb.record.field.StringField
-import uk.co.randomcoding.drinkfinder.model.record.bson
+import uk.co.randomcoding.scala.util.core.string.StringHelpers._
+
 
 /**
  * BSON record class for a drink feature

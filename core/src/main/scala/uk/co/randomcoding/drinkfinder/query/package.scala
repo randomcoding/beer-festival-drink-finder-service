@@ -1,7 +1,7 @@
 package uk.co.randomcoding.drinkfinder
 
-import org.bson.types.ObjectId
 import com.mongodb.QueryBuilder
+import org.bson.types.ObjectId
 
 /**
  * A collection of common query helpers. Either common queries, or common query builders

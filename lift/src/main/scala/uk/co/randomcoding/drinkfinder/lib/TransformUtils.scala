@@ -1,14 +1,11 @@
 package uk.co.randomcoding.drinkfinder.lib
 
-import uk.co.randomcoding.drinkfinder.model._
-import uk.co.randomcoding.drinkfinder.model.drink.{DrinkRecord, Drink, NoDrink, DrinkFeature}
-import uk.co.randomcoding.drinkfinder.model.brewer.{BrewerRecord, Brewer}
-import matcher.id._
-import comment.{ Comment, DrinkComments }
-import net.liftweb.util.Helpers._
 import net.liftweb.http.SHtml
-import net.liftweb.http.RequestVar
+import net.liftweb.util.Helpers._
 import scala.xml.Text
+import uk.co.randomcoding.drinkfinder.model.comment.{DrinkComments, Comment}
+import uk.co.randomcoding.drinkfinder.model.matcher.id.{DRINK_NAME, FESTIVAL_NAME, BREWER_NAME}
+import uk.co.randomcoding.drinkfinder.model.record.{BrewerRecord, DrinkRecord}
 
 object TransformUtils {
 
@@ -20,7 +17,7 @@ object TransformUtils {
       "#Features" #> displayFeatures(drink) &
       "#ABV" #> displayAbv(drink) &
       "#Price" #> displayPrice(drink) &
-      "#Description" #> drink.description &
+      "#Description" #> drink.description.get &
       "#Quantity" #> displayQuantity(drink)
   })
 
@@ -33,7 +30,7 @@ object TransformUtils {
       "#Features" #> displayFeatures(drink) &
       "#ABV" #> displayAbv(drink) &
       "#Price" #> displayPrice(drink) &
-      "#Description" #> drink.description &
+      "#Description" #> drink.description.get &
       "#Brewer" #> displayBrewer(drink) &
       "#Quantity" #> displayQuantity(drink)
   })

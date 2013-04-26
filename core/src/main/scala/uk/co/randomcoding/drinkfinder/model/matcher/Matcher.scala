@@ -1,10 +1,10 @@
 package uk.co.randomcoding.drinkfinder.model.matcher
 
 import id._
-import uk.co.randomcoding.drinkfinder.model.drink._
 import net.liftweb.common.Logger
 import uk.co.randomcoding.drinkfinder.model.drink.DrinkFeature
-import uk.co.randomcoding.drinkfinder.model.brewer.BrewerRecord
+import uk.co.randomcoding.drinkfinder.model.drink._
+import uk.co.randomcoding.drinkfinder.model.record.{BrewerRecord, DrinkRecord}
 
 /**
  * Enumeration of the types of matchers as case classes with extractors

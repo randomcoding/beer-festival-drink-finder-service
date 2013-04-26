@@ -19,19 +19,17 @@
  */
 package uk.co.randomcoding.drinkfinder.snippet
 
-import uk.co.randomcoding.drinkfinder.model.matcher.id._
-import uk.co.randomcoding.drinkfinder.lib.TransformUtils._
-import uk.co.randomcoding.drinkfinder.lib.UserSession
+import net.liftweb.common.Logger
 import net.liftweb.http._
 import net.liftweb.util.Helpers._
-import scala.xml.{ NodeSeq, Text }
+import scala.xml.NodeSeq
+import scala.xml.Text
+import uk.co.randomcoding.drinkfinder.lib.TransformUtils._
+import uk.co.randomcoding.drinkfinder.lib.UserSession
 import uk.co.randomcoding.drinkfinder.model.data.FestivalData
 import uk.co.randomcoding.drinkfinder.model.drink._
-import uk.co.randomcoding.drinkfinder.model.matcher.{ MatcherFactory, BrewerNameMatcher }
-import net.liftweb.common.Logger
-import uk.co.randomcoding.drinkfinder.model.matcher.AlwaysTrueDrinkMatcher
-import scala.xml.Text
-import uk.co.randomcoding.drinkfinder.model.drink.Drink
+import uk.co.randomcoding.drinkfinder.model.matcher.{AlwaysTrueDrinkMatcher, MatcherFactory}
+import uk.co.randomcoding.drinkfinder.model.record.DrinkRecord
 
 /**
  * @author RandomCoder
@@ -43,7 +41,6 @@ class DisplayResults extends Logger {
   private val perryResultsId = "perryResults"
 
   def calculateResults = {
-    import uk.co.randomcoding.drinkfinder.model.matcher.Matcher
 
     val params = S.queryString openOr "No Query String"
     val currentFestivalId = UserSession.currentFestivalId.openTheBox

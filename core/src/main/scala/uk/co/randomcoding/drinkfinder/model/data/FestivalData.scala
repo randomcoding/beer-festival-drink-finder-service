@@ -19,13 +19,12 @@
  */
 package uk.co.randomcoding.drinkfinder.model.data
 
-import scala.collection.mutable.{ Set => MSet }
-import uk.co.randomcoding.drinkfinder.model.matcher.DrinkMatcher
-import uk.co.randomcoding.drinkfinder.model.drink._
 import net.liftweb.common.Logger
-import uk.co.randomcoding.drinkfinder.model.brewer.BrewerRecord
+import scala.collection.mutable.{ Set => MSet }
 import uk.co.randomcoding.drinkfinder.model.drink.DrinkRemainingStatus._
-import uk.co.randomcoding.drinkfinder.model.matcher.BrewerNameMatcher
+import uk.co.randomcoding.drinkfinder.model.drink._
+import uk.co.randomcoding.drinkfinder.model.matcher.DrinkMatcher
+import uk.co.randomcoding.drinkfinder.model.record.{BrewerRecord, DrinkRecord}
 
 /**
  * Store of information about drinks and associated data.
