@@ -33,7 +33,7 @@ import uk.co.randomcoding.drinkfinder.model.record.DrinkRecord
  */
 class FestivalDataTest extends FunSuite with ShouldMatchers {
 
-  import DummyDrinks._
+  import uk.co.randomcoding.drinkfinder.model.data.DummyDrinks._
 
   val festivalData = new DummyFestivalData
 

@@ -21,7 +21,7 @@ package uk.co.randomcoding.drinkfinder.lib.mongodb
 
 // TODO: Change to mongo record initialisation
 
-import com.mongodb.Mongo
+import com.mongodb.MongoClient
 import net.liftweb.common.Logger
 import net.liftweb.json._
 import net.liftweb.mongodb.{MongoDB, DefaultMongoIdentifier}
@@ -64,11 +64,11 @@ object MongoConfig extends Logger {
           config match {
             case MongoConnectionConfig(host, port, user, pass, db, true) => {
               debug("Got Mongo Config for CloudFoundry")
-              MongoDB.defineDbAuth(DefaultMongoIdentifier, new Mongo(host, port), db, user, pass)
+              MongoDB.defineDbAuth(DefaultMongoIdentifier, new MongoClient(host, port), db, user, pass)
             }
             case MongoConnectionConfig(_, _, _, _, db, false) => {
               debug("Unsing local Mongo Config")
-              MongoDB.defineDb(DefaultMongoIdentifier, new Mongo, db)
+              MongoDB.defineDb(DefaultMongoIdentifier, new MongoClient, db)
             }
             case _ => error("Failed To initialise mongo DB Connection!")
           }
@@ -79,7 +79,7 @@ object MongoConfig extends Logger {
     }
   }
 
-  private implicit def hostToMongo(host: (String, Int)): Mongo = new Mongo(host._1, host._2)
+  private implicit def hostToMongo(host: (String, Int)): MongoClient = new MongoClient(host._1, host._2)
 
   private def mongoConnectionDetails(dbName: String): Option[MongoConnectionConfig] = {
     debug("Env: VCAP_SERVICES: %s".format(Option(System.getenv("VCAP_SERVICES"))))

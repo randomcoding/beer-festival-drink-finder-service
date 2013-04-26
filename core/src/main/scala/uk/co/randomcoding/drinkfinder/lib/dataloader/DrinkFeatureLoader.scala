@@ -22,7 +22,7 @@ package uk.co.randomcoding.drinkfinder.lib.dataloader
 import org.apache.poi.ss.usermodel.Row
 import uk.co.randomcoding.drinkfinder.lib.dataloader.template.DrinkDataTemplate
 import uk.co.randomcoding.drinkfinder.model.drink.DrinkFeature
-import util.RichRow._
+import uk.co.randomcoding.drinkfinder.lib.dataloader.util.RichRow._
 
 /**
  * Loads drink features from a spreadsheet row for a single drink.

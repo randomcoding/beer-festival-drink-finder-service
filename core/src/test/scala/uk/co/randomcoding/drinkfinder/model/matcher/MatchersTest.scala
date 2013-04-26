@@ -19,7 +19,7 @@
  */
 package uk.co.randomcoding.drinkfinder.model.matcher
 
-import MatcherFactory._
+import uk.co.randomcoding.drinkfinder.model.matcher.MatcherFactory._
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
 import uk.co.randomcoding.drinkfinder.model.data.DummyDrinks._

@@ -23,13 +23,12 @@ import com.mongodb.casbah.Imports._
 import com.mongodb.casbah.commons.conversions.scala._
 import net.liftweb.common.Logger
 import org.joda.time.format.DateTimeFormat
-import uk.co.randomcoding.drinkfinder.lib.mongodb.FestivalMongoCollection
 
 
 // TODO: Update this to use new comment record class
 class DrinkComments(festivalId: String) extends Logger {
 
-  import DrinkComments._
+  import uk.co.randomcoding.drinkfinder.model.comment.DrinkComments._
 
   RegisterJodaTimeConversionHelpers()
 	private val mongoCollection = new FestivalMongoCollection(festivalId)

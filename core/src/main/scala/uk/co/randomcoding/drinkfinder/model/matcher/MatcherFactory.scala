@@ -19,7 +19,7 @@
  */
 package uk.co.randomcoding.drinkfinder.model.matcher
 
-import id._
+import uk.co.randomcoding.drinkfinder.model.matcher.id._
 import net.liftweb.common.Logger
 import uk.co.randomcoding.drinkfinder.model.drink.DrinkFeature
 

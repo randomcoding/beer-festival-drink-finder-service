@@ -30,7 +30,7 @@ import uk.co.randomcoding.drinkfinder.lib.dataloader.template.DrinkDataTemplate
  */
 class RichRow(row : Row) {
 
-  import RichRow._
+  import uk.co.randomcoding.drinkfinder.lib.dataloader.util.RichRow._
 
   private val evaluator = row.getSheet.getWorkbook.getCreationHelper.createFormulaEvaluator()
 	/**
