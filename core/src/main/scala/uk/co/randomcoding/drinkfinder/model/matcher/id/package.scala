@@ -16,7 +16,7 @@ package object id {
       id.hashCode
     }
 
-    override def toString(): String = id
+    override def toString: String = id
   }
 
   case object DRINK_NAME extends MatcherId("drink.name") {

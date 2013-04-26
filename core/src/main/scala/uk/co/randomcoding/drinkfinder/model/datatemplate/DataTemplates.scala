@@ -11,10 +11,10 @@ object DataTemplates {
 	 */
 	val templatesMap : Map[String, String] = {
     import scala.io.Source
-    val templatesSource = Source.fromInputStream(DataTemplates.getClass().getResourceAsStream("/templates.properties"))
+    val templatesSource = Source.fromInputStream(DataTemplates.getClass.getResourceAsStream("/templates.properties"))
 
 		val templateLines = for {
-			line <- templatesSource.getLines
+			line <- templatesSource.getLines()
 			if line.trim().nonEmpty
 			if !line.startsWith("#")
 		} yield {

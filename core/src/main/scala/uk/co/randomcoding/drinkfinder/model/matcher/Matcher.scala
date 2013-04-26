@@ -2,7 +2,6 @@ package uk.co.randomcoding.drinkfinder.model.matcher
 
 import id._
 import net.liftweb.common.Logger
-import uk.co.randomcoding.drinkfinder.model.drink.DrinkFeature
 import uk.co.randomcoding.drinkfinder.model.drink._
 import uk.co.randomcoding.drinkfinder.model.record.{BrewerRecord, DrinkRecord}
 
@@ -12,7 +11,6 @@ import uk.co.randomcoding.drinkfinder.model.record.{BrewerRecord, DrinkRecord}
  * User: RandomCoder
  * Date: 26/05/11
  */
-
 sealed abstract class Matcher[M](matcherType: MatcherId, matchValue: M) extends Logger {
   type T
 
@@ -74,9 +72,9 @@ case class DrinkTypeMatcher(drinkType: String) extends DrinkMatcher[String](DRIN
 
   def apply(drink: DrinkRecord) = {
     matchTo.toLowerCase match {
-      case "beer" => drink.drinkType.get.toString == DrinkType.BEER.toString
-      case "cider" => drink.drinkType.get.toString == DrinkType.CIDER.toString
-      case "perry" => drink.drinkType.get.toString == DrinkType.PERRY.toString
+      case "beer" => drink.drinkType.get.toString == DrinkType.BEER
+      case "cider" => drink.drinkType.get.toString == DrinkType.CIDER
+      case "perry" => drink.drinkType.get.toString == DrinkType.PERRY
       case _ => {
         error("Undefined drink type %s".format(matchTo))
         false

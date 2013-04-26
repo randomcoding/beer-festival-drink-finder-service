@@ -32,7 +32,7 @@ import org.joda.time.DateTime
 case class Comment(drinkName: String, author: String, comment: String) {
 	var date = new DateTime()
 
-	override def toString() : String = "Comment: %S, %s, %s\n%s".format(drinkName, author, date, comment)
+	override def toString : String = "Comment: %S, %s, %s\n%s".format(drinkName, author, date, comment)
 }
 
 /*object DrinkComment extends MongoDocumentMeta[DrinkComment] {

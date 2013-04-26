@@ -31,9 +31,13 @@ case class Brewer(name : String) {
 
 	private var brewedDrinks : List[Drink] = Nil
 
-	def addDrink(drink : Drink) = brewedDrinks = drink :: brewedDrinks
+	def addDrink(drink : Drink) {
+    brewedDrinks = drink :: brewedDrinks
+  }
 
-	def removeDrink(drink : Drink) = brewedDrinks = brewedDrinks.filterNot(_ == drink)
+	def removeDrink(drink : Drink) {
+    brewedDrinks = brewedDrinks.filterNot(_ == drink)
+  }
 }
 
 object NoBrewer extends Brewer("No Brewer")

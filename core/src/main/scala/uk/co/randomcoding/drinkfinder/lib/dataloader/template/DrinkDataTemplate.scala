@@ -30,7 +30,7 @@ import scala.io.Source
 class DrinkDataTemplate(templateSource: Source) extends Logger {
   private val LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toArray
 
-  private val lines = templateSource.getLines.toList
+  private val lines = templateSource.getLines().toList
 
   private def getValueFor(key: String): Option[String] = {
     lines.find(_.startsWith(key)) match {
@@ -99,14 +99,15 @@ class DrinkDataTemplate(templateSource: Source) extends Logger {
   /**
    * Get the map of drink feature names to the column that is used to identify the feature for the drink.
    *
-   *  This is only relevant if the [[#drinkFeatureFormat]] is '''SeparateColumns'''. If it is '''SingleColumn''' an empty map will be returned.
+   *  This is only relevant if the `drinkFeatureFormat` is '''SeparateColumns'''.
+   *  If it is '''SingleColumn''' an empty map will be returned.
    */
   lazy val drinkFeatureColumns: Map[String, Int] = {
 
     val featureTuples = for {
       line <- lines
       if line.matches(featureNameRegexString)
-      val featureNameRegex(name, col) = line
+      featureNameRegex(name, col) = line
     } yield {
       (name.replaceAll("_", " "), columnIndex(col))
     }

@@ -35,16 +35,15 @@ class DrinkFeatureLoaderTest extends FunSuite with ShouldMatchers {
 	val beerFileLocation = "/BeerList-TestData.xls"
 
 	private val loadSheet = (sheetLocation : String) => {
-		val wb = WorkbookFactory.create(getClass().getResourceAsStream(sheetLocation))
+		val wb = WorkbookFactory.create(getClass.getResourceAsStream(sheetLocation))
 		wb.setMissingCellPolicy(Row.CREATE_NULL_AS_BLANK)
-		wb.getSheetAt(0);
-
+		wb.getSheetAt(0)
 	}
 
 	private val beerSheet = loadSheet(beerFileLocation)
 
 	private val featureLoader = new DrinkFeatureLoader()
-	private val beerTemplateSource = Source.fromInputStream(getClass().getResourceAsStream("/templates/wbf_template.tpl"))
+	private val beerTemplateSource = Source.fromInputStream(getClass.getResourceAsStream("/templates/wbf_template.tpl"))
 	private val beerTemplate = new DrinkDataTemplate(beerTemplateSource)
 
 	test("Feature Loader correctly identifies drink features for beers sheet") {
@@ -71,7 +70,7 @@ class DrinkFeatureLoaderTest extends FunSuite with ShouldMatchers {
 	}
 
 	val ciderFileLocation = "/CidersTest.xls"
-	private val ciderTemplateSource = Source.fromInputStream(getClass().getResourceAsStream("/templates/wbf_cider_template.tpl"))
+	private val ciderTemplateSource = Source.fromInputStream(getClass.getResourceAsStream("/templates/wbf_cider_template.tpl"))
 	private val ciderTemplate = new DrinkDataTemplate(ciderTemplateSource)
 	private val ciderSheet = loadSheet(ciderFileLocation)
 	test("Feature loader correctly loads cider") {
@@ -86,7 +85,7 @@ class DrinkFeatureLoaderTest extends FunSuite with ShouldMatchers {
 	}
 
 	val perryFileLocation = "/PerriesTest.xls"
-	private val perryTemplateSource = Source.fromInputStream(getClass().getResourceAsStream("/templates/wbf_perry_template.tpl"))
+	private val perryTemplateSource = Source.fromInputStream(getClass.getResourceAsStream("/templates/wbf_perry_template.tpl"))
 	private val perryTemplate = new DrinkDataTemplate(perryTemplateSource)
 	private val perrySheet = loadSheet(perryFileLocation)
 	test("Feature loader correctly loads perry features") {
@@ -104,7 +103,7 @@ class DrinkFeatureLoaderTest extends FunSuite with ShouldMatchers {
 	}
 
 	val beers2011FileLocation = "/Beers2011Test.xls"
-	private val beer2011TemplateSource = Source.fromInputStream(getClass().getResourceAsStream("/templates/wbf_beer_2011_template.tpl"))
+	private val beer2011TemplateSource = Source.fromInputStream(getClass.getResourceAsStream("/templates/wbf_beer_2011_template.tpl"))
 	private val beer2011Template = new DrinkDataTemplate(beer2011TemplateSource)
 	private val beer2011Sheet = loadSheet(beers2011FileLocation)
 	test("Feature loader correctly loads 2011 Beers") {

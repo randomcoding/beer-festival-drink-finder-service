@@ -45,7 +45,7 @@ class AddComment {
 
     def process(): JsCmd = {
       if (!commentText.isEmpty) {
-        if (author isEmpty) author = "Anonymous"
+        if (author.isEmpty) author = "Anonymous"
         val comment = Comment(drinkName, author, commentText)
         comments.addComment(comment)
       }

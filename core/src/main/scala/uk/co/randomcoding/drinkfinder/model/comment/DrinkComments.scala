@@ -40,7 +40,7 @@ class DrinkComments(festivalId: String) extends Logger {
 	 *
 	 * If there is already a comment with the same drink, author and comment text then it will not be added.
 	 */
-	def addComment(comment : Comment) = {
+	def addComment(comment : Comment) {
 		/*val existsCheck = MongoDBObject("drinkName" -> comment.drinkName, "author" -> comment.author, "comment" -> comment.comment)
 		comments.findOne(existsCheck) match {
 			case None => comments += commentToMongo(comment)

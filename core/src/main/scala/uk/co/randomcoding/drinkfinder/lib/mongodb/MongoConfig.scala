@@ -26,7 +26,6 @@ import net.liftweb.common.Logger
 import net.liftweb.json._
 import net.liftweb.mongodb.{MongoDB, DefaultMongoIdentifier}
 
-
 /**
  * Configuration for Mongo DB and access to mongo connections
  *
@@ -38,9 +37,6 @@ import net.liftweb.mongodb.{MongoDB, DefaultMongoIdentifier}
 object MongoConfig extends Logger {
 
   private implicit val formats = DefaultFormats
-
-  private var usingCloudfoundry = false
-  private var cloudfoundryDbName = ""
 
   // Case classes required to parse CloudFoundry JSON
   case class CloudFoundryMongo(name: String, label: String, plan: String, credentials: CloudFoundryMongoCredentials)
@@ -60,7 +56,7 @@ object MongoConfig extends Logger {
    * @param dbName The name of the local database to connect to. If connecting to a CloudFoundry database then this parameters is ignored and can be empty.
    *
    */
-  def init(dbName: String): Unit = {
+  def init(dbName: String) {
     mongoConnectionDetails(dbName) match {
       case Some(x) => x match {
         case config: MongoConnectionConfig => {
@@ -109,7 +105,7 @@ object MongoConfig extends Logger {
     }
     catch {
       case e: MatchError => {
-        error("Match Error: %s\n%s\n%s.\n\nAssuming a service is running locally on port 27017".format(e.getMessage(), e.getCause(), e.getStackTrace().mkString("", "\n", "")))
+        error("Match Error: %s\n%s\n%s.\n\nAssuming a service is running locally on port 27017".format(e.getMessage(), e.getCause, e.getStackTrace.mkString("", "\n", "")))
         None
       }
       case e: Exception => {
@@ -150,87 +146,3 @@ object MongoConfig extends Logger {
 case class MongoConnectionConfig(host: String, port: Int, user: String, password: String, dbName: String, onCloudFoundry: Boolean) {
   require(dbName.trim nonEmpty, "DB Name Cannot be empty")
 }
-
-	/*private implicit val formats = DefaultFormats
-
-	private var usingCloudfoundry = false
-	private var cloudfoundryDbName = ""
-
-	// Case classes required to parse CloudFoundry JSON
-	case class CloudFoundryMongo(name : String, label : String, plan : String, credentials : CloudFoundryMongoCredentials)
-	case class CloudFoundryMongoCredentials(hostname : String, port : String, username : String, password : String, name : String, db : String)
-
-	/**
-	 * Private holder for the MongoDB objects
-	 */
-	private var dbs = Map.empty[String, MongoDB].withDefault(dbName => init(dbName))
-
-	/**
-	 * Initialise the MongoDB system to create connections etc.
-	 *
-	 * If the connection is local (i.e. offline or testing, then will connect to a database called '''DrinkService''')
-	 *
-	 * @return The [[com.mongobd.casbah.MongoDB]] object
-	 */
-	private def init(dbName : String) : MongoDB = {
-		logger.info("Env: VCAP_SERVICES: %s".format(Option(System.getenv("VCAP_SERVICES"))))
-		var user = ""
-		var port = 27017
-		var host = ""
-		var pass = ""
-		var db = dbName
-
-		try {
-			Option(System.getenv("VCAP_SERVICES")) match {
-				case Some(s) => {
-					try {
-						parse(s) \\ "mongodb-1.8" match {
-							case JArray(ary) => ary foreach { mongoJson =>
-								val mongo = mongoJson.extract[CloudFoundryMongo]
-								val credentials = mongo.credentials
-								user = credentials.username
-								port = credentials.port.toInt
-								host = credentials.hostname
-								pass = credentials.password
-								db = credentials.db
-								cloudfoundryDbName = db
-								usingCloudfoundry = true
-							}
-							case x => logger.warn("Json parse error: %s".format(x))
-						}
-					}
-				}
-				case _ => logger.info("Not running on Cloud Foundry, assuming localhost connection on port 27017")
-			}
-		} catch {
-			case e : MatchError => logger.error("Match Error: %s\n%s\n%s.\n\nAssuming a service is running locally on port 27017".format(e.getMessage(), e.getCause(), e.getStackTrace().mkString("", "\n", "")))
-		}
-
-		val connection = host match {
-			case "" => MongoConnection()
-			case h => MongoConnection(h, port)
-		}
-
-		val mongoDb = connection(db)
-
-		if (user.nonEmpty) {
-			mongoDb.authenticate(user, pass)
-		}
-
-		dbs = dbs + (db -> mongoDb)
-		mongoDb
-	}
-
-	/**
-	 * Get or create a named collection in the current database
-	 */
-	def getCollection(dbName : String, collectionId : String) : MongoCollection = {
-		val conn = usingCloudfoundry match {
-			case true => dbs(cloudfoundryDbName)
-			case false => dbs(dbName)
-		}
-		logger.debug("Getting collection %s from %s".format(collectionId, conn))
-
-		conn(collectionId)
-	}
-}*/

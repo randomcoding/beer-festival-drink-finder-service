@@ -32,7 +32,7 @@ class RichRow(row : Row) {
 
   import RichRow._
 
-  private val evaluator = row.getSheet().getWorkbook().getCreationHelper().createFormulaEvaluator()
+  private val evaluator = row.getSheet.getWorkbook.getCreationHelper.createFormulaEvaluator()
 	/**
 	 * Get the cell at the given index
 	 */
@@ -44,13 +44,13 @@ class RichRow(row : Row) {
 	 * @return '''Some(value)''' if the cell contains a numeric value or '''None''' otherwise
 	 */
 	def getNumericCellValue(cellIndex : Int) : Option[Double] = {
-		row(cellIndex).getCellType() match {
+		row(cellIndex).getCellType match {
 			case Cell.CELL_TYPE_NUMERIC => Some(row(cellIndex).getNumericCellValue)
 			case Cell.CELL_TYPE_FORMULA if evaluator.evaluateFormulaCell(row(cellIndex)) == Cell.CELL_TYPE_NUMERIC => Some(row(cellIndex).getNumericCellValue)
 			case Cell.CELL_TYPE_STRING => {
 				val numberRegex = """\s*(\d+(?:\.\d+))%*""".r
 				try {
-					val numberRegex(number) = row(cellIndex).getStringCellValue().trim
+					val numberRegex(number) = row(cellIndex).getStringCellValue.trim
 					Some(number.toDouble)
 				} catch {
 					case e : MatchError => None
@@ -85,7 +85,7 @@ class RichRow(row : Row) {
 		null == row match {
 			case true => println("Row is null"); false
 			case _ => {
-				val abvColumn = dataTemplate.drinkAbvColumn
+				//val abvColumn = dataTemplate.drinkAbvColumn
 				getNumericCellValue(dataTemplate.drinkAbvColumn).isDefined &&
 					correctCellType(row, dataTemplate.drinkNameColumn, Cell.CELL_TYPE_STRING)
 			}
@@ -98,7 +98,7 @@ class RichRow(row : Row) {
 }
 
 /**
- * Contains an implicit conversion from a Row to a [[RichRow]]
+ * Contains an implicit conversion from a Row to a [[uk.co.randomcoding.drinkfinder.lib.dataloader.util.RichRow]]
  */
 object RichRow {
 	implicit def rowToRichRow(row : Row) : RichRow = new RichRow(row)

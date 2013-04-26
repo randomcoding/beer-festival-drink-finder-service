@@ -58,17 +58,23 @@ class FestivalData(val festivalId: String, val festivalName: String) extends Log
    *
    * This does not remove the drink's features
    */
-  def removeDrink(drink: DrinkRecord) = drinks = drinks - drink
+  def removeDrink(drink: DrinkRecord) {
+    drinks = drinks - drink
+  }
 
   /**
    * Add a brewer to the festival's data
    */
-  def addBrewer(brewer: BrewerRecord) = brewers = brewers + brewer
+  def addBrewer(brewer: BrewerRecord) {
+    brewers = brewers + brewer
+  }
 
   /**
    * Remove a brewer from the festival's data
    */
-  def removeBrewer(brewer: BrewerRecord) = brewers = brewers - brewer
+  def removeBrewer(brewer: BrewerRecord) {
+    brewers = brewers - brewer
+  }
 
   /**
    * Returns a sorted list of all the features for Beers.
@@ -116,7 +122,7 @@ class FestivalData(val festivalId: String, val festivalName: String) extends Log
     matchers.filterNot(_.apply(drink)).isEmpty
   }
 
-  private def addDrinkFeatures(drink: DrinkRecord) = {
+  private def addDrinkFeatures(drink: DrinkRecord) {
     val typeOfDrink = drinkType(drink)
 
     drinkFeatures.get(typeOfDrink) match {
@@ -133,7 +139,7 @@ class FestivalData(val festivalId: String, val festivalName: String) extends Log
     }
   }
 
-  private def addNewDrink(drink: DrinkRecord) = {
+  private def addNewDrink(drink: DrinkRecord) {
     drinks = drinks + drink
     addDrinkFeatures(drink)
   }
@@ -182,7 +188,7 @@ object FestivalData {
   //@deprecated("Use FestivalData(String, String) instead.", "0.5.0")
   def apply(festivalId: FestivalId): Option[FestivalData] = festivals.get(festivalId)
 
-  def apply(festivalId: FestivalId, festivalData: FestivalData) = {
+  def apply(festivalId: FestivalId, festivalData: FestivalData) {
     festivals = festivals + (festivalId -> festivalData)
   }
 }

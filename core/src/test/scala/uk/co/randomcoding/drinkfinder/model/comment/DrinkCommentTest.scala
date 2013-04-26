@@ -24,7 +24,6 @@ import org.joda.time.DateTime
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
-import uk.co.randomcoding.drinkfinder.lib.mongodb.FestivalMongoCollection
 
 /**
  * @author RandomCoder
@@ -34,26 +33,24 @@ import uk.co.randomcoding.drinkfinder.lib.mongodb.FestivalMongoCollection
  */
 class DrinkCommentTest extends FunSuite with ShouldMatchers with BeforeAndAfterAll {
 
-  import DrinkComments._
-
   val festivalId = "TestFestival"
 
 	val drinkComments = DrinkComments(festivalId)
 
-	private def cleanup(comments : Comment*) = {
+	private def cleanup(comments : Comment*) {
 		//val mongo = new FestivalMongoCollection(festivalId).comments
 		//comments.foreach(comment => mongo.remove(commentToMongo(comment)))
 	}
 
-	override def afterAll() = MongoConnection().dropDatabase(festivalId)
+	override def afterAll() { MongoConnection().dropDatabase(festivalId) }
 
-	private def commentToMongo(comment : Comment) : MongoDBObject = {
+	/*private def commentToMongo(comment : Comment) : MongoDBObject = {
 		MongoDBObject("drinkName" -> comment.drinkName,
 			"author" -> comment.author,
 			"comment" -> comment.comment,
 			"date" -> comment.date.toString(dateFormat)
 		)
-	}
+	}*/
 
 	ignore("New Comment can be added and retrieved") {
 		val comment = Comment("First Beer", "Test User", "Lovely Drink")

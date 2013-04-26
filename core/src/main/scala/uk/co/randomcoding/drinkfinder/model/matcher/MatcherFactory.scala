@@ -42,11 +42,11 @@ object MatcherFactory extends Logger {
   }
 
   private def createMatcher(query: (String, String)): DrinkMatcher[_] = {
-    val (queryId, queryValue) = query
+    val (qId, queryValue) = query
 
-    debug("Query Id: %s, Query Value: %s".format(queryId, queryValue))
+    debug("Query Id: %s, Query Value: %s".format(qId, queryValue))
 
-    queryId match {
+    qId match {
       case DRINK_ABV_EQUAL_TO(queryId) => DrinkAbvEqualToMatcher(queryValue.toDouble)
       case DRINK_ABV_GREATER_THAN(queryId) => DrinkAbvGreaterThanMatcher(queryValue.toDouble)
       case DRINK_ABV_LESS_THAN(queryId) => DrinkAbvLessThanMatcher(queryValue.toDouble)
