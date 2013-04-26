@@ -32,6 +32,7 @@ import uk.co.randomcoding.drinkfinder.model.record.BrewerRecord
 /**
  * @author RandomCoder
  */
+@deprecated("CHeppel is no longer actively supported", "0.6.0")
 class ChappelSpreadsheetLoaderTest extends FunSuite with ShouldMatchers {
   val testFileLocation = "/ChappelTestData.xls"
   val festivalId = "CHPL"
@@ -45,7 +46,7 @@ class ChappelSpreadsheetLoaderTest extends FunSuite with ShouldMatchers {
     FestivalData(beerTemplate.festivalId, beerTemplate.festivalName)
   }
 
-  test("Load Beer Data from sample spreadsheet with loaded source") {
+  ignore("Load Beer Data from sample spreadsheet with loaded source") {
     val matcher = DrinkNameMatcher("chorister")
     val matched = data.getMatching(List(matcher))
     matched.size should be(1)
@@ -55,7 +56,7 @@ class ChappelSpreadsheetLoaderTest extends FunSuite with ShouldMatchers {
     drink.quantityRemaining.get should be("Plenty")
   }
 
-  test("Correct Beers are loaded") {
+  ignore("Correct Beers are loaded") {
     val beersMatcher = DrinkTypeMatcher("beer")
     val matched = data.getMatching(List(beersMatcher))
 
