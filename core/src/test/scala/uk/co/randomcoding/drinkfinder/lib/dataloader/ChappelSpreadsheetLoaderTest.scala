@@ -32,7 +32,7 @@ import uk.co.randomcoding.drinkfinder.model.record.BrewerRecord
 /**
  * @author RandomCoder
  */
-@deprecated("CHeppel is no longer actively supported", "0.6.0")
+@deprecated("Chappel is no longer actively supported", "0.6.0")
 class ChappelSpreadsheetLoaderTest extends FunSuite with ShouldMatchers {
   val testFileLocation = "/ChappelTestData.xls"
   val festivalId = "CHPL"

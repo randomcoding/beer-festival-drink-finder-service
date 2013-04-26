@@ -55,7 +55,7 @@ class DrinkCommentTest extends FunSuite with ShouldMatchers with BeforeAndAfterA
 		)
 	}
 
-	test("New Comment can be added and retrieved") {
+	ignore("New Comment can be added and retrieved") {
 		val comment = Comment("First Beer", "Test User", "Lovely Drink")
 
 		drinkComments.addComment(comment)
@@ -67,7 +67,7 @@ class DrinkCommentTest extends FunSuite with ShouldMatchers with BeforeAndAfterA
 		drinkComments.commentsForDrink("FirstBeer") should be('empty)
 	}
 
-	test("Multiple New Comments can be added and retrieved") {
+	ignore("Multiple New Comments can be added and retrieved") {
 		val comment1 = Comment("First Beer", "Test User", "Lovely Drink")
 		val comment2 = Comment("First Beer", "Test User 2", "Good!")
 		val comment3 = Comment("First Beer", "Test User 3", "Yum")
@@ -99,7 +99,7 @@ class DrinkCommentTest extends FunSuite with ShouldMatchers with BeforeAndAfterA
 		drinkComments.commentsForDrink("Second Beer") should be('empty)
 	}
 
-	test("Duplicate Comment is not added") {
+	ignore("Duplicate Comment is not added") {
 		val comment1 = Comment("Beer", "Tester", "Yum")
 		val comment2 = Comment("Beer", "Tester", "Yum")
 
@@ -114,7 +114,7 @@ class DrinkCommentTest extends FunSuite with ShouldMatchers with BeforeAndAfterA
 		cleanup(comment1, comment2)
 	}
 
-	test("Comments are returned in date order") {
+	ignore("Comments are returned in date order") {
 		val comment1 = Comment("Beer", "Tester", "Yum")
 		val comment2 = Comment("Beer", "Tester 2", "Yum Yum")
 		comment1.date = "2011-08-11T12:00:00Z"
