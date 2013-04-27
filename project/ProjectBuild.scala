@@ -1,18 +1,17 @@
 import sbt._
-import Keys._
+import sbt.Keys._
 
 import com.typesafe.sbteclipse.core.EclipsePlugin._
 
 object ProjectBuild extends Build {
   import BuildSettings._
-  import ShellPrompt._
   import Dependencies._
   import com.github.siasia.WebPlugin.webSettings
 
-  lazy val root = Project("root", 
+  lazy val root = Project("root",
     file("."),
     settings = buildSettings ++ Unidoc.settings ++ Seq (
-      scaladocOptions := Seq(),
+      scalacOptions in doc := Seq(),
       // Disable publish and publish-local for empty root project
       publish := {},
       publishLocal := {}
@@ -26,7 +25,7 @@ object ProjectBuild extends Build {
     )
   ) dependsOn (loggingProject)
 
-  lazy val liftProject: Project = Project("lift", 
+  lazy val liftProject: Project = Project("lift",
     file("lift"),
     settings = buildSettings ++ Seq(libraryDependencies ++= liftProjectDeps,
       name := "DrinkServiceLift"
@@ -38,10 +37,10 @@ object ProjectBuild extends Build {
     settings = buildSettings ++ Seq(libraryDependencies ++= loggingDeps,
       name := "DrinkServiceLogging"
     )
-  )  
+  )
 
   val commonDeps = testDeps ++ jodaDeps ++ utilsDeps
-  val coreProjectDeps = commonDeps ++ Seq(liftMongoRecord, poi) ++ oldCasbahDeps ++ rogue
+  val coreProjectDeps = commonDeps ++ Seq(liftMongoRecord, poi)
   val liftProjectDeps = commonDeps ++ liftDeps ++ jettyDeps
 }
 

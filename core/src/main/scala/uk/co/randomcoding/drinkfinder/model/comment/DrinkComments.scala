@@ -19,8 +19,6 @@
  */
 package uk.co.randomcoding.drinkfinder.model.comment
 
-import com.mongodb.casbah.Imports._
-import com.mongodb.casbah.commons.conversions.scala._
 import net.liftweb.common.Logger
 import org.joda.time.format.DateTimeFormat
 
@@ -28,7 +26,7 @@ import org.joda.time.format.DateTimeFormat
 // TODO: Update this to use new comment record class
 class DrinkComments(festivalId: String) extends Logger {
 
-  RegisterJodaTimeConversionHelpers()
+  //RegisterJodaTimeConversionHelpers()
 	//private val mongoCollection = new FestivalMongoCollection(festivalId)
 	//private val comments : MongoCollection = _//mongoCollection.comments
 
@@ -82,7 +80,7 @@ object DrinkComments extends Logger {
 
 	val dateFormat = DateTimeFormat.forStyle("MM")
 
-	implicit def commentToMongo(comment : Comment) : MongoDBObject = {
+	/*implicit def commentToMongo(comment : Comment) : MongoDBObject = {
 		MongoDBObject("drinkName" -> comment.drinkName,
 			"author" -> comment.author,
 			"comment" -> comment.comment,
@@ -95,5 +93,5 @@ object DrinkComments extends Logger {
 			comment.date = dateFormat.parseDateTime(result.getAs[String]("date").get)
 
 			comment
-	}
+	}*/
 }

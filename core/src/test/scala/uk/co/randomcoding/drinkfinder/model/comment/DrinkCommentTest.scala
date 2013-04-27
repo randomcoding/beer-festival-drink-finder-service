@@ -19,7 +19,6 @@
  */
 package uk.co.randomcoding.drinkfinder.model.comment
 
-import com.mongodb.casbah.Imports._
 import org.joda.time.DateTime
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.FunSuite
@@ -42,7 +41,7 @@ class DrinkCommentTest extends FunSuite with ShouldMatchers with BeforeAndAfterA
 		//comments.foreach(comment => mongo.remove(commentToMongo(comment)))
 	}
 
-	override def afterAll() { MongoConnection().dropDatabase(festivalId) }
+	//override def afterAll() { MongoConnection().dropDatabase(festivalId) }
 
 	/*private def commentToMongo(comment : Comment) : MongoDBObject = {
 		MongoDBObject("drinkName" -> comment.drinkName,
