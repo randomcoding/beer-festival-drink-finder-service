@@ -9,7 +9,7 @@ import org.bson.types.ObjectId
  * @author RandomCoder
  */
 package object query {
-  def byId(id: ObjectId) = QueryBuilder.start("id").is(id).get
+  def byId(id: ObjectId) = QueryBuilder.start("_id").is(id).get
 
   def byName(name: String, nameField: String = "name") = QueryBuilder.start(nameField).is(name).get
 }

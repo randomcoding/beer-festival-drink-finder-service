@@ -62,4 +62,6 @@ object BrewerRecord extends BrewerRecord with BaseMongoRecordObject[BrewerRecord
   }
 
   override def findById(oid: ObjectId): Option[BrewerRecord] = BrewerRecord.find(byId(oid))
+
+  def findByName(name: String): Option[BrewerRecord] = BrewerRecord.find(byName(name))
 }

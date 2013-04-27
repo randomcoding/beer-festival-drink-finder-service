@@ -53,4 +53,22 @@ class BrewerRecordTest extends MongoDbTestBase {
     brewer1.hashCode should (not equal (brewer2.hashCode) and not equal (brewer3.hashCode))
   }
 
+  test("A Brewer Record can be found by name and Id") {
+    val brewerName: String = "A Brewer"
+    Given("a Brewer Record is added to the database")
+    val addedRecord = BrewerRecord.add(BrewerRecord(brewerName))
+    addedRecord should be('defined)
+    val recordId = addedRecord.get.id.get
+    When("The record is queries by id")
+    val foundByIdRecord = BrewerRecord.findById(recordId)
+    And("the record is found by name")
+    val foundByNameRecord = BrewerRecord.findByName(brewerName)
+    Then("the same record as was added is found in each case")
+    foundByIdRecord should be ('defined)
+    foundByIdRecord.get should be(addedRecord.get)
+    foundByNameRecord should be ('defined)
+    foundByNameRecord.get should be(addedRecord.get)
+    And("the two found records are the same")
+    foundByIdRecord.get should be(foundByNameRecord.get)
+  }
 }

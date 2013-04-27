@@ -34,9 +34,9 @@ object Dependencies {
   val groovy = "org.codehaus.groovy" % "groovy" % "2.0.0"
 
   // Common Utilities
-  val utilsVersion = "0.2.0-SNAPSHOT"
+  val utilsVersion = "0.3.0-SNAPSHOT"
   val coreUtils = "uk.co.randomcoding" %% "scala-utilities-core" % utilsVersion
-  val liftUtils = "uk.co.randomcoding" %% "scala-utilities-lift" % utilsVersion
+  val liftUtils = "uk.co.randomcoding" %% "scala-utilities-lift" % utilsVersion % "compile->compile;test->test"
 
   // Dependency groups
   val testDeps = Seq(scalatest)

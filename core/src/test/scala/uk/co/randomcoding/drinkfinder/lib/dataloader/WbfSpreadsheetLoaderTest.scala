@@ -28,11 +28,14 @@ import uk.co.randomcoding.drinkfinder.model.drink.DrinkFactory._
 import uk.co.randomcoding.drinkfinder.model.drink.DrinkFeature
 import uk.co.randomcoding.drinkfinder.model.matcher._
 import uk.co.randomcoding.drinkfinder.model.record.BrewerRecord
+import uk.co.randomcoding.scala.util.lift.mongodb.test.MongoDbTestBase
 
 /**
  * @author RandomCoder
  */
-class WbfSpreadsheetLoaderTest extends FunSuite with ShouldMatchers {
+class WbfSpreadsheetLoaderTest extends MongoDbTestBase with FunSuite with ShouldMatchers {
+  override val dbName = "WbfSpreadsheetLoaderTest"
+
   val testFileLocation = "/BeerList-TestData.xls"
   val cidersLocation = "/CidersTest.xls"
   val perriesLocation = "/PerriesTest.xls"

@@ -93,4 +93,5 @@ object DrinkRecord extends DrinkRecord with BaseMongoRecordObject[DrinkRecord] w
     val upd = QueryBuilder.start("id").is(drink.id.get).put("quantityRemaining").is(remaining).get
     DrinkRecord.find(upd)
   }
+
 }
