@@ -29,13 +29,14 @@ object Dependencies {
   // Apache poi
   val poi = "org.apache.poi" % "poi-ooxml" % "3.7"
 
-  val scalatest = "org.scalatest" %% "scalatest" % "1.8" % "test"
+  val scalatest = "org.scalatest" %% "scalatest" % "2.0.M5b" % "test"
 
   val groovy = "org.codehaus.groovy" % "groovy" % "2.0.0"
 
   // Common Utilities
-  val coreUtils = "uk.co.randomcoding" %% "scala-utilities-core" % "0.1.0-SNAPSHOT"
-  val liftUtils = "uk.co.randomcoding" %% "scala-utilities-lift" % "0.1.0-SNAPSHOT"
+  val utilsVersion = "0.2.0-SNAPSHOT"
+  val coreUtils = "uk.co.randomcoding" %% "scala-utilities-core" % utilsVersion
+  val liftUtils = "uk.co.randomcoding" %% "scala-utilities-lift" % utilsVersion
 
   // Dependency groups
   val testDeps = Seq(scalatest)

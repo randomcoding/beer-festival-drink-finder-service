@@ -1,6 +1,4 @@
 
 object Resolvers {
-    //val snapshotsRepo = ScalaToolsSnapshots
-
-    //val snapshots = Seq(snapshotsRepo)
+  // Empty Class for now - not using snapshots etc.
 }
