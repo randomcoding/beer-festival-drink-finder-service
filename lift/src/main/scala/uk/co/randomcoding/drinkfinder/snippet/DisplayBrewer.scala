@@ -1,6 +1,6 @@
 package uk.co.randomcoding.drinkfinder.snippet
 
-import net.liftweb.common.Logger
+import net.liftweb.common.{Full, Logger}
 import net.liftweb.http._
 import net.liftweb.util.Helpers._
 import scala.xml.Text
@@ -13,7 +13,10 @@ import uk.co.randomcoding.drinkfinder.model.matcher.id._
 class DisplayBrewer extends Logger {
 
   def showBrewer = {
-    val currentFestivalId = UserSession.currentFestivalId.openTheBox
+    val currentFestivalId = UserSession.currentFestivalId.is match {
+      case Full(id) => id
+      case _ => "" // TODO: Throw error?
+    }
     //val festivalName = urlDecode(S.param(FESTIVAL_NAME.toString).openOr("Worcester Beer, Cider and Perry Festival"))
     //val festivalName = urlDecode(S.param(FESTIVAL_NAME.toString).openOr("Chappel Beer Festival"))
     val drinkData = FestivalData(currentFestivalId).get

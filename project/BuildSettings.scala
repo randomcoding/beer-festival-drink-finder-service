@@ -1,5 +1,5 @@
 import sbt._
-import Keys._
+import sbt.Keys._
 
 import com.typesafe.sbteclipse.core.EclipsePlugin._
 

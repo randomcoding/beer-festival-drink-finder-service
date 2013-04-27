@@ -39,7 +39,10 @@ import uk.co.randomcoding.drinkfinder.model.matcher.id._
 object DrinkSearch extends Logger {
   // hack to provide access to the (currently) only data object
   //private lazy val festivalData = FestivalData("Chappel Beer Festival")
-  val currentFestivalId = UserSession.currentFestivalId.openTheBox
+  val currentFestivalId = UserSession.currentFestivalId.is match {
+    case Full(id) => id
+    case _ => "" // TODO: Throw error?
+  }
   private[this] def festivalData = FestivalData(currentFestivalId).get
 
   // function to convert a Drink Feature into a combo box tuple
@@ -50,17 +53,17 @@ object DrinkSearch extends Logger {
 
   private val drinkTypes = List(("" -> "Any"), ("Beer" -> "Beer"), ("Cider" -> "Cider"), ("Perry" -> "Perry"))
 
-  private def brewers = List(("" -> "Any")) ::: (festivalData.allBrewers.sortBy(_.name.get).map(brewer => (brewer.name.get -> brewer.name.get)))
+  private def brewers = List(("" -> "Any")) ::: (festivalData.allBrewers().sortBy(_.name.get).map(brewer => (brewer.name.get -> brewer.name.get)))
 
   private def drinkFeatures = {
-    val beerFeatures = festivalData.beerFeatures.sortBy(_.feature)
+    val beerFeatures = festivalData.beerFeatures().sortBy(_.feature)
     val ciderAndPerryFeatures = (festivalData.ciderFeatures ::: festivalData.perryFeatures).toList.distinct.sortBy(_.feature)
     List(("" -> "Any")) ::: beerFeatures.map(featureToDisplay(_, "Beer")) ::: ciderAndPerryFeatures.map(featureToDisplay(_, "Cider & Perry"))
   }
 
   def render = {
     // where did we come here from
-    val whence = S.referer openOr "/"
+    //val whence = S.referer openOr "/"
 
     // store state from fields
     var drinkName = ""
@@ -115,9 +118,9 @@ object DrinkSearch extends Logger {
 
       valid match {
         case true => {
-          val resultString = getParameterValues()
+          val resultString = getParameterValues
           debug("Query String: %s".format(resultString))
-          val redirectTo = if (isOnlyBrewerSearch()) "/brewer?%s" else "/results?%s"
+          val redirectTo = if (isOnlyBrewerSearch) "/brewer?%s" else "/results?%s"
           S.notice("Name: " + drinkName)
           S.redirectTo(redirectTo.format(resultString))
         }
@@ -125,11 +128,11 @@ object DrinkSearch extends Logger {
       }
     }
 
-    def isOnlyBrewerSearch(): Boolean = {
+    def isOnlyBrewerSearch: Boolean = {
       (brewerName.nonEmpty && !brewerName.equals("Any")) && drinkName.isEmpty && descriptionContains.isEmpty && (abvValue equals 0.0) && (priceValue equals 0.0)
     }
 
-    def getParameterValues(): String = {
+    def getParameterValues: String = {
       var paramsList = List.empty[String]
       if (drinkName.nonEmpty) {
         paramsList = (DRINK_NAME + "=" + drinkName) :: paramsList
@@ -180,7 +183,7 @@ object DrinkSearch extends Logger {
       "type=submit" #> (SHtml.onSubmitUnit(process))
   }
 
-  private def displayError(formId: String, errorMessage: String) = {
+  private def displayError(formId: String, errorMessage: String) {
     S.error(formId, errorMessage)
   }
 }

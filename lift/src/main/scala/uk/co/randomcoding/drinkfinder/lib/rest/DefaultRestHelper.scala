@@ -19,7 +19,7 @@
  */
 package uk.co.randomcoding.drinkfinder.lib.rest
 
-import net.liftweb.common.Logger
+import net.liftweb.common.{Full, Logger}
 import net.liftweb.http.rest.RestHelper
 import net.liftweb.json.JsonAST.{ JValue, JArray }
 import net.liftweb.json.JsonDSL._
@@ -43,7 +43,10 @@ object DefaultRestHelper extends RestHelper with Logger {
 
   serve {
     case "api" :: festivalId :: "drinks" :: "all" :: Nil Get _ => {
-      val currentFestivalId = UserSession.currentFestivalId.openTheBox
+      val currentFestivalId = UserSession.currentFestivalId.is match {
+        case Full(id) => id
+        case _ => "" // TODO: Raise an error?
+      }
       val query = "%s=%s".format(FESTIVAL_ID, festivalId)
       val data = FestivalData(currentFestivalId).get
       val drinks = data.getMatching(MatcherFactory.generate(query)).toList

@@ -1,8 +1,6 @@
-import sbt._
-import Keys._
 
 object Resolvers {
-    val snapshotsRepo = ScalaToolsSnapshots
+    //val snapshotsRepo = ScalaToolsSnapshots
 
-    val snapshots = Seq(snapshotsRepo)
+    //val snapshots = Seq(snapshotsRepo)
 }

@@ -25,6 +25,7 @@ import net.liftweb.util.Helpers._
 import uk.co.randomcoding.drinkfinder.lib.UserSession
 import uk.co.randomcoding.drinkfinder.model.comment.{Comment, DrinkComments}
 import uk.co.randomcoding.drinkfinder.model.matcher.id.DRINK_NAME
+import net.liftweb.common.Full
 
 /**
  * Snippet to provide logic to add a comment for a drink.
@@ -40,7 +41,10 @@ class AddComment {
     var author = ""
     val drinkName = urlDecode(S.param(DRINK_NAME.toString).get)
     var commentText = ""
-    val currentFestivalId = UserSession.currentFestivalId.openTheBox
+    val currentFestivalId = UserSession.currentFestivalId.is match {
+      case Full(id) => id
+      case _ => "" // TODO: Throw error?
+    }
     val comments = DrinkComments(currentFestivalId)
 
     def process(): JsCmd = {

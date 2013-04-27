@@ -12,7 +12,7 @@ import uk.co.randomcoding.drinkfinder.lib.rest.DefaultRestHelper
  * to modify lift's environment
  */
 class Boot extends Loggable {
-  def boot {
+  def boot() {
     // where to search snippet
     LiftRules.addToPackages("uk.co.randomcoding.drinkfinder")
 
@@ -62,12 +62,12 @@ class Boot extends Loggable {
     LiftRules.htmlProperties.default.set((r: Req) => new Html5Properties(r.userAgent))
 
     // Use jQuery 1.4
-    LiftRules.jsArtifacts = net.liftweb.http.js.jquery.JQuery14Artifacts
+    LiftRules.jsArtifacts = net.liftweb.http.js.jquery.JQueryArtifacts
     ResourceServer.allow {
       case "css" :: _ => true
       case "js" :: _ => true
     }
 
-    LiftRules.statelessDispatchTable.append(DefaultRestHelper)
+    LiftRules.statelessDispatch.append(DefaultRestHelper)
   }
 }

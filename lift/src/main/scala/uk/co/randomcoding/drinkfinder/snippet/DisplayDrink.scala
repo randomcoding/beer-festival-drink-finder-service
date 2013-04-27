@@ -1,6 +1,6 @@
 package uk.co.randomcoding.drinkfinder.snippet
 
-import net.liftweb.common.Logger
+import net.liftweb.common.{Full, Logger}
 import net.liftweb.http._
 import net.liftweb.util.Helpers._
 import scala.xml.Text
@@ -27,5 +27,8 @@ class DisplayDrink extends Logger {
     comments.commentsForDrink(drinkName)
   }
 
-  private[this] def currentFestivalId = UserSession.currentFestivalId.openTheBox
+  private[this] def currentFestivalId = UserSession.currentFestivalId.is match {
+    case Full(id) => id
+    case _ => "" // TODO: Throw error?
+  }
 }

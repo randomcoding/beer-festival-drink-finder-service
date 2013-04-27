@@ -54,7 +54,7 @@ object UploadData extends Logger {
 			val redirectTo = uploadFile.get match {
 				case Full(f) => {
 					val loader = new SpreadsheetDataLoader()
-					val template = new DrinkDataTemplate(Source.fromInputStream(getClass().getResourceAsStream(selectedTemplate)))
+					val template = new DrinkDataTemplate(Source.fromInputStream(getClass.getResourceAsStream(selectedTemplate)))
 					loader.loadData(f.fileStream, template)
 					"uploadcompleted?status=success&filename=" + f.fileName
 				}
@@ -110,11 +110,12 @@ object UploadData extends Logger {
 	 * @param formId The id of the element to display the error within
 	 * @param errorMessage The text to be displayed
 	 */
-	private def displayError(formId : String, errorMessage : String) = S.error(formId, errorMessage)
+	private def displayError(formId : String, errorMessage : String) {
+    S.error(formId, errorMessage)
+  }
 
 	/**
 	 * Helper function to generate a [[net.liftweb.util.CssSel]] for the '''''#uploadMessage''''' element in the page
-	 * @param message The message to be displayed
 	 */
 	private val generateUploadMessage = ((message : String) => "#uploadMessage" #> message)
 }

@@ -28,10 +28,8 @@ import org.joda.time.format.DateTimeFormat
 // TODO: Update this to use new comment record class
 class DrinkComments(festivalId: String) extends Logger {
 
-  import uk.co.randomcoding.drinkfinder.model.comment.DrinkComments._
-
   RegisterJodaTimeConversionHelpers()
-	private val mongoCollection = new FestivalMongoCollection(festivalId)
+	//private val mongoCollection = new FestivalMongoCollection(festivalId)
 	//private val comments : MongoCollection = _//mongoCollection.comments
 
 	/**
@@ -51,7 +49,7 @@ class DrinkComments(festivalId: String) extends Logger {
 	 * Get all the comments for a particular drink, sorted by date
 	 */
 	def commentsForDrink(drinkName : String) : List[Comment] = {
-		val query = MongoDBObject("drinkName" -> drinkName)
+		//val query = MongoDBObject("drinkName" -> drinkName)
 
 		val commentsForDrink : List[Comment] = List.empty /*(for {
 			result <- comments.find(query)

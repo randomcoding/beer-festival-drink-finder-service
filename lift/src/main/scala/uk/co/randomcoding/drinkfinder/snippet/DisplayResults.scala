@@ -19,7 +19,7 @@
  */
 package uk.co.randomcoding.drinkfinder.snippet
 
-import net.liftweb.common.Logger
+import net.liftweb.common.{Full, Logger}
 import net.liftweb.http._
 import net.liftweb.util.Helpers._
 import scala.xml.NodeSeq
@@ -43,7 +43,10 @@ class DisplayResults extends Logger {
   def calculateResults = {
 
     val params = S.queryString openOr "No Query String"
-    val currentFestivalId = UserSession.currentFestivalId.openTheBox
+    val currentFestivalId = UserSession.currentFestivalId.is match {
+      case Full(id) => id
+      case _ => "" // TODO: Throw error?
+    }
 
     val festivalData = FestivalData(currentFestivalId).get
     debug("Received Query String: %s".format(params))
