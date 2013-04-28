@@ -152,6 +152,13 @@ class FestivalData(val festivalId: String, val festivalName: String) extends Log
       DrinkRecord.update(currentDrink.id.get, drink)
     }
   }
+
+  /**
+   * Persists the current drink data in the database
+   */
+  def store() {
+
+  }
 }
 
 /**

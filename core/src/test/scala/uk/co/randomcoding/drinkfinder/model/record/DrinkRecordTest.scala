@@ -5,7 +5,7 @@ import uk.co.randomcoding.drinkfinder.model.drink.DrinkType
 import uk.co.randomcoding.drinkfinder.query._
 
 /**
- * TODO: Brief Description
+ * Base tests for the [[uk.co.randomcoding.drinkfinder.model.record.DrinkRecord]]
  *
  * @author RandomCoder
  */

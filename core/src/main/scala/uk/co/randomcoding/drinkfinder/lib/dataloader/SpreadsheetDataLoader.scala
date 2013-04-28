@@ -22,7 +22,7 @@ package uk.co.randomcoding.drinkfinder.lib.dataloader
 import java.io.InputStream
 import net.liftweb.common.Logger
 import org.apache.poi.ss.usermodel.{WorkbookFactory, Row}
-import scala.collection.JavaConverters.asScalaIteratorConverter
+import scala.collection.JavaConversions._
 import uk.co.randomcoding.drinkfinder.lib.dataloader.template.DrinkDataTemplate
 import uk.co.randomcoding.drinkfinder.lib.dataloader.util.RichRow._
 import uk.co.randomcoding.drinkfinder.model.data.FestivalData
@@ -49,8 +49,15 @@ class SpreadsheetDataLoader extends Logger {
     val festivalId = dataTemplate.festivalId
     val festivalData = FestivalData(festivalId, dataTemplate.festivalName)
 
-    val physicalRows = dataSheet.rowIterator.asScala
-    physicalRows.foreach(row => if (row.isDataRow(dataTemplate)) addRowToData(row, festivalData, dataTemplate, festivalId))
+    val physicalRows = dataSheet.rowIterator.toList
+
+    val dataRows = physicalRows.filter(_.isDataRow(dataTemplate))
+
+    dataRows.foreach(addRowToData(_, festivalData, dataTemplate, festivalId))
+    /*physicalRows.foreach(row =>
+      if (row.isDataRow(dataTemplate)) {
+        addRowToData(row, festivalData, dataTemplate, festivalId)
+      })*/
   }
 
   private def addRowToData(row: Row, festivalData: FestivalData, dataTemplate: DrinkDataTemplate, festivalId: String) {
@@ -72,7 +79,8 @@ class SpreadsheetDataLoader extends Logger {
 
       drink match {
         case Some(d) => {
-          DrinkRecord.remaining(d, getQuantityRemaining(row, dataTemplate))
+          val remaining = getQuantityRemaining(row, dataTemplate)
+          d.quantityRemaining(remaining)
           //debug("Drink Quantity (%s): %s".format(drink.name, drink.quantityRemaining))
 
           info("Adding drink %s to Festival Data".format(drink))
