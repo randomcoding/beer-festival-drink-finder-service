@@ -157,7 +157,10 @@ class FestivalData(val festivalId: String, val festivalName: String) extends Log
    * Persists the current drink data in the database
    */
   def store() {
-
+    drinks.foreach(drink => {
+      DrinkRecord.addOrUpdate(drink)
+      // TODO: Match the return nad check the record was added ok
+    })
   }
 }
 

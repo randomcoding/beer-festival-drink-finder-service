@@ -28,7 +28,7 @@ import uk.co.randomcoding.drinkfinder.lib.dataloader.util.RichRow._
 import uk.co.randomcoding.drinkfinder.model.data.FestivalData
 import uk.co.randomcoding.drinkfinder.model.drink.DrinkFactory.{perry, cider, beer}
 import uk.co.randomcoding.drinkfinder.model.drink.{DrinkRemainingStatus, DrinkFeature}
-import uk.co.randomcoding.drinkfinder.model.record.{BrewerRecord, DrinkRecord}
+import uk.co.randomcoding.drinkfinder.model.record.BrewerRecord
 
 /**
  * @author RandomCoder
@@ -54,10 +54,6 @@ class SpreadsheetDataLoader extends Logger {
     val dataRows = physicalRows.filter(_.isDataRow(dataTemplate))
 
     dataRows.foreach(addRowToData(_, festivalData, dataTemplate, festivalId))
-    /*physicalRows.foreach(row =>
-      if (row.isDataRow(dataTemplate)) {
-        addRowToData(row, festivalData, dataTemplate, festivalId)
-      })*/
   }
 
   private def addRowToData(row: Row, festivalData: FestivalData, dataTemplate: DrinkDataTemplate, festivalId: String) {
@@ -65,11 +61,18 @@ class SpreadsheetDataLoader extends Logger {
 
     if (brewer.isDefined) {
       val drink = getDrinkType(row, dataTemplate) match {
-        case Some(t) => t.toLowerCase match {
-          case "beer" => Some(beer(getDrinkName(row, dataTemplate), getDrinkDescription(row, dataTemplate), getDrinkAbv(row, dataTemplate), getDrinkPrice(row, dataTemplate), brewer.get, festivalId, getDrinkFeatures(row, dataTemplate)))
-          case "cider" => Some(cider(getDrinkName(row, dataTemplate), getDrinkDescription(row, dataTemplate), getDrinkAbv(row, dataTemplate), getDrinkPrice(row, dataTemplate), brewer.get, festivalId, getDrinkFeatures(row, dataTemplate)))
-          case "perry" => Some(perry(getDrinkName(row, dataTemplate), getDrinkDescription(row, dataTemplate), getDrinkAbv(row, dataTemplate), getDrinkPrice(row, dataTemplate), brewer.get, festivalId, getDrinkFeatures(row, dataTemplate)))
-          case _ => None
+        case Some(t) => {
+          val drinkName = getDrinkName(row, dataTemplate)
+          val description = getDrinkDescription(row, dataTemplate)
+          val abv = getDrinkAbv(row, dataTemplate)
+          val price = getDrinkPrice(row, dataTemplate)
+          val features = getDrinkFeatures(row, dataTemplate)
+          t.toLowerCase match {
+            case "beer" => Some(beer(drinkName, description, abv, price, brewer.get, festivalId, features))
+            case "cider" => Some(cider(drinkName, description, abv, price, brewer.get, festivalId, features))
+            case "perry" => Some(perry(drinkName, description, abv, price, brewer.get, festivalId, features))
+            case _ => None
+          }
         }
         case None => {
           error("No drink type for data found")
@@ -81,12 +84,11 @@ class SpreadsheetDataLoader extends Logger {
         case Some(d) => {
           val remaining = getQuantityRemaining(row, dataTemplate)
           d.quantityRemaining(remaining)
-          //debug("Drink Quantity (%s): %s".format(drink.name, drink.quantityRemaining))
 
-          info("Adding drink %s to Festival Data".format(drink))
+          debug("Adding drink %s to Festival Data".format(drink))
           festivalData.addDrink(d)
         }
-        case _ => // log no record
+        case _ => warn(s"No DrinkRecord generated for Row ${row.getRowNum}")
       }
     }
   }
