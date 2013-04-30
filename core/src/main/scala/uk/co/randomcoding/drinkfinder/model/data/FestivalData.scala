@@ -20,11 +20,12 @@
 package uk.co.randomcoding.drinkfinder.model.data
 
 import net.liftweb.common.Logger
-import scala.collection.mutable.{ Set => MSet }
 import uk.co.randomcoding.drinkfinder.model.drink.DrinkRemainingStatus._
 import uk.co.randomcoding.drinkfinder.model.drink._
+import uk.co.randomcoding.drinkfinder.model.drink.DrinkType._
 import uk.co.randomcoding.drinkfinder.model.matcher.DrinkMatcher
 import uk.co.randomcoding.drinkfinder.model.record.{BrewerRecord, DrinkRecord}
+import uk.co.randomcoding.drinkfinder.query._
 
 /**
  * Store of information about drinks and associated data.
@@ -33,25 +34,17 @@ import uk.co.randomcoding.drinkfinder.model.record.{BrewerRecord, DrinkRecord}
  */
 class FestivalData(val festivalId: String, val festivalName: String) extends Logger {
 
-  private val BEER = "BEER"
+  // TODO: This class needs to access the database directly. Remove vars and change matching to use db also remove store and update db in addDrink
+  /*private val BEER = "BEER"
   private val CIDER = "CIDER"
-  private val PERRY = "PERRY"
-
-  private var drinks = Set.empty[DrinkRecord]
-  private var brewers = Set.empty[BrewerRecord]
-  private var drinkFeatures = Map.empty[String, MSet[DrinkFeature]]
+  private val PERRY = "PERRY"*/
 
   /**
    * Adds the given drink to the Festival's drinks list.
    *
    * This also updates the features for the drink type by adding the drink's features to the feature set for its type
    */
-  def addDrink(drink: DrinkRecord) = {
-    drinks.contains(drink) match {
-      case false => addNewDrink(drink)
-      case true => updateDrink(drink)
-    }
-  }
+  def addDrink(drink: DrinkRecord) = DrinkRecord.addOrUpdate(drink)
 
   /**
    * Remove a drink from the festival data.
@@ -59,108 +52,57 @@ class FestivalData(val festivalId: String, val festivalName: String) extends Log
    * This does not remove the drink's features
    */
   def removeDrink(drink: DrinkRecord) {
-    drinks = drinks - drink
-  }
-
-  /**
-   * Add a brewer to the festival's data
-   */
-  def addBrewer(brewer: BrewerRecord) {
-    brewers = brewers + brewer
-  }
-
-  /**
-   * Remove a brewer from the festival's data
-   */
-  def removeBrewer(brewer: BrewerRecord) {
-    brewers = brewers - brewer
+    DrinkRecord.remove(drink.id.get) match {
+      case Some(record) => debug(s"Removed Drink Record $drink")
+      case _ => s"Failed to remove a record for $drink"
+    }
   }
 
   /**
    * Returns a sorted list of all the features for Beers.
    */
-  def beerFeatures(): List[DrinkFeature] = drinkFeatures.get(BEER) match {
-    case None => List.empty
-    case Some(features) => features.toList.sortBy(_.displayName)
+  def beerFeatures(): List[DrinkFeature] = {
+    DrinkRecord.findAll(byAllMatches(("drinkType", BEER))).flatMap(_.features.get).distinct
   }
 
   /**
    * Returns a sorted list of all the features for Ciders.
    */
-  def ciderFeatures(): List[DrinkFeature] = drinkFeatures.get(CIDER) match {
-    case None => List.empty
-    case Some(features) => features.toList.sortBy(_.displayName)
+  def ciderFeatures(): List[DrinkFeature] = {
+    DrinkRecord.findAll(byAllMatches(("drinkType", CIDER))).flatMap(_.features.get).distinct
   }
 
   /**
    * Returns a sorted list of all the features for Perries.
    */
-  def perryFeatures(): List[DrinkFeature] = drinkFeatures.get(PERRY) match {
-    case None => List.empty
-    case Some(features) => features.toList.sortBy(_.displayName)
+  def perryFeatures(): List[DrinkFeature] = {
+    DrinkRecord.findAll(byAllMatches(("drinkType", PERRY))).flatMap(_.features.get).distinct
   }
 
-  def allDrinks = drinks
+  def allDrinks = DrinkRecord.findAll(byAllMatches(("festivalId", festivalId)))
   /**
    * Get all the drinks that match all the matchers provided that are not '''All Gone'''
    */
-  def getMatching(matchers: List[DrinkMatcher[_]]): Set[DrinkRecord] = drinks.filter(drink => (drinkRemaining(drink) && matchesAll(drink, matchers)))
+  // TODO: This needs to use updated matchers
+  def getMatching(matchers: List[DrinkMatcher[_]]): Set[DrinkRecord] = {
+    val all = allDrinks
+      all.filter(drink => (drinkRemaining(drink) && matchesAll(drink, matchers))).toSet
+  }
 
   /**
    * Get the brewer with the name or return [[scala.None]] if there is no Brewer with that name.
    */
-  def getBrewer(brewerName: String): Option[BrewerRecord] = brewers.find(_.name equals brewerName)
+  def getBrewer(brewerName: String): Option[BrewerRecord] = BrewerRecord.find(byName(brewerName))
 
   /**
    * Accessor for a list of all the brewers stored in this FesitvalData
    */
-  def allBrewers(): List[BrewerRecord] = brewers.toList
+  def allBrewers(): List[BrewerRecord] = BrewerRecord.findAll(byAllMatches(("festivalId", festivalId)))
 
   private def drinkRemaining(drink: DrinkRecord): Boolean = drink.quantityRemaining.get != NOT_AVAILABLE
 
   private def matchesAll(drink: DrinkRecord, matchers: List[DrinkMatcher[_]]): Boolean = {
     matchers.filterNot(_.apply(drink)).isEmpty
-  }
-
-  private def addDrinkFeatures(drink: DrinkRecord) {
-    val typeOfDrink = drinkType(drink)
-
-    drinkFeatures.get(typeOfDrink) match {
-      case None => drinkFeatures = drinkFeatures + (typeOfDrink -> MSet(drink.features.get: _*))
-      case Some(currentFeats) => drinkFeatures = drinkFeatures + (typeOfDrink -> (currentFeats ++ drink.features.get))
-    }
-  }
-
-  private def drinkType(drink: DrinkRecord) = {
-    drink.drinkType.get.toString match {
-      case "Beer" => BEER
-      case "Cider" => CIDER
-      case "Perry" => PERRY
-    }
-  }
-
-  private def addNewDrink(drink: DrinkRecord) {
-    drinks = drinks + drink
-    addDrinkFeatures(drink)
-  }
-
-  private def updateDrink(drink: DrinkRecord) = {
-    val currentDrink = drinks.find(_.name.equals(drink.name)).get
-
-    if (currentDrink.quantityRemaining != drink.quantityRemaining) {
-      debug("Quantity is different (current: %s -> new: %s)".format(currentDrink.quantityRemaining, drink.quantityRemaining))
-      DrinkRecord.update(currentDrink.id.get, drink)
-    }
-  }
-
-  /**
-   * Persists the current drink data in the database
-   */
-  def store() {
-    drinks.foreach(drink => {
-      DrinkRecord.addOrUpdate(drink)
-      // TODO: Match the return nad check the record was added ok
-    })
   }
 }
 

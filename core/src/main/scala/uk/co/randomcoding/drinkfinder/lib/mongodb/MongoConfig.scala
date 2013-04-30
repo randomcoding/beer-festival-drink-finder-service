@@ -15,23 +15,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * Contributors:
- *    RandomCoder - initial API and implementation and/or initial documentation
+ * RandomCoder - initial API and implementation and/or initial documentation
  */
 package uk.co.randomcoding.drinkfinder.lib.mongodb
-
-// TODO: Change to mongo record initialisation
 
 import com.mongodb.MongoClient
 import net.liftweb.common.Logger
 import net.liftweb.json._
-import net.liftweb.mongodb.{MongoDB, DefaultMongoIdentifier}
+import net.liftweb.mongodb.{MongoIdentifier, MongoDB, DefaultMongoIdentifier}
 
 /**
  * Configuration for Mongo DB and access to mongo connections
  *
  * @author RandomCoder
  *
- * Created On: 19 Aug 2011
+ *         Created On: 19 Aug 2011
  *
  */
 object MongoConfig extends Logger {
@@ -40,6 +38,7 @@ object MongoConfig extends Logger {
 
   // Case classes required to parse CloudFoundry JSON
   case class CloudFoundryMongo(name: String, label: String, plan: String, credentials: CloudFoundryMongoCredentials)
+
   case class CloudFoundryMongoCredentials(hostname: String, port: String, username: String, password: String, name: String, db: String)
 
   /**
@@ -64,11 +63,15 @@ object MongoConfig extends Logger {
           config match {
             case MongoConnectionConfig(host, port, user, pass, db, true) => {
               debug("Got Mongo Config for CloudFoundry")
-              MongoDB.defineDbAuth(DefaultMongoIdentifier, new MongoClient(host, port), db, user, pass)
+              val dbId= DefaultMongoIdentifier
+              MongoDB.defineDbAuth(dbId, new MongoClient(host, port), db, user, pass)
+              initCollections(dbId)
             }
             case MongoConnectionConfig(_, _, _, _, db, false) => {
               debug("Unsing local Mongo Config")
-              MongoDB.defineDb(DefaultMongoIdentifier, new MongoClient, db)
+              val dbId= DefaultMongoIdentifier
+              MongoDB.defineDb(dbId, new MongoClient, db)
+              initCollections(dbId)
             }
             case _ => error("Failed To initialise mongo DB Connection!")
           }
@@ -119,15 +122,34 @@ object MongoConfig extends Logger {
     // TODO: This loop could/should be made to identify the element it wants and then use just that one
     var config: Option[MongoConnectionConfig] = None
 
-    ary foreach { mongoJson =>
-      val mongo = mongoJson.extract[CloudFoundryMongo]
-      val credentials = mongo.credentials
-      debug("Extracted CloudFoundry MongoDB: %s\nWith Credentials: %s".format(mongo, credentials))
-      config = Some(MongoConnectionConfig(credentials.hostname, credentials.port.toInt, credentials.username, credentials.password, credentials.db, true))
+    ary foreach {
+      mongoJson =>
+        val mongo = mongoJson.extract[CloudFoundryMongo]
+        val credentials = mongo.credentials
+        debug("Extracted CloudFoundry MongoDB: %s\nWith Credentials: %s".format(mongo, credentials))
+        config = Some(MongoConnectionConfig(credentials.hostname, credentials.port.toInt, credentials.username, credentials.password, credentials.db, true))
     }
 
     debug("Using mongodb cloudfoundry config: %s".format(config))
     config
+  }
+
+  /**
+   * This wil create the empty collections if required on startup
+   *
+   * @param dbId The `MongoIdentifier` for the database to initialise
+   */
+  private[this] def initCollections(dbId: MongoIdentifier) {
+    val collections = Seq("drinkrecords", "brewerrecords")
+
+    MongoDB.getDb(dbId) match {
+      case Some(mongo) => {
+        collections.foreach(coll => {
+          if (!mongo.collectionExists(coll)) mongo.createCollection(coll, null)
+        })
+      }
+      case _ => error(s"No database found for identifier: $dbId")
+    }
   }
 }
 

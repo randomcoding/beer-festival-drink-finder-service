@@ -15,15 +15,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * Contributors:
- *    RandomCoder - initial API and implementation and/or initial documentation
+ * RandomCoder - initial API and implementation and/or initial documentation
  */
 package uk.co.randomcoding.drinkfinder.model.data
 
-import org.scalatest.FunSuite
-import org.scalatest.matchers.ShouldMatchers
 import uk.co.randomcoding.drinkfinder.model.drink._
+import uk.co.randomcoding.drinkfinder.model.drink.DrinkType._
 import uk.co.randomcoding.drinkfinder.model.matcher._
 import uk.co.randomcoding.drinkfinder.model.record.DrinkRecord
+import uk.co.randomcoding.scala.util.lift.mongodb.test.MongoDbTestBase
 
 
 /**
@@ -31,130 +31,137 @@ import uk.co.randomcoding.drinkfinder.model.record.DrinkRecord
  *
  * @author RandomCoder
  */
-class FestivalDataTest extends FunSuite with ShouldMatchers {
+class FestivalDataTest extends MongoDbTestBase {
+  override val dbName = "FestivalDataTest"
 
   import uk.co.randomcoding.drinkfinder.model.data.DummyDrinks._
 
-  val festivalData = new DummyFestivalData
+  def festivalData = new DummyFestivalData
 
   test("Query For Only Beers") {
-	val matcher = DrinkTypeMatcher("beer")
+    val matcher = DrinkTypeMatcher(BEER)
 
-	val matchingDrinks = festivalData.getMatching(List(matcher))
+    val matchingDrinks = festivalData.getMatching(List(matcher))
 
-	checkMatchedDrinks(matchingDrinks.toList, festivalData.beers.toList)
+    checkMatchedDrinks(matchingDrinks.toList, festivalData.beers.toList)
   }
 
   test("Query For Only Ciders") {
-	  val matcher = DrinkTypeMatcher("cider")
+    val matcher = List(DrinkTypeMatcher(CIDER))
 
-	val matchingDrinks = festivalData.getMatching(List(matcher))
+    val matchingDrinks = festivalData.getMatching(matcher)
 
-	checkMatchedDrinks(matchingDrinks.toList, festivalData.ciders.toList)
+    checkMatchedDrinks(matchingDrinks.toList, festivalData.ciders.toList)
   }
 
   test("Query For Only Perries") {
-	  val matcher = DrinkTypeMatcher("perry")
+    val matcher = DrinkTypeMatcher(PERRY)
 
-	val matchingDrinks = festivalData.getMatching(List(matcher))
+    val matchingDrinks = festivalData.getMatching(List(matcher))
 
-	checkMatchedDrinks(matchingDrinks.toList, festivalData.perries.toList)
+    checkMatchedDrinks(matchingDrinks.toList, festivalData.perries.toList)
   }
 
   test("Query by Drink Name") {
-	val matcher = DrinkNameMatcher("first")
+    val matcher = DrinkNameMatcher("first")
 
-	val matchingDrinks = festivalData.getMatching(List(matcher))
+    val matchingDrinks = festivalData.getMatching(List(matcher))
 
-	checkMatchedDrinks(matchingDrinks.toList, List(FirstBeer, FirstCider, FirstPerry))
+    checkMatchedDrinks(matchingDrinks.toList, List(FirstBeer, FirstCider, FirstPerry))
   }
 
   test("Query description contains") {
-	val matcher = DrinkDescriptionMatcher("tasty")
-	checkMatchedDrinks(festivalData.getMatching(List(matcher)).toList, Nil)
+    val matcher = DrinkDescriptionMatcher("tasty")
+    checkMatchedDrinks(festivalData.getMatching(List(matcher)).toList, Nil)
 
-	val matcherFirst = DrinkDescriptionMatcher("first")
-	checkMatchedDrinks(festivalData.getMatching(List(matcherFirst)).toList, List(FirstBeer, FirstCider, FirstPerry))
+    val matcherFirst = DrinkDescriptionMatcher("first")
+    checkMatchedDrinks(festivalData.getMatching(List(matcherFirst)).toList, List(FirstBeer, FirstCider, FirstPerry))
   }
 
   test("Query Abv Less Than") {
-	val abvLessThan45Matcher = DrinkAbvLessThanMatcher(4.5)
+    val abvLessThan45Matcher = DrinkAbvLessThanMatcher(4.5)
 
-	checkMatchedDrinks(festivalData.getMatching(List(abvLessThan45Matcher)).toList, List(SecondBeer, SecondPerry))
+    checkMatchedDrinks(festivalData.getMatching(List(abvLessThan45Matcher)).toList, List(SecondBeer, SecondPerry))
   }
 
   test("Query ABV Equal To") {
-	val abvEqual45Matcher = DrinkAbvEqualToMatcher(4.5)
+    val abvEqual45Matcher = DrinkAbvEqualToMatcher(4.5)
 
-	checkMatchedDrinks(festivalData.getMatching(List(abvEqual45Matcher)).toList, List(FirstBeer))
+    checkMatchedDrinks(festivalData.getMatching(List(abvEqual45Matcher)).toList, List(FirstBeer))
   }
 
   test("Query ABV Greater Than") {
-	val abvGreater65Matcher = DrinkAbvGreaterThanMatcher(6.5)
+    val abvGreater65Matcher = DrinkAbvGreaterThanMatcher(6.5)
 
-	checkMatchedDrinks(festivalData.getMatching(List(abvGreater65Matcher)).toList, List(SecondCider, FirstPerry))
+    checkMatchedDrinks(festivalData.getMatching(List(abvGreater65Matcher)).toList, List(SecondCider, FirstPerry))
   }
 
   test("Query Price Less Than or equal to £1.50") {
-	val matcher = DrinkPriceMatcher(1.50)
-	checkMatchedDrinks(festivalData.getMatching(List(matcher)).toList, List(FirstCider, FirstPerry, SecondPerry))
+    val matcher = DrinkPriceMatcher(1.50)
+    checkMatchedDrinks(festivalData.getMatching(List(matcher)).toList, List(FirstCider, FirstPerry, SecondPerry))
   }
 
   test("Query for Real Ales") {
-	val matcher = DrinkFeatureMatcher(RealAle)
+    val matcher = DrinkFeatureMatcher(RealAle)
 
-	checkMatchedDrinks(festivalData.getMatching(List(matcher)).toList, List(FirstBeer))
+    checkMatchedDrinks(festivalData.getMatching(List(matcher)).toList, List(FirstBeer))
   }
 
   test("Query for Sweet Drinks") {
-	val matcher = DrinkFeatureMatcher(Sweet)
-	checkMatchedDrinks(festivalData.getMatching(List(matcher)).toList, List(FirstPerry))
+    val matcher = DrinkFeatureMatcher(Sweet)
+    checkMatchedDrinks(festivalData.getMatching(List(matcher)).toList, List(FirstPerry))
   }
 
   test("Query for Dry Drinks") {
-	val matcher = DrinkFeatureMatcher(Dry)
-	checkMatchedDrinks(festivalData.getMatching(List(matcher)).toList, List(FirstCider))
+    val matcher = DrinkFeatureMatcher(Dry)
+    checkMatchedDrinks(festivalData.getMatching(List(matcher)).toList, List(FirstCider))
   }
 
   test("Query for Dry Ciders") {
-	val dryMatcher = DrinkFeatureMatcher(Dry)
-	val ciderMatcher = DrinkTypeMatcher("cider")
+    val dryMatcher = DrinkFeatureMatcher(Dry)
+    val ciderMatcher = DrinkTypeMatcher("cider")
 
-	checkMatchedDrinks(festivalData.getMatching(List(dryMatcher, ciderMatcher)).toList, List(FirstCider))
+    checkMatchedDrinks(festivalData.getMatching(List(dryMatcher, ciderMatcher)).toList, List(FirstCider))
   }
 
   test("Query for Medium Ciders with ABV Greater Than 7.0") {
-	val ciderMatcher: DrinkMatcher[String] = DrinkTypeMatcher("cider")
-	val mediumMatcher = DrinkFeatureMatcher(Medium)
-	val abvMatcher = DrinkAbvGreaterThanMatcher(7.0)
+    val ciderMatcher: DrinkMatcher[String] = DrinkTypeMatcher("cider")
+    val mediumMatcher = DrinkFeatureMatcher(Medium)
+    val abvMatcher = DrinkAbvGreaterThanMatcher(7.0)
 
-	checkMatchedDrinks(festivalData.getMatching(List(ciderMatcher, mediumMatcher, abvMatcher)).toList, List(SecondCider))
+    checkMatchedDrinks(festivalData.getMatching(List(ciderMatcher, mediumMatcher, abvMatcher)).toList, List(SecondCider))
   }
 
   test("Beer features are added correctly") {
-	  festivalData.beerFeatures should be (List(DrinkFeature("Real Ale"), DrinkFeature("Stout")))
+    festivalData.beerFeatures should (have size(2) and
+      contain(DrinkFeature("Real Ale")) and
+      contain(DrinkFeature("Stout")))
   }
 
   test("Cider features are added correctly") {
-	  festivalData.ciderFeatures should be (List(DrinkFeature("Dry"), DrinkFeature("Medium")))
+    festivalData.ciderFeatures should (have size(2) and
+      contain (DrinkFeature("Dry")) and
+      contain(DrinkFeature("Medium")))
   }
 
   test("Perry features are added correctly") {
-	  festivalData.perryFeatures should be (List(DrinkFeature("Medium"), DrinkFeature("Sweet")))
+    festivalData.perryFeatures should (have size(2) and
+      contain (DrinkFeature("Medium")) and
+      contain(DrinkFeature("Sweet")))
   }
 
   private def checkMatchedDrinks(matched: List[DrinkRecord], expected: List[DrinkRecord]) {
-	val expectedSize = expected.size
+    val expectedSize = expected.size
 
-	matched should have size (expectedSize)
+    matched should have size (expectedSize)
 
-	val expectedDrinksContainedInMatched = for {
-	  drink <- expected
-	}
-	yield {
-	  matched contains drink
-	}
+    val expectedDrinksContainedInMatched = for {
+      drink <- expected
+    }
+    yield {
+      matched contains drink
+    }
 
-	expectedDrinksContainedInMatched should not contain (false)
+    expectedDrinksContainedInMatched should not contain (false)
   }
 }

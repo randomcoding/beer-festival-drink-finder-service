@@ -35,6 +35,8 @@ import uk.co.randomcoding.drinkfinder.query._
 class WbfSpreadsheetLoaderTest extends MongoDbTestBase {
   override val dbName = "WbfSpreadsheetLoaderTest"
 
+  //initDb
+
   val testFileLocation = "/BeerList-TestData.xls"
   val cidersLocation = "/CidersTest.xls"
   val perriesLocation = "/PerriesTest.xls"
@@ -46,7 +48,7 @@ class WbfSpreadsheetLoaderTest extends MongoDbTestBase {
   private val beerTemplate = new DrinkDataTemplate(templateSource("/templates/wbf_template.tpl"))
   private val ciderTemplate = new DrinkDataTemplate(templateSource("/templates/wbf_cider_template.tpl"))
   private val perryTemplate = new DrinkDataTemplate(templateSource("/templates/wbf_perry_template.tpl"))
-  private val data = {
+  private def data = {
     loader.loadData(getClass.getResourceAsStream(testFileLocation), beerTemplate)
     loader.loadData(getClass.getResourceAsStream(cidersLocation), ciderTemplate)
     loader.loadData(getClass.getResourceAsStream(perriesLocation), perryTemplate)
@@ -93,11 +95,11 @@ class WbfSpreadsheetLoaderTest extends MongoDbTestBase {
     matched.find(_.name.get.equals("Blakeney Red")).get should be(BLAKENEY_RED)
   }
 
-  test("When Festival Data is Stored, the drink data can be retrieved from the database") {
+  test("When Festival Data is Loaded, the drink data can be retrieved from the database") {
     Given("test data loaded into a Festival Data class")
-    When("'store' is called in the data")
-    data.store()
-    Then("drink records can be accessed by name")
+    When("the data has all been loaded")
+    data
+    Then("drink records can be accessed directly from the database by name")
     DrinkRecord.find(byName("Orchard Bull")) should be(ORCHARD_BULL)
     DrinkRecord.find(byName("Deception")) should be(DECEPTION)
     DrinkRecord.find(byName("B.U.R.P.")) should be(BURP)

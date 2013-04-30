@@ -19,7 +19,10 @@
  */
 package uk.co.randomcoding.drinkfinder.model.data
 
-class DummyFestivalData extends FestivalData("TST", "Test Festival") {
+import uk.co.randomcoding.drinkfinder.model.record.DrinkRecord
+import org.scalatest.matchers.ShouldMatchers
+
+class DummyFestivalData extends FestivalData("Festival", "Test Festival") with ShouldMatchers {
 
   import uk.co.randomcoding.drinkfinder.model.data.DummyDrinks._
 
@@ -29,7 +32,11 @@ class DummyFestivalData extends FestivalData("TST", "Test Festival") {
 
   final def perries = Set(FirstPerry, SecondPerry)
 
-  beers.foreach(addDrink(_))
-  ciders.foreach(addDrink(_))
-  perries.foreach(addDrink(_))
+  beers.foreach(addDrinkToDb(_))
+  ciders.foreach(addDrinkToDb(_))
+  perries.foreach(addDrinkToDb(_))
+
+  private[this] def addDrinkToDb(drink: DrinkRecord) {
+    addDrink(drink) should be(Some(drink))
+  }
 }
